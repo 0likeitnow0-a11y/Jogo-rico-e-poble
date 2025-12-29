@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regras Completas - Cashflow Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #3498db;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f39c12;
+        }
+
+        h1 {
+            color: #f39c12;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #bdc3c7;
+            font-size: 1.2rem;
+        }
+
+        .rules-container {
+            display: grid;
+            gap: 30px;
+        }
+
+        .rule-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .rule-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            color: #f39c12;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            color: #ecf0f1;
+        }
+
+        .rule-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .rule-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border-left-color: #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .tip {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: #3498db;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .board-space {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .space-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .space-info h4 {
+            color: #f39c12;
+            margin-bottom: 5px;
+        }
+
+        .space-info p {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .icon {
+            font-size: 1.2rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book"></i> REGRAS COMPLETAS DO JOGO</h1>
+            <p class="subtitle">Cashflow Online - Versão Multiplayer</p>
+        </header>
+
+        <div class="rules-container">
+            <!-- SEÇÃO 1: OBJETIVO DO JOGO -->
+            <div class="rule-section" style="border-left-color: #f39c12;">
+                <div class="section-title">
+                    <i class="fas fa-bullseye"></i>
+                    <h2>1. OBJETIVO DO JOGO</h2>
+                </div>
+                <div class="section-content">
+                    <div class="rule-item">Sair da <strong>Corrida dos Ratos</strong> (Renda Passiva > Despesas)</div>
+                    <div class="rule-item">Entrar na <strong>Via Rápida</strong> (viver apenas de renda passiva)</div>
+                    <div class="rule-item">Comprar <strong>1 Sonho</strong> na Via Rápida para vencer</div>
+                    
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i> <strong>DICA:</strong> Foque em adquirir ativos que gerem renda passiva, não em acumular dinheiro.
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: COMO JOGAR -->
+            <div class="rule-section" style="border-left-color: #3498db;">
+                <div class="section-title">
+                    <i class="fas fa-play-circle"></i>
+                    <h2>2. COMO JOGAR (PASSO A PASSO)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <div>
+                            <div class="rule-item">Escolha número de jogadores (2-6)</div>
+                            <div class="rule-item">Defina os nomes dos jogadores</div>
+                            <div class="rule-item">Cada um recebe uma profissão aleatória</div>
+                        </div>
+                        <div>
+                            <div class="rule-item">Role os dados no seu turno</div>
+                            <div class="rule-item">Mova seu marcador na tabela</div>
+                            <div class="rule-item">Execute a ação do espaço</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: TABULEIRO E ESPAÇOS -->
+            <div class="rule-section" style="border-left-color: #2ecc71;">
+                <div class="section-title">
+                    <i class="fas fa-map"></i>
+                    <h2>3. TABULEIRO - 40 ESPAÇOS</h2>
+                </div>
+                <div class="section-content">
+                    <div class="grid-2">
+                        <!-- Espaço 1 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #f39c12;"></div>
+                            <div class="space-info">
+                                <h4>INÍCIO</h4>
+                                <p>Onde todos começam. Nenhuma ação especial.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 2 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #3498db;"></div>
+                            <div class="space-info">
+                                <h4>PEQUENA OPORTUNIDADE</h4>
+                                <p>Compre ações, FIIs ou títulos. Pode recusar.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 3 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #9b59b6;"></div>
+                            <div class="space-info">
+                                <h4>DIA DE PAGAMENTO</h4>
+                                <p>Receba salário + renda passiva automático.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 4 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #2ecc71;"></div>
+                            <div class="space-info">
+                                <h4>MERCADO</h4>
+                                <p>Venda ativos valorizados ou compre oportunidades.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <!-- Espaço 5 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #e74c3c;"></div>
+                            <div class="space-info">
+                                <h4>DOODAD</h4>
+                                <p>Gasto obrigatório! Se não tiver dinheiro, peça empréstimo.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 6 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #f1c40f;"></div>
+                            <div class="space-info">
+                                <h4>BEBÊ</h4>
+                                <p>Aumenta despesas mensais permanentemente.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 7 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #e67e22;"></div>
+                            <div class="space-info">
+                                <h4>CARIDADE</h4>
+                                <p>Doação de 10% do salário. No próximo turno, role 3 dados.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Espaço 8 -->
+                        <div class="board-space">
+                            <div class="space-color" style="background: #1abc9c;"></div>
+                            <div class="space-info">
+                                <h4>VIA RÁPIDA</h4>
+                                <p>Só acessível após sair da Corrida dos Ratos. Compre sonhos!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: REGRAS OFICIAIS IMPORTANTES -->
+            <div class="rule-section" style="border-left-color: #e74c3c;">
+                <div class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>4. REGRAS OFICIAIS (OBRIGATÓRIAS)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="warning">
+                        <i class="fas fa-hand-point-right"></i> <strong>DOODAD É OBRIGATÓRIO!</strong>
+                        <p>Quando cair em Doodad, você DEVE pagar. Não pode recusar.</p>
+                    </div>
+                    
+                    <div class="rule-item">Se não tiver dinheiro para Doodad → <strong>empréstimo obrigatório</strong></div>
+                    <div class="rule-item">Empréstimo tem juros de 10% por turno</div>
+                    <div class="rule-item">Você pode quitar dívidas a qualquer momento</div>
+                    <div class="rule-item">Não pode emprestar dinheiro entre jogadores</div>
+                    <div class="rule-item">Mercado em alta: você ESCOLHE vender ou não</div>
+                    <div class="rule-item">Mercado em baixa: apenas informação (não tem escolha)</div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: SISTEMA FINANCEIRO -->
+            <div class="rule-section" style="border-left-color: #9b59b6;">
+                <div class="section-title">
+                    <i class="fas fa-calculator"></i>
+                    <h2>5. SISTEMA FINANCEIRO</h2>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CONCEITO</th>
+                                <th>DEFINIÇÃO</th>
+                                <th>EXEMPLO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Salário</strong></td>
+                                <td>Renda do seu trabalho</td>
+                                <td>R$ 3.500/mês (Enfermeiro)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Despesas</strong></td>
+                                <td>Custos mensais fixos</td>
+                                <td>R$ 2.800/mês</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fluxo de Caixa</strong></td>
+                                <td>Salário - Despesas</td>
+                                <td>R$ 700/mês</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Renda Passiva</strong></td>
+                                <td>Dinheiro dos seus ativos</td>
+                                <td>R$ 1.200/mês (de aluguéis)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Saída da Corrida</strong></td>
+                                <td>Renda Passiva > Despesas</td>
+                                <td>R$ 1.200 > R$ 1.000 ✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 6: VIA RÁPIDA -->
+            <div class="rule-section" style="border-left-color: #1abc9c;">
+                <div class="section-title">
+                    <i class="fas fa-trophy"></i>
+                    <h2>6. VIA RÁPIDA (FAST TRACK)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="rule-item">Você para de receber salário</div>
+                    <div class="rule-item">Vive apenas de renda passiva</div>
+                    <div class="rule-item">Cada espaço é uma oportunidade de comprar SONHOS</div>
+                    <div class="rule-item">Sonhos têm custo alto e exigem renda passiva mínima</div>
+                    <div class="rule-item">Compre 1 Sonho para vencer o jogo!</div>
+                    
+                    <div class="tip">
+                        <i class="fas fa-star"></i> <strong>SONHOS:</strong> Viagem ao Caribe, Carro Esportivo, Casa na Praia, Iate, Jato Particular...
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 7: ESTRATÉGIAS -->
+            <div class="rule-section" style="border-left-color: #f1c40f;">
+                <div class="section-title">
+                    <i class="fas fa-chess-knight"></i>
+                    <h2>7. ESTRATÉGIAS PARA VENCER</h2>
+                </div>
+                <div class="section-content">
+                    <div class="rule-item">Comece com Pequenas Oportunidades (ações, FIIs)</div>
+                    <div class="rule-item">Evite Doodads desnecessários</div>
+                    <div class="rule-item">Use Mercado em alta para vender com lucro</div>
+                    <div class="rule-item">Foque em ativos com boa relação custo/renda</div>
+                    <div class="rule-item">Mantenha alguma reserva para emergências</div>
+                    <div class="rule-item">Não se endivide demais - juros consomem seu fluxo</div>
+                    
+                    <div class="warning">
+                        <i class="fas fa-money-bill-wave"></i> <strong>ALERTA:</strong> Empréstimos são úteis, mas juros de 10% por turno são altos!
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 8: JOGANDO À DISTÂNCIA -->
+            <div class="rule-section" style="border-left-color: #3498db;">
+                <div class="section-title">
+                    <i class="fas fa-video"></i>
+                    <h2>8. COMO JOGAR COM SEU IRMÃO</h2>
+                </div>
+                <div class="section-content">
+                    <div class="rule-item">Publique o jogo no Netlify/GitHub Pages</div>
+                    <div class="rule-item">Compartilhe o link com todos os jogadores</div>
+                    <div class="rule-item">Use videochamada (Zoom, Meet, WhatsApp)</div>
+                    <div class="rule-item">Um compartilha a tela com o jogo</div>
+                    <div class="rule-item">Cada um controla quando é sua vez</div>
+                    <div class="rule-item">Discutam estratégias juntos!</div>
+                    
+                    <div class="tip">
+                        <i class="fas fa-users"></i> <strong>DICA:</strong> Crie um grupo no WhatsApp para combinar os horários de jogo!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTÕES DE AÇÃO -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                <i class="fas fa-play"></i> VOLTAR PARA O JOGO
+            </button>
+            
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fas fa-print"></i> IMPRIMIR REGRAS
+            </button>
+        </div>
+
+        <footer>
+            <p>Cashflow Online | Baseado no jogo original de Robert Kiyosaki | Desenvolvido para jogar com familiares à distância</p>
+            <p>© 2024 | Jogue, aprenda e divirta-se!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Adiciona números às seções
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.rule-section');
+            sections.forEach((section, index) => {
+                const title = section.querySelector('.section-title h2');
+                const currentText = title.textContent;
+                const number = currentText.split('.')[0];
+                title.textContent = currentText;
+            });
+        });
+
+        // Botão para copiar regras
+        function copyRules() {
+            const rulesText = document.querySelector('.container').innerText;
+            navigator.clipboard.writeText(rulesText).then(() => {
+                alert('Regras copiadas para a área de transferência!');
+            });
+        }
+    </script>
+</body>
+</html>

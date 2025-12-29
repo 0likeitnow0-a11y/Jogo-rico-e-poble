@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflow Online | Jogue com seu Irmão</title>
+    <title>Cashflow Online | Edição Completa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -23,6 +23,10 @@
             --dark: #2C3E50;
             --player1: #E74C3C;
             --player2: #3498DB;
+            --player3: #2ECC71;
+            --player4: #9B59B6;
+            --player5: #F39C12;
+            --player6: #1ABC9C;
         }
 
         body {
@@ -33,152 +37,162 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        header {
-            text-align: center;
-            padding: 20px;
-            margin-bottom: 20px;
+        /* CONFIGURAÇÃO INICIAL */
+        .setup-screen {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--warning);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .setup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--warning);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .player-names-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        /* TABELA DO TABULEIRO */
+        .board-table-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
             border: 2px solid var(--secondary);
         }
 
-        h1 {
-            color: var(--warning);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
         }
 
-        .subtitle {
-            color: var(--light);
-            font-size: 1.1rem;
-        }
-
-        .game-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 992px) {
-            .game-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .player-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid;
-            min-height: 400px;
-        }
-
-        .player-1-section {
-            border-color: var(--player1);
-        }
-
-        .player-2-section {
-            border-color: var(--player2);
-        }
-
-        .player-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid;
-        }
-
-        .player-1-section .player-header {
-            border-color: var(--player1);
-        }
-
-        .player-2-section .player-header {
-            border-color: var(--player2);
-        }
-
-        .player-name {
-            font-size: 1.8rem;
-            font-weight: bold;
-        }
-
-        .player-1-name {
-            color: var(--player1);
-        }
-
-        .player-2-name {
-            color: var(--player2);
-        }
-
-        .player-status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            background: var(--dark);
-        }
-
-        .current-turn {
-            background: var(--warning) !important;
-            color: var(--dark);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .player-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .info-card {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .info-label {
+        .board-table th {
+            background: var(--secondary);
+            color: white;
+            padding: 12px;
+            text-align: center;
             font-size: 0.9rem;
-            color: var(--light);
-            margin-bottom: 5px;
+            position: sticky;
+            top: 0;
         }
 
-        .info-value {
-            font-size: 1.4rem;
+        .board-table td {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            vertical-align: middle;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .board-table td:first-child {
+            width: 40px;
+            min-width: 40px;
+        }
+
+        .space-number {
             font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--warning);
+            padding: 2px 4px;
+            background: rgba(243, 156, 18, 0.2);
+            border-radius: 4px;
+            display: inline-block;
+            width: 30px;
         }
 
-        .income {
-            color: var(--success);
+        .space-type {
+            font-size: 0.8rem;
+            margin: 3px 0;
         }
 
-        .expense {
-            color: var(--danger);
+        .space-action {
+            font-size: 0.75rem;
+            color: #bdc3c7;
         }
 
+        .player-markers-cell {
+            min-width: 180px;
+        }
+
+        /* Cores dos espaços */
+        .space-start { background: rgba(243, 156, 18, 0.15); border-left: 4px solid var(--warning); }
+        .space-small { background: rgba(52, 152, 219, 0.15); border-left: 4px solid var(--player2); }
+        .space-big { background: rgba(52, 152, 219, 0.2); border-left: 4px solid var(--secondary); }
+        .space-doodad { background: rgba(231, 76, 60, 0.25); border-left: 4px solid var(--player1); }
+        .space-market { background: rgba(46, 204, 113, 0.15); border-left: 4px solid var(--success); }
+        .space-payday { background: rgba(155, 89, 182, 0.15); border-left: 4px solid var(--player4); }
+        .space-baby { background: rgba(241, 196, 15, 0.15); border-left: 4px solid #F1C40F; }
+        .space-charity { background: rgba(230, 126, 34, 0.15); border-left: 4px solid #E67E22; }
+        .space-dream { background: rgba(155, 89, 182, 0.25); border-left: 4px solid #9b59b6; }
+
+        /* Marcadores dos jogadores */
+        .player-markers {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .player-marker {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* CONTROLES */
         .controls {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 20px;
-            margin-top: 20px;
+            margin: 20px 0;
             text-align: center;
-        }
-
-        .controls h3 {
-            color: var(--warning);
-            margin-bottom: 15px;
+            border: 2px solid var(--secondary);
         }
 
         .dice-container {
@@ -189,24 +203,18 @@
         }
 
         .dice {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--dark);
-            cursor: pointer;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             user-select: none;
-        }
-
-        .dice:hover {
-            transform: translateY(-5px);
-            transition: transform 0.2s;
         }
 
         .dice.rolling {
@@ -223,14 +231,17 @@
             background: var(--secondary);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            margin: 10px 5px;
-            min-width: 180px;
+            margin: 5px;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .button:hover {
@@ -244,110 +255,87 @@
             transform: none !important;
         }
 
-        .button-success {
-            background: var(--success);
-        }
+        .button-success { background: var(--success); }
+        .button-danger { background: var(--danger); }
+        .button-warning { background: var(--warning); }
+        .button-purple { background: #9b59b6; }
 
-        .button-danger {
-            background: var(--danger);
-        }
-
-        .button-warning {
-            background: var(--warning);
-        }
-
-        .game-board {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            border: 2px solid var(--secondary);
-        }
-
-        .board-title {
-            color: var(--warning);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .position-tracker {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-
-        .position {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
-
-        .position.player-1 {
-            background: var(--player1);
-        }
-
-        .position.player-2 {
-            background: var(--player2);
-        }
-
-        .space-info {
-            font-size: 0.9rem;
-            color: var(--light);
-        }
-
+        /* CARD DISPLAY */
         .card-display {
             background: white;
             color: var(--dark);
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            text-align: left;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            border-top: 8px solid var(--secondary);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
         }
 
         .card-title {
             color: var(--secondary);
             font-size: 1.3rem;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .card-phase {
+            background: #f39c12;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
 
         .card-details {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
             margin: 15px 0;
         }
 
-        .card-action {
-            text-align: center;
-            margin-top: 20px;
+        .card-detail {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
         }
 
+        .detail-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* LOG */
         .log-section {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 20px;
-            margin-top: 20px;
-        }
-
-        .log-title {
-            color: var(--warning);
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin: 20px 0;
+            border: 2px solid var(--secondary);
         }
 
         .log-content {
@@ -359,33 +347,12 @@
         }
 
         .log-entry {
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-
-        .log-player1 {
-            color: var(--player1);
-            font-weight: bold;
-        }
-
-        .log-player2 {
-            color: var(--player2);
-            font-weight: bold;
-        }
-
-        .log-income {
-            color: var(--success);
-        }
-
-        .log-expense {
-            color: var(--danger);
-        }
-
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -403,984 +370,1791 @@
             background: white;
             color: var(--dark);
             border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
+            padding: 25px;
+            max-width: 600px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
         }
 
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
         .modal-title {
             color: var(--secondary);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: bold;
         }
 
         .close-modal {
-            float: right;
+            background: none;
+            border: none;
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--danger);
         }
 
-        .assets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .asset-card {
-            background: var(--light);
-            padding: 15px;
+        /* INFORMAÇÕES DO JOGADOR ATUAL */
+        .player-info-bar {
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid var(--warning);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
         }
 
-        .asset-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--dark);
+        .player-info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .asset-value {
-            color: var(--success);
-            font-weight: bold;
-        }
-
-        .connection-status {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        .connected {
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        .disconnected {
-            background: var(--danger);
-        }
-
-        .instructions {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 2px dashed var(--warning);
-        }
-
-        .instructions h3 {
-            color: var(--warning);
-            margin-bottom: 15px;
-        }
-
-        .instructions ul {
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-
-        .instructions li {
-            margin-bottom: 8px;
-        }
-
-        footer {
+        .info-label {
+            font-size: 0.8rem;
+            color: #bdc3c7;
+            margin-bottom: 3px;
             text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            color: var(--light);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .winner-banner {
-            background: linear-gradient(135deg, var(--warning), #ff9f43);
-            color: var(--dark);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 1.5rem;
+        .info-value {
+            font-size: 1.1rem;
             font-weight: bold;
-            margin: 20px 0;
-            animation: celebrate 2s infinite;
+            text-align: center;
         }
 
-        @keyframes celebrate {
+        .info-income { color: var(--success); }
+        .info-expense { color: var(--danger); }
+        .info-warning { color: var(--warning); }
+
+        /* DEBT INDICATOR */
+        .debt-indicator {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--danger);
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            color: var(--danger);
+            grid-column: 1 / -1;
+            justify-content: center;
+        }
+
+        .phase-indicator {
+            background: rgba(52, 152, 219, 0.2);
+            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .board-table {
+                font-size: 0.8rem;
+            }
+            
+            .board-table th,
+            .board-table td {
+                padding: 6px;
+            }
+            
+            .board-table td:first-child {
+                width: 30px;
+                min-width: 30px;
+            }
+            
+            .space-number {
+                width: 25px;
+                font-size: 0.8rem;
+            }
+            
+            .player-markers-cell {
+                min-width: 120px;
+            }
+            
+            .dice {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .player-info-bar {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .debt-indicator {
+                grid-column: 1;
+            }
+        }
+
+        /* CORES DOS JOGADORES */
+        .color-1 { background: var(--player1); }
+        .color-2 { background: var(--player2); }
+        .color-3 { background: var(--player3); }
+        .color-4 { background: var(--player4); }
+        .color-5 { background: var(--player5); }
+        .color-6 { background: var(--player6); }
+
+        /* ANIMAÇÕES */
+        @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+
+        .pulse-warning {
+            animation: pulse 1s infinite;
+        }
+
+        /* GAME STATS */
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--warning);
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1><i class="fas fa-coins"></i> CASHFLOW ONLINE</h1>
-            <p class="subtitle">Jogue com seu irmão à distância em tempo real!</p>
-            <div style="margin-top: 10px;">
-                <span class="connection-status connected"></span>
-                <span>Pronto para jogar! Compartilhe esta tela com seu irmão</span>
-            </div>
-        </header>
-
-        <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> COMO JOGAR À DISTÂNCIA:</h3>
-            <ul>
-                <li><strong>1.</strong> Compartilhe esta tela pelo Zoom, Meet ou WhatsApp Video</li>
-                <li><strong>2.</strong> Cada jogador controla suas próprias decisões quando for sua vez</li>
-                <li><strong>3.</strong> Discutam as oportunidades juntos antes de comprar</li>
-                <li><strong>4.</strong> O objetivo: sair da "Corrida dos Ratos" para a "Via Rápida"</li>
-                <li><strong>5.</strong> Ganha quem comprar um sonho na Via Rápida primeiro!</li>
-            </ul>
-        </div>
-
-        <div class="game-container">
-            <!-- JOGADOR 1 -->
-            <div class="player-section player-1-section">
-                <div class="player-header">
-                    <div class="player-name player-1-name">
-                        <i class="fas fa-user"></i> JOGADOR 1 (VOCÊ)
-                    </div>
-                    <div class="player-status" id="player1Status">AGUARDANDO</div>
+        <!-- TELA DE CONFIGURAÇÃO -->
+        <div id="setupScreen" class="setup-screen">
+            <h2 style="color: var(--warning); text-align: center; margin-bottom: 20px;">
+                <i class="fas fa-cogs"></i> CONFIGURAÇÃO DO JOGO
+            </h2>
+            
+            <div class="setup-form">
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> NÚMERO DE JOGADORES (2-6)</label>
+                    <select id="numPlayers">
+                        <option value="2">2 Jogadores</option>
+                        <option value="3">3 Jogadores</option>
+                        <option value="4">4 Jogadores</option>
+                        <option value="5">5 Jogadores</option>
+                        <option value="6">6 Jogadores</option>
+                    </select>
                 </div>
                 
-                <div class="player-info">
-                    <div class="info-card">
-                        <div class="info-label">Profissão</div>
-                        <div class="info-value" id="p1Profession">Enfermeiro</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Salário</div>
-                        <div class="info-value income" id="p1Salary">R$ 3.500</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Despesas</div>
-                        <div class="info-value expense" id="p1Expenses">R$ 2.800</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Fluxo de Caixa</div>
-                        <div class="info-value income" id="p1Cashflow">R$ 700</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Dinheiro Disponível</div>
-                        <div class="info-value income" id="p1Cash">R$ 1.000</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Renda Passiva</div>
-                        <div class="info-value income" id="p1Passive">R$ 0</div>
-                    </div>
-                </div>
-
-                <div class="game-board">
-                    <div class="board-title">
-                        <i class="fas fa-map"></i> POSIÇÃO ATUAL
-                    </div>
-                    <div class="position-tracker">
-                        <div class="position player-1" id="p1Position">0</div>
-                        <div class="space-info" id="p1Space">INÍCIO - Corrida dos Ratos</div>
-                    </div>
-                    <div id="p1Dreams"></div>
-                </div>
-            </div>
-
-            <!-- JOGADOR 2 -->
-            <div class="player-section player-2-section">
-                <div class="player-header">
-                    <div class="player-name player-2-name">
-                        <i class="fas fa-user-friends"></i> JOGADOR 2 (IRMÃO)
-                    </div>
-                    <div class="player-status" id="player2Status">AGUARDANDO</div>
+                <div id="playerNamesContainer" class="player-names-container">
+                    <!-- Nomes serão gerados aqui -->
                 </div>
                 
-                <div class="player-info">
-                    <div class="info-card">
-                        <div class="info-label">Profissão</div>
-                        <div class="info-value" id="p2Profession">Professor</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Salário</div>
-                        <div class="info-value income" id="p2Salary">R$ 4.200</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Despesas</div>
-                        <div class="info-value expense" id="p2Expenses">R$ 3.500</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Fluxo de Caixa</div>
-                        <div class="info-value income" id="p2Cashflow">R$ 700</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Dinheiro Disponível</div>
-                        <div class="info-value income" id="p2Cash">R$ 1.000</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">Renda Passiva</div>
-                        <div class="info-value income" id="p2Passive">R$ 0</div>
-                    </div>
-                </div>
-
-                <div class="game-board">
-                    <div class="board-title">
-                        <i class="fas fa-map"></i> POSIÇÃO ATUAL
-                    </div>
-                    <div class="position-tracker">
-                        <div class="position player-2" id="p2Position">0</div>
-                        <div class="space-info" id="p2Space">INÍCIO - Corrida dos Ratos</div>
-                    </div>
-                    <div id="p2Dreams"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONTROLES CENTRAIS -->
-        <div class="controls">
-            <h3><i class="fas fa-gamepad"></i> CONTROLES DO JOGO</h3>
-            
-            <div class="dice-container">
-                <div class="dice" id="dice1">?</div>
-                <div class="dice" id="dice2">?</div>
-            </div>
-            
-            <button class="button button-warning" id="rollDiceBtn">
-                <i class="fas fa-dice"></i> ROLAR DADOS
-            </button>
-            
-            <button class="button" id="endTurnBtn" disabled>
-                <i class="fas fa-forward"></i> FINALIZAR TURNO
-            </button>
-            
-            <button class="button button-success" id="showAssetsBtn">
-                <i class="fas fa-chart-pie"></i> VER MEUS ATIVOS
-            </button>
-            
-            <button class="button button-danger" id="newGameBtn">
-                <i class="fas fa-redo"></i> NOVO JOGO
-            </button>
-
-            <div id="winnerMessage"></div>
-        </div>
-
-        <!-- CARD DISPLAY -->
-        <div id="cardArea" style="display: none;">
-            <div class="card-display">
-                <div class="card-title" id="cardType">OPORTUNIDADE</div>
-                <div id="cardDescription">Carregando carta...</div>
-                <div class="card-details" id="cardDetails"></div>
-                <div class="card-action">
-                    <button class="button button-success" id="acceptCardBtn">
-                        <i class="fas fa-check"></i> ACEITAR OFERTA
-                    </button>
-                    <button class="button button-danger" id="declineCardBtn">
-                        <i class="fas fa-times"></i> RECUSAR
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button button-warning" id="startGameBtn" style="padding: 15px 40px; font-size: 1.1rem;">
+                        <i class="fas fa-play"></i> INICIAR JOGO
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- LOG DO JOGO -->
-        <div class="log-section">
-            <div class="log-title">
-                <span><i class="fas fa-history"></i> HISTÓRICO DO JOGO</span>
-                <button class="button" style="padding: 5px 15px; font-size: 0.9rem;" onclick="clearLog()">
-                    Limpar
-                </button>
+        <!-- ÁREA DO JOGO (inicialmente escondida) -->
+        <div id="gameArea" style="display: none;">
+            <header style="text-align: center; margin-bottom: 20px;">
+                <h1 style="color: var(--warning); font-size: 2rem;">
+                    <i class="fas fa-coins"></i> CASHFLOW ONLINE - EDIÇÃO COMPLETA
+                </h1>
+                <p style="color: var(--light);">Dinheiro inicial 180% | Doodads por fase | Juros por volta</p>
+            </header>
+
+            <!-- INFORMAÇÕES DO JOGO -->
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div>Rodada Atual</div>
+                    <div class="stat-value" id="currentRound">1</div>
+                </div>
+                <div class="stat-item">
+                    <div>Fase do Jogo</div>
+                    <div class="stat-value" id="gamePhase">FASE 1 - INÍCIO</div>
+                </div>
+                <div class="stat-item">
+                    <div>Total de Voltas</div>
+                    <div class="stat-value" id="totalLaps">0</div>
+                </div>
             </div>
-            <div class="log-content" id="gameLog">
-                <div class="log-entry">Jogo iniciado! Boa sorte!</div>
-                <div class="log-entry log-player1">Jogador 1 é um Enfermeiro</div>
-                <div class="log-entry log-player2">Jogador 2 é um Professor</div>
-                <div class="log-entry">É a vez do Jogador 1</div>
+
+            <!-- INFORMAÇÕES DO JOGADOR ATUAL -->
+            <div class="player-info-bar" id="currentPlayerInfo">
+                <!-- Informações serão inseridas aqui -->
+            </div>
+
+            <!-- TABELA DO TABULEIRO -->
+            <div class="board-table-container">
+                <h3 style="color: var(--warning); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-table"></i> TABULEIRO - 40 ESPAÇOS
+                </h3>
+                <table class="board-table" id="boardTable">
+                    <!-- Gerado dinamicamente -->
+                </table>
+            </div>
+
+            <!-- TABELA DA VIA RÁPIDA -->
+            <div class="board-table-container" id="fastTrackTable" style="display: none; border-color: #f39c12;">
+                <h3 style="color: #f39c12; margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-bolt"></i> VIA RÁPIDA - PARA JOGADORES QUE SAÍRAM DA CORRIDA DOS RATOS
+                </h3>
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th>ESPAÇO</th>
+                            <th>OPORTUNIDADE</th>
+                            <th>PRÊMIO</th>
+                            <th>JOGADORES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="space-dream">
+                            <td><span class="space-number">0</span></td>
+                            <td><span class="space-type">ENTRADA NA VIA RÁPIDA</span></td>
+                            <td><span class="space-action">Receba R$ 100.000 para investir!</span></td>
+                            <td id="fastTrackMarker0" class="player-markers-cell"></td>
+                        </tr>
+                        <tr class="space-dream">
+                            <td><span class="space-number">1</span></td>
+                            <td><span class="space-type">INVESTIMENTO PRIVADO</span></td>
+                            <td><span class="space-action">Invista R$ 50.000 para ganhar R$ 500/mês</span></td>
+                            <td id="fastTrackMarker1" class="player-markers-cell"></td>
+                        </tr>
+                        <tr class="space-dream">
+                            <td><span class="space-number">2</span></td>
+                            <td><span class="space-type">MERCADO DE AÇÕES</span></td>
+                            <td><span class="space-action">Compre ações com 30% de desconto</span></td>
+                            <td id="fastTrackMarker2" class="player-markers-cell"></td>
+                        </tr>
+                        <tr class="space-dream">
+                            <td><span class="space-number">3</span></td>
+                            <td><span class="space-type">FII DE LUXO</span></td>
+                            <td><span class="space-action">Fundos imobiliários premium</span></td>
+                            <td id="fastTrackMarker3" class="player-markers-cell"></td>
+                        </tr>
+                        <tr class="space-dream">
+                            <td><span class="space-number">4</span></td>
+                            <td><span class="space-type">SONHO DISPONÍVEL</span></td>
+                            <td><span class="space-action">Realize um sonho se tiver renda suficiente</span></td>
+                            <td id="fastTrackMarker4" class="player-markers-cell"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CONTROLES -->
+            <div class="controls">
+                <h3 style="color: var(--warning); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-gamepad"></i> CONTROLES
+                </h3>
+                
+                <div class="dice-container">
+                    <div class="dice" id="dice1">?</div>
+                    <div class="dice" id="dice2">?</div>
+                </div>
+                
+                <div>
+                    <button class="button button-warning" id="rollDiceBtn">
+                        <i class="fas fa-dice"></i> ROLAR DADOS
+                    </button>
+                    
+                    <button class="button" id="endTurnBtn" disabled>
+                        <i class="fas fa-forward"></i> FINALIZAR TURNO
+                    </button>
+                    
+                    <button class="button button-success" id="showAssetsBtn">
+                        <i class="fas fa-chart-pie"></i> MEUS ATIVOS
+                    </button>
+                    
+                    <button class="button button-purple" id="payDebtBtn">
+                        <i class="fas fa-money-bill-wave"></i> QUITAR DÍVIDAS
+                    </button>
+                    
+                    <button class="button button-danger" id="newGameBtn">
+                        <i class="fas fa-redo"></i> NOVO JOGO
+                    </button>
+                </div>
+                
+                <div id="winnerMessage" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- ÁREA DE CARTAS -->
+            <div class="card-display" id="cardDisplay">
+                <div class="card-header">
+                    <div class="card-title" id="cardTitle">OPORTUNIDADE</div>
+                    <div class="card-phase" id="cardPhaseTag">FASE 1</div>
+                </div>
+                
+                <div id="cardDescription" style="margin-bottom: 15px;"></div>
+                
+                <div class="card-details" id="cardDetails">
+                    <!-- Detalhes aqui -->
+                </div>
+                
+                <div class="card-actions" id="cardActions">
+                    <!-- Botões aqui -->
+                </div>
+            </div>
+
+            <!-- LOG DO JOGO -->
+            <div class="log-section">
+                <h3 style="color: var(--warning); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-history"></i> HISTÓRICO DO JOGO
+                </h3>
+                <div class="log-content" id="gameLog">
+                    <div class="log-entry">Jogo iniciado!</div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button class="button" onclick="clearLog()" style="padding: 8px 15px;">
+                        <i class="fas fa-trash"></i> Limpar Histórico
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- MODAL DE ATIVOS -->
         <div class="modal" id="assetsModal">
             <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('assetsModal')">&times;</span>
-                <h2 class="modal-title" id="assetsTitle">MEUS ATIVOS</h2>
+                <div class="modal-header">
+                    <div class="modal-title" id="assetsTitle">MEUS ATIVOS E DÍVIDAS</div>
+                    <button class="close-modal" onclick="closeModal('assetsModal')">&times;</button>
+                </div>
                 <div id="assetsContent">
-                    <p>Carregando...</p>
+                    <!-- Conteúdo aqui -->
                 </div>
             </div>
         </div>
 
-        <footer>
-            <p>Jogo desenvolvido especialmente para jogar com familiares à distância</p>
-            <p>Compartilhe o link: <span id="gameLink" style="color: var(--warning);">Copie o URL desta página</span></p>
-        </footer>
+        <!-- MODAL DE QUITAR DÍVIDAS -->
+        <div class="modal" id="debtModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-money-bill-wave"></i> QUITAR DÍVIDAS</div>
+                    <button class="close-modal" onclick="closeModal('debtModal')">&times;</button>
+                </div>
+                <div id="debtContent">
+                    <!-- Conteúdo aqui -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // =========== ESTADO DO JOGO ===========
+        // =========== CONFIGURAÇÃO DO JOGO ===========
         const gameState = {
             currentPlayer: 1,
             gameActive: true,
             diceValue: 0,
             currentCard: null,
-            spaces: [
-                {type: 'start', name: 'INÍCIO'},
-                {type: 'small', name: 'PEQUENA OPORTUNIDADE'},
-                {type: 'payday', name: 'DIA DE PAGAMENTO'},
-                {type: 'market', name: 'MERCADO'},
-                {type: 'doodad', name: 'DOODAD - GASTO'},
-                {type: 'baby', name: 'BEBÊ - Despesas ↑'},
-                {type: 'charity', name: 'CARIDADE'},
-                {type: 'big', name: 'GRANDE OPORTUNIDADE'},
-                {type: 'payday', name: 'DIA DE PAGAMENTO'},
-                {type: 'market', name: 'MERCADO'},
-                {type: 'small', name: 'PEQUENA OPORTUNIDADE'},
-                {type: 'doodad', name: 'DOODAD - GASTO'},
-                {type: 'baby', name: 'BEBÊ - Despesas ↑'},
-                {type: 'charity', name: 'CARIDADE'},
-                {type: 'big', name: 'GRANDE OPORTUNIDADE'},
-                {type: 'payday', name: 'DIA DE PAGAMENTO'},
-                {type: 'market', name: 'MERCADO'},
-                {type: 'small', name: 'PEQUENA OPORTUNIDADE'},
-                {type: 'doodad', name: 'DOODAD - GASTO'},
-                {type: 'baby', name: 'BEBÊ - Despesas ↑'},
-                {type: 'charity', name: 'CARIDADE'},
-                {type: 'big', name: 'GRANDE OPORTUNIDADE'}
-            ],
-            players: {
-                1: {
-                    name: "Jogador 1 (Você)",
-                    profession: "Enfermeiro",
-                    salary: 3500,
-                    expenses: 2800,
-                    cashflow: 700,
-                    cash: 1000,
-                    passiveIncome: 0,
-                    position: 0,
-                    inRatRace: true,
-                    assets: [],
-                    liabilities: [],
-                    dreams: []
-                },
-                2: {
-                    name: "Jogador 2 (Irmão)",
-                    profession: "Professor",
-                    salary: 4200,
-                    expenses: 3500,
-                    cashflow: 700,
-                    cash: 1000,
-                    passiveIncome: 0,
-                    position: 0,
-                    inRatRace: true,
-                    assets: [],
-                    liabilities: [],
-                    dreams: []
-                }
-            }
+            totalPlayers: 2,
+            players: {},
+            spaces: [],
+            dice3Enabled: false,
+            charityPlayer: null,
+            currentRound: 1,
+            gamePhase: 1, // 1, 2 ou 3
+            totalLaps: 0
         };
 
-        // =========== BANCO DE CARTAS SIMPLIFICADO ===========
-        const cards = {
-            small: [
-                {name: "Ações TechBR", cost: 5000, down: 500, cashflow: 100, type: "ação"},
-                {name: "Ações Mineração", cost: 8000, down: 800, cashflow: 150, type: "ação"},
-                {name: "Títulos Públicos", cost: 3000, down: 300, cashflow: 50, type: "renda fixa"},
-                {name: "ETF de Dividendos", cost: 6000, down: 600, cashflow: 120, type: "ETF"}
+        // =========== PROFISSÕES COM DINHEIRO INICIAL 180% ===========
+        const professions = [
+            { name: "Enfermeiro", salary: 3500, expenses: 2800, cashflow: 700, initialCash: 6300 },
+            { name: "Professor", salary: 4200, expenses: 3500, cashflow: 700, initialCash: 7560 },
+            { name: "Mecânico", salary: 2800, expenses: 2350, cashflow: 450, initialCash: 5040 },
+            { name: "Secretária", salary: 3200, expenses: 2650, cashflow: 550, initialCash: 5760 },
+            { name: "Policial", salary: 3800, expenses: 3100, cashflow: 700, initialCash: 6840 },
+            { name: "Motorista", salary: 3000, expenses: 2500, cashflow: 500, initialCash: 5400 }
+        ];
+
+        // =========== DOODADS POR FASE ===========
+        const doodadsByPhase = {
+            1: [ // FASE 1 — INÍCIO (Rodadas 1 a 8)
+                { name: "Celular novo", cost: 300, monthly: 0, description: "Smartphone básico" },
+                { name: "Roupas", cost: 400, monthly: 0, description: "Roupas novas para trabalho" },
+                { name: "Jantar fora", cost: 500, monthly: 0, description: "Jantar em restaurante chique" },
+                { name: "Manutenção carro", cost: 600, monthly: 0, description: "Reparos no veículo" },
+                { name: "Pequena viagem", cost: 800, monthly: 0, description: "Fim de semana na praia" },
+                { name: "Eletrônicos", cost: 1000, monthly: 0, description: "Tablet e acessórios" }
             ],
-            big: [
-                {name: "Apartamento Aluguel", cost: 150000, down: 15000, cashflow: 800, type: "imóvel"},
-                {name: "Loja Shopping", cost: 120000, down: 30000, cashflow: 2000, type: "negócio"},
-                {name: "Terreno Loteamento", cost: 80000, down: 8000, cashflow: 400, type: "imóvel"},
-                {name: "Franquia Lanches", cost: 200000, down: 50000, cashflow: 3000, type: "negócio"}
+            2: [ // FASE 2 — MEIO DO JOGO (Rodadas 9 a 20)
+                { name: "Smartphone premium", cost: 1200, monthly: 100, description: "Último modelo parcelado" },
+                { name: "TV grande", cost: 1800, monthly: 150, description: "TV 55'' 4K em 12x" },
+                { name: "Moto financiada", cost: 2500, monthly: 250, description: "Moto 0km financiada" },
+                { name: "Curso caro", cost: 2000, monthly: 0, description: "Curso de especialização" },
+                { name: "Viagem internacional", cost: 3000, monthly: 0, description: "1 semana no exterior" }
             ],
-            doodad: [
-                {name: "Férias na Praia", cost: 800, monthly: 0, description: "Viagem de uma semana"},
-                {name: "Carro Novo", cost: 2000, monthly: 400, description: "Parcelado em 5x"},
-                {name: "TV 4K 75\"", cost: 3000, monthly: 250, description: "Smart TV última geração"},
-                {name: "Reforma Cozinha", cost: 1500, monthly: 0, description: "Renovação completa"}
-            ],
-            market: [
-                {name: "MERCADO EM ALTA", effect: "ações", modifier: 1.5, description: "Suas ações valem 50% mais!"},
-                {name: "MERCADO EM BAIXA", effect: "ações", modifier: 0.7, description: "Suas ações valem 30% menos!"},
-                {name: "ALTA DOS ALUGUÉIS", effect: "imóvel", modifier: 1.2, description: "Aluguéis aumentaram 20%!"},
-                {name: "CRISE IMOBILIÁRIA", effect: "imóvel", modifier: 0.75, description: "Imóveis valem 25% menos!"}
+            3: [ // FASE 3 — AVANÇADO (Após rodada 20)
+                { name: "Carro novo", cost: 4000, monthly: 400, description: "Carro 0km financiado" },
+                { name: "Reforma casa", cost: 5000, monthly: 0, description: "Reforma completa" },
+                { name: "Barco", cost: 6000, monthly: 500, description: "Barco de recreio" },
+                { name: "Casa maior", cost: 8000, monthly: 800, description: "Mudança para casa maior" },
+                { name: "Luxo excessivo", cost: 10000, monthly: 1000, description: "Gastos de luxo desnecessários" }
             ]
         };
 
-        // =========== ELEMENTOS DO DOM ===========
-        const rollDiceBtn = document.getElementById('rollDiceBtn');
-        const endTurnBtn = document.getElementById('endTurnBtn');
-        const showAssetsBtn = document.getElementById('showAssetsBtn');
-        const newGameBtn = document.getElementById('newGameBtn');
-        const acceptCardBtn = document.getElementById('acceptCardBtn');
-        const declineCardBtn = document.getElementById('declineCardBtn');
-        const dice1 = document.getElementById('dice1');
-        const dice2 = document.getElementById('dice2');
-        const cardArea = document.getElementById('cardArea');
-        const gameLog = document.getElementById('gameLog');
-
-        // =========== INICIALIZAÇÃO ===========
-        document.addEventListener('DOMContentLoaded', () => {
-            initGame();
-            updateDisplay();
-        });
-
-        function initGame() {
-            // Event Listeners
-            rollDiceBtn.addEventListener('click', rollDice);
-            endTurnBtn.addEventListener('click', endTurn);
-            showAssetsBtn.addEventListener('click', showAssets);
-            newGameBtn.addEventListener('click', newGame);
-            acceptCardBtn.addEventListener('click', acceptCard);
-            declineCardBtn.addEventListener('click', declineCard);
+        // =========== CONFIGURAÇÃO INICIAL ===========
+        function initializeGame() {
+            setupPlayerNames();
             
-            // Atualiza status inicial
-            updatePlayerStatus();
+            document.getElementById('numPlayers').addEventListener('change', setupPlayerNames);
+            document.getElementById('startGameBtn').addEventListener('click', startGame);
+            document.getElementById('rollDiceBtn').addEventListener('click', rollDice);
+            document.getElementById('endTurnBtn').addEventListener('click', endTurn);
+            document.getElementById('showAssetsBtn').addEventListener('click', showAssets);
+            document.getElementById('payDebtBtn').addEventListener('click', showDebtModal);
+            document.getElementById('newGameBtn').addEventListener('click', () => location.reload());
         }
 
-        // =========== ATUALIZA DISPLAY ===========
-        function updateDisplay() {
-            const p1 = gameState.players[1];
-            const p2 = gameState.players[2];
+        function setupPlayerNames() {
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            const container = document.getElementById('playerNamesContainer');
+            container.innerHTML = '';
             
-            // Jogador 1
-            document.getElementById('p1Profession').textContent = p1.profession;
-            document.getElementById('p1Salary').textContent = `R$ ${p1.salary.toLocaleString()}`;
-            document.getElementById('p1Expenses').textContent = `R$ ${p1.expenses.toLocaleString()}`;
-            document.getElementById('p1Cashflow').textContent = `R$ ${p1.cashflow.toLocaleString()}`;
-            document.getElementById('p1Cash').textContent = `R$ ${p1.cash.toLocaleString()}`;
-            document.getElementById('p1Passive').textContent = `R$ ${p1.passiveIncome.toLocaleString()}`;
-            document.getElementById('p1Position').textContent = p1.position;
-            document.getElementById('p1Space').textContent = gameState.spaces[p1.position].name;
-            
-            // Jogador 2
-            document.getElementById('p2Profession').textContent = p2.profession;
-            document.getElementById('p2Salary').textContent = `R$ ${p2.salary.toLocaleString()}`;
-            document.getElementById('p2Expenses').textContent = `R$ ${p2.expenses.toLocaleString()}`;
-            document.getElementById('p2Cashflow').textContent = `R$ ${p2.cashflow.toLocaleString()}`;
-            document.getElementById('p2Cash').textContent = `R$ ${p2.cash.toLocaleString()}`;
-            document.getElementById('p2Passive').textContent = `R$ ${p2.passiveIncome.toLocaleString()}`;
-            document.getElementById('p2Position').textContent = p2.position;
-            document.getElementById('p2Space').textContent = gameState.spaces[p2.position].name;
-            
-            // Atualiza status dos jogadores
-            updatePlayerStatus();
-        }
-
-        function updatePlayerStatus() {
-            const p1Status = document.getElementById('player1Status');
-            const p2Status = document.getElementById('player2Status');
-            
-            if (gameState.currentPlayer === 1) {
-                p1Status.textContent = "SUA VEZ";
-                p1Status.className = "player-status current-turn";
-                p2Status.textContent = "AGUARDANDO";
-                p2Status.className = "player-status";
-            } else {
-                p1Status.textContent = "AGUARDANDO";
-                p1Status.className = "player-status";
-                p2Status.textContent = "SUA VEZ";
-                p2Status.className = "player-status current-turn";
+            for (let i = 1; i <= numPlayers; i++) {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `
+                    <label>Jogador ${i}:</label>
+                    <input type="text" id="playerName${i}" value="Jogador ${i}" placeholder="Nome do jogador">
+                `;
+                container.appendChild(div);
             }
         }
 
-        // =========== ROLAR DADOS ===========
-        function rollDice() {
-            if (!gameState.gameActive) return;
+        function getRandomProfession() {
+            return professions[Math.floor(Math.random() * professions.length)];
+        }
+
+        function startGame() {
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            gameState.totalPlayers = numPlayers;
+            gameState.players = {};
+            gameState.currentRound = 1;
+            gameState.gamePhase = 1;
+            gameState.totalLaps = 0;
             
-            // Anima os dados
+            for (let i = 1; i <= numPlayers; i++) {
+                const name = document.getElementById(`playerName${i}`).value || `Jogador ${i}`;
+                const prof = getRandomProfession();
+                
+                gameState.players[i] = {
+                    id: i,
+                    name: name,
+                    profession: prof.name,
+                    salary: prof.salary,
+                    expenses: prof.expenses,
+                    cashflow: prof.cashflow,
+                    cash: prof.initialCash,
+                    passiveIncome: 0,
+                    position: 0,
+                    inRatRace: true,
+                    assets: [],
+                    liabilities: [],
+                    loans: [],
+                    dreams: [],
+                    hasCharityBonus: false,
+                    lapsCompleted: 0
+                };
+            }
+            
+            createBoard();
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            
+            updateBoard();
+            updateCurrentPlayerInfo();
+            updateGameStats();
+            
+            addLog("🎮 JOGO INICIADO COM NOVAS REGRAS!");
+            addLog("💰 Dinheiro inicial: 180% do salário");
+            addLog("🏦 Juros: 10% por VOLTA no tabuleiro");
+            addLog("📱 Doodads por fase do jogo");
+            
+            for (let i = 1; i <= numPlayers; i++) {
+                const player = gameState.players[i];
+                addLog(`👤 ${player.name} é ${player.profession} (Salário: R$ ${player.salary.toLocaleString()}, Inicial: R$ ${player.cash.toLocaleString()})`);
+            }
+            addLog(`🎲 Vez de: ${gameState.players[1].name}`);
+        }
+
+        // =========== TABULEIRO ===========
+        function createBoard() {
+            gameState.spaces = [];
+            
+            const spaceTypes = [
+                'start', 'small', 'payday', 'market', 'doodad', 'baby', 'charity', 'big',
+                'payday', 'market', 'small', 'doodad', 'baby', 'charity', 'big', 'payday',
+                'market', 'small', 'doodad', 'baby', 'charity', 'big', 'payday', 'market',
+                'small', 'doodad', 'baby', 'charity', 'big', 'payday', 'market', 'small',
+                'doodad', 'baby', 'charity', 'big', 'payday', 'market', 'small', 'dream'
+            ];
+            
+            const spaceNames = [
+                'INÍCIO', 'PEQUENA OPORTUNIDADE', 'DIA DE PAGAMENTO', 'MERCADO', 'DOODAD', 'BEBÊ', 'CARIDADE', 'GRANDE OPORTUNIDADE',
+                'DIA DE PAGAMENTO', 'MERCADO', 'PEQUENA OPORTUNIDADE', 'DOODAD', 'BEBÊ', 'CARIDADE', 'GRANDE OPORTUNIDADE', 'DIA DE PAGAMENTO',
+                'MERCADO', 'PEQUENA OPORTUNIDADE', 'DOODAD', 'BEBÊ', 'CARIDADE', 'GRANDE OPORTUNIDADE', 'DIA DE PAGAMENTO', 'MERCADO',
+                'PEQUENA OPORTUNIDADE', 'DOODAD', 'BEBÊ', 'CARIDADE', 'GRANDE OPORTUNIDADE', 'DIA DE PAGAMENTO', 'MERCADO', 'PEQUENA OPORTUNIDADE',
+                'DOODAD', 'BEBÊ', 'CARIDADE', 'GRANDE OPORTUNIDADE', 'DIA DE PAGAMENTO', 'MERCADO', 'PEQUENA OPORTUNIDADE', 'VIA RÁPIDA'
+            ];
+            
+            const spaceActions = [
+                'Comece aqui!', 'Compre ações ou títulos', 'Receba salário', 'Venda ou compre ativos', 'Gasto obrigatório!',
+                'Despesas aumentam', 'Doação 10% do salário', 'Compre imóveis ou negócios', 'Receba salário', 'Venda ou compre ativos',
+                'Compre ações ou títulos', 'Gasto obrigatório!', 'Despesas aumentam', 'Doação 10% do salário', 'Compre imóveis ou negócios',
+                'Receba salário', 'Venda ou compre ativos', 'Compre ações ou títulos', 'Gasto obrigatório!', 'Despesas aumentam',
+                'Doação 10% do salário', 'Compre imóveis ou negócios', 'Receba salário', 'Venda ou compre ativos', 'Compre ações ou títulos',
+                'Gasto obrigatório!', 'Despesas aumentam', 'Doação 10% do salário', 'Compre imóveis ou negócios', 'Receba salário',
+                'Venda ou compre ativos', 'Compre ações ou títulos', 'Gasto obrigatório!', 'Despesas aumentam', 'Doação 10% do salário',
+                'Compre imóveis ou negócios', 'Receba salário', 'Venda ou compre ativos', 'Compre ações ou títulos', 'Compre um sonho!'
+            ];
+            
+            for (let i = 0; i < 40; i++) {
+                gameState.spaces.push({
+                    num: i,
+                    type: spaceTypes[i],
+                    name: spaceNames[i],
+                    action: spaceActions[i]
+                });
+            }
+            
+            const table = document.getElementById('boardTable');
+            let html = `
+                <thead>
+                    <tr>
+                        <th>ESPAÇO</th>
+                        <th>TIPO</th>
+                        <th>AÇÃO</th>
+                        <th>JOGADORES</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            for (let i = 0; i < 40; i++) {
+                const space = gameState.spaces[i];
+                html += `
+                    <tr class="space-${space.type}">
+                        <td><span class="space-number">${space.num}</span></td>
+                        <td><span class="space-type">${space.name}</span></td>
+                        <td><span class="space-action">${space.action}</span></td>
+                        <td id="spaceMarkers${i}" class="player-markers-cell">
+                            <div class="player-markers" id="markers${i}"></div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            html += '</tbody>';
+            table.innerHTML = html;
+        }
+
+        function updateBoard() {
+            for (let i = 0; i < 40; i++) {
+                const markersDiv = document.getElementById(`markers${i}`);
+                if (markersDiv) markersDiv.innerHTML = '';
+            }
+            
+            for (let playerId = 1; playerId <= gameState.totalPlayers; playerId++) {
+                const player = gameState.players[playerId];
+                const markersDiv = document.getElementById(`markers${player.position}`);
+                
+                if (markersDiv) {
+                    const marker = document.createElement('div');
+                    marker.className = `player-marker color-${playerId}`;
+                    marker.textContent = playerId;
+                    marker.title = player.name;
+                    markersDiv.appendChild(marker);
+                }
+            }
+            
+            // Atualiza a via rápida
+            updateFastTrack();
+        }
+
+        // =========== ATUALIZAR VIA RÁPIDA ===========
+        function updateFastTrack() {
+            // Esconde a tabela se nenhum jogador está na via rápida
+            let hasFastTrackPlayers = false;
+            
+            for (let playerId = 1; playerId <= gameState.totalPlayers; playerId++) {
+                if (!gameState.players[playerId].inRatRace) {
+                    hasFastTrackPlayers = true;
+                    break;
+                }
+            }
+            
+            const fastTrackTable = document.getElementById('fastTrackTable');
+            fastTrackTable.style.display = hasFastTrackPlayers ? 'block' : 'none';
+            
+            // Limpa todos os marcadores
+            for (let i = 0; i < 5; i++) {
+                const markersDiv = document.getElementById(`fastTrackMarker${i}`);
+                if (markersDiv) markersDiv.innerHTML = '';
+            }
+            
+            // Adiciona marcadores dos jogadores na via rápida
+            for (let playerId = 1; playerId <= gameState.totalPlayers; playerId++) {
+                const player = gameState.players[playerId];
+                
+                if (!player.inRatRace) {
+                    // Jogadores na via rápida ficam no espaço 0 (entrada)
+                    const markersDiv = document.getElementById(`fastTrackMarker0`);
+                    
+                    if (markersDiv) {
+                        const marker = document.createElement('div');
+                        marker.className = `player-marker color-${playerId}`;
+                        marker.textContent = playerId;
+                        marker.title = player.name + " (Via Rápida)";
+                        markersDiv.appendChild(marker);
+                    }
+                }
+            }
+        }
+
+        // =========== ATUALIZAR ESTATÍSTICAS DO JOGO ===========
+        function updateGameStats() {
+            // Atualiza fase baseado na rodada
+            if (gameState.currentRound <= 8) {
+                gameState.gamePhase = 1;
+                document.getElementById('gamePhase').textContent = "FASE 1 - INÍCIO";
+                document.getElementById('gamePhase').style.color = "#2ecc71";
+            } else if (gameState.currentRound <= 20) {
+                gameState.gamePhase = 2;
+                document.getElementById('gamePhase').textContent = "FASE 2 - MEIO DO JOGO";
+                document.getElementById('gamePhase').style.color = "#f39c12";
+            } else {
+                gameState.gamePhase = 3;
+                document.getElementById('gamePhase').textContent = "FASE 3 - AVANÇADO";
+                document.getElementById('gamePhase').style.color = "#e74c3c";
+            }
+            
+            document.getElementById('currentRound').textContent = gameState.currentRound;
+            document.getElementById('totalLaps').textContent = gameState.totalLaps;
+        }
+
+        // =========== ATUALIZAR INFORMAÇÕES DO JOGADOR ===========
+        function updateCurrentPlayerInfo() {
+            const player = gameState.players[gameState.currentPlayer];
+            const infoBar = document.getElementById('currentPlayerInfo');
+            
+            // Calcular dívida total e juros POR VOLTA
+            let totalDebt = 0;
+            let lapInterest = 0; // Juros por volta
+            
+            player.loans.forEach(loan => {
+                totalDebt += loan.amount;
+                lapInterest += loan.amount * 0.1; // 10% por VOLTA
+            });
+            
+            let html = `
+                <div class="player-info-item">
+                    <div class="info-label">JOGADOR ATUAL</div>
+                    <div class="info-value" style="color: var(--player${player.id})">
+                        ${player.name}
+                    </div>
+                </div>
+                
+                <div class="player-info-item">
+                    <div class="info-label">PROFISSÃO</div>
+                    <div class="info-value">${player.profession}</div>
+                </div>
+                
+                <div class="player-info-item">
+                    <div class="info-label">DINHEIRO</div>
+                    <div class="info-value info-income">R$ ${player.cash.toLocaleString()}</div>
+                </div>
+                
+                <div class="player-info-item">
+                    <div class="info-label">RENDA PASSIVA</div>
+                    <div class="info-value info-income">R$ ${player.passiveIncome.toLocaleString()}/mês</div>
+                </div>
+                
+                <div class="player-info-item">
+                    <div class="info-label">DESPESAS</div>
+                    <div class="info-value info-expense">R$ ${player.expenses.toLocaleString()}/mês</div>
+                </div>
+                
+                <div class="player-info-item">
+                    <div class="info-label">VOLTAS</div>
+                    <div class="info-value">${player.lapsCompleted}</div>
+                </div>
+            `;
+            
+            if (player.inRatRace) {
+                html += `
+                    <div class="player-info-item">
+                        <div class="info-label">STATUS</div>
+                        <div class="info-value info-warning">CORRIDA DOS RATOS</div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="player-info-item">
+                        <div class="info-label">STATUS</div>
+                        <div class="info-value" style="color: #f39c12;">VIA RÁPIDA 🚀</div>
+                    </div>
+                `;
+            }
+            
+            if (totalDebt > 0) {
+                html += `
+                    <div class="debt-indicator pulse-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>DÍVIDA: R$ ${totalDebt.toLocaleString()} (Juros por volta: R$ ${lapInterest.toLocaleString()})</span>
+                    </div>
+                `;
+            }
+            
+            infoBar.innerHTML = html;
+        }
+
+        // =========== SISTEMA DE DADOS ===========
+        function rollDice() {
+            if (!gameState.gameActive) {
+                alert("O jogo não está ativo!");
+                return;
+            }
+            
+            const player = gameState.players[gameState.currentPlayer];
+            
+            // Se o jogador está na via rápida, não pode rolar dados
+            if (!player.inRatRace) {
+                addLog(`🚀 ${player.name} está na Via Rápida e não rola dados. Esperando sonho...`);
+                document.getElementById('endTurnBtn').disabled = false;
+                return;
+            }
+            
+            const rollBtn = document.getElementById('rollDiceBtn');
+            rollBtn.disabled = true;
+            
+            const dice1 = document.getElementById('dice1');
+            const dice2 = document.getElementById('dice2');
+            const dice3 = document.createElement('div');
+            
             dice1.classList.add('rolling');
             dice2.classList.add('rolling');
-            rollDiceBtn.disabled = true;
             
-            // Rola após animação
+            if (gameState.dice3Enabled && gameState.charityPlayer === gameState.currentPlayer) {
+                dice3.className = 'dice rolling';
+                dice3.textContent = '?';
+                dice3.id = 'dice3';
+                document.querySelector('.dice-container').appendChild(dice3);
+            }
+            
             setTimeout(() => {
-                const dice1Val = Math.floor(Math.random() * 6) + 1;
-                const dice2Val = Math.floor(Math.random() * 6) + 1;
-                const total = dice1Val + dice2Val;
+                const dice1Value = Math.floor(Math.random() * 6) + 1;
+                const dice2Value = Math.floor(Math.random() * 6) + 1;
                 
-                dice1.textContent = dice1Val;
-                dice2.textContent = dice2Val;
-                dice1.classList.remove('rolling');
-                dice2.classList.remove('rolling');
+                let total = dice1Value + dice2Value;
+                let diceValues = [dice1Value, dice2Value];
+                
+                if (gameState.dice3Enabled && gameState.charityPlayer === gameState.currentPlayer) {
+                    const dice3Value = Math.floor(Math.random() * 6) + 1;
+                    diceValues.push(dice3Value);
+                    diceValues.sort((a, b) => b - a);
+                    total = diceValues[0] + diceValues[1];
+                    
+                    dice3.textContent = dice3Value;
+                    dice3.classList.remove('rolling');
+                    addLog(`🎲 Bônus de caridade! Dados: ${dice1Value}, ${dice2Value}, ${dice3Value} → usando ${diceValues[0]} e ${diceValues[1]}`);
+                    
+                    gameState.dice3Enabled = false;
+                    gameState.charityPlayer = null;
+                } else {
+                    addLog(`🎲 ${player.name} rolou ${dice1Value}+${dice2Value}=${total}`);
+                }
                 
                 gameState.diceValue = total;
                 
-                // Move o jogador
+                dice1.textContent = dice1Value;
+                dice2.textContent = dice2Value;
+                dice1.classList.remove('rolling');
+                dice2.classList.remove('rolling');
+                
                 movePlayer(gameState.currentPlayer, total);
                 
-                // Permite finalizar turno
-                endTurnBtn.disabled = false;
+                document.getElementById('endTurnBtn').disabled = false;
                 
-                addLog(`🎲 Jogador ${gameState.currentPlayer} rolou ${dice1Val}+${dice2Val}=${total}`);
             }, 800);
         }
 
-        // =========== MOVER JOGADOR ===========
         function movePlayer(playerId, steps) {
             const player = gameState.players[playerId];
             
-            // Move na pista
-            player.position = (player.position + steps) % gameState.spaces.length;
-            
-            // Se passou pelo início, recebe salário
-            if (player.position < steps && steps > 0) {
-                payday(playerId);
+            // Se o jogador está na via rápida, não se move no tabuleiro normal
+            if (!player.inRatRace) {
+                addLog(`🚀 ${player.name} está na Via Rápida e não se move no tabuleiro normal`);
+                updateFastTrack();
+                document.getElementById('endTurnBtn').disabled = false;
+                return;
             }
             
-            // Ativa o espaço
-            activateSpace(playerId, player.position);
+            const oldPosition = player.position;
+            let newPosition = (player.position + steps) % 40;
             
-            updateDisplay();
+            // Verifica se completou uma volta
+            if (newPosition < oldPosition && steps > 0) {
+                player.lapsCompleted++;
+                gameState.totalLaps = Math.max(gameState.totalLaps, player.lapsCompleted);
+                
+                // Aplica juros dos empréstimos a cada volta
+                applyLoanInterest(playerId);
+                
+                // Recebe pagamento
+                payday(playerId);
+                
+                addLog(`🔄 ${player.name} completou uma volta! Total: ${player.lapsCompleted} volta(s)`);
+            }
+            
+            player.position = newPosition;
+            updateBoard();
+            updateCurrentPlayerInfo();
+            updateGameStats();
+            activateSpace(playerId, newPosition);
         }
 
-        // =========== ATIVAR ESPAÇO ===========
+        // =========== APLICAR JUROS POR VOLTA ===========
+        function applyLoanInterest(playerId) {
+            const player = gameState.players[playerId];
+            
+            if (player.loans.length === 0) return;
+            
+            let totalInterest = 0;
+            
+            player.loans.forEach(loan => {
+                const interest = loan.amount * 0.1; // 10% por volta
+                totalInterest += interest;
+            });
+            
+            // Os juros são adicionados às despesas mensais
+            player.expenses += totalInterest;
+            player.cashflow = player.salary + player.passiveIncome - player.expenses;
+            
+            if (totalInterest > 0) {
+                addLog(`🏦 ${player.name} pagou juros de R$ ${totalInterest.toLocaleString()} nesta volta`);
+            }
+        }
+
+        // =========== ATIVAÇÃO DE ESPAÇOS ===========
         function activateSpace(playerId, position) {
             const player = gameState.players[playerId];
             const space = gameState.spaces[position];
             
-            addLog(`📍 Jogador ${playerId} parou em: ${space.name}`);
+            document.getElementById('cardDisplay').style.display = 'none';
             
-            switch(space.type) {
-                case 'payday':
-                    payday(playerId);
-                    break;
-                case 'small':
-                    showCard('small', playerId);
-                    break;
-                case 'big':
-                    showCard('big', playerId);
-                    break;
-                case 'doodad':
-                    showCard('doodad', playerId);
-                    break;
-                case 'market':
-                    showCard('market', playerId);
-                    break;
-                case 'baby':
-                    haveBaby(playerId);
-                    break;
-                case 'charity':
-                    charity(playerId);
-                    break;
-                case 'start':
-                    addLog(`🎯 Jogador ${playerId} passou pelo início`);
-                    break;
-            }
+            addLog(`📍 ${player.name} está no espaço ${position}: ${space.name}`);
+            
+            setTimeout(() => {
+                switch(space.type) {
+                    case 'payday':
+                        payday(playerId);
+                        break;
+                    case 'baby':
+                        haveBaby(playerId);
+                        break;
+                    case 'charity':
+                        charity(playerId);
+                        break;
+                    case 'small':
+                        showCard('small', playerId);
+                        break;
+                    case 'big':
+                        showCard('big', playerId);
+                        break;
+                    case 'doodad':
+                        showDoodadCard(playerId);
+                        break;
+                    case 'market':
+                        showCard('market', playerId);
+                        break;
+                    case 'dream':
+                        if (!player.inRatRace) {
+                            showDream(playerId);
+                        }
+                        break;
+                }
+            }, 500);
         }
 
-        // =========== DIA DE PAGAMENTO ===========
-        function payday(playerId) {
-            const player = gameState.players[playerId];
-            
-            // Recebe salário + renda passiva
-            const totalIncome = player.salary + player.passiveIncome;
-            player.cash += totalIncome;
-            
-            addLog(`💰 Jogador ${playerId} recebeu: Salário R$ ${player.salary.toLocaleString()} + Renda Passiva R$ ${player.passiveIncome.toLocaleString()} = R$ ${totalIncome.toLocaleString()}`, 'income');
-            updateDisplay();
-        }
-
-        // =========== MOSTRAR CARTA ===========
-        function showCard(type, playerId) {
-            const cardArray = cards[type];
-            const randomCard = cardArray[Math.floor(Math.random() * cardArray.length)];
-            
-            gameState.currentCard = {
-                ...randomCard,
-                playerId: playerId,
-                type: type
+        // =========== SISTEMA DE CARTAS ===========
+        function getRandomCard(type) {
+            const cards = {
+                small: [
+                    { name: "Ações TechBR", type: "ação", cost: 5000, downPayment: 500, cashflow: 100, description: "Startup de tecnologia em crescimento" },
+                    { name: "FII Shopping", type: "fii", cost: 6000, downPayment: 600, cashflow: 120, description: "Fundos Imobiliários de shopping centers" },
+                    { name: "Tesouro Direto", type: "título", cost: 3000, downPayment: 300, cashflow: 50, description: "Títulos públicos federais" },
+                    { name: "Ações Mineração", type: "ação", cost: 8000, downPayment: 800, cashflow: 150, description: "Empresa de mineração com novas reservas" }
+                ],
+                big: [
+                    { name: "Apartamento Centro", type: "imóvel", cost: 150000, downPayment: 15000, cashflow: 800, description: "2 quartos em bairro consolidado" },
+                    { name: "Franquia Lanches", type: "negócio", cost: 200000, downPayment: 50000, cashflow: 3000, description: "Marca conhecida em local movimentado" },
+                    { name: "Casa Condomínio", type: "imóvel", cost: 250000, downPayment: 25000, cashflow: 1200, description: "3 quartos em área nobre" },
+                    { name: "Loja Shopping", type: "negócio", cost: 120000, downPayment: 30000, cashflow: 2000, description: "Em shopping center consolidado" }
+                ],
+                market: [
+                    { name: "BOLSA EM ALTA!", type: "alta", effect: "ações", modifier: 1.5, description: "Índice subiu 15% - ótimo momento para vender ações!" },
+                    { name: "IMÓVEIS VALORIZADOS", type: "alta", effect: "imóvel", modifier: 1.3, description: "Demanda por imóveis aumentou - venda com lucro!" },
+                    { name: "BOLSA EM QUEDA", type: "baixa", effect: "ações", modifier: 0.7, description: "Crise política afetou o mercado de ações" },
+                    { name: "CRISE IMOBILIÁRIA", type: "baixa", effect: "imóvel", modifier: 0.75, description: "Juros altos esfriaram o mercado imobiliário" },
+                    { name: "OPORTUNIDADE ESPECIAL", type: "oportunidade", effect: "ações", modifier: 0.6, description: "Ações descontadas - compre agora com 40% OFF!" }
+                ]
             };
             
-            // Mostra área da carta
-            cardArea.style.display = 'block';
-            cardArea.scrollIntoView({ behavior: 'smooth' });
-            
-            // Atualiza conteúdo da carta
-            document.getElementById('cardType').textContent = type === 'small' ? 'PEQUENA OPORTUNIDADE' : 
-                                                              type === 'big' ? 'GRANDE OPORTUNIDADE' :
-                                                              type === 'doodad' ? 'DOODAD - GASTO' : 'CARTA DE MERCADO';
-            
-            let description = '';
-            let details = '';
-            
-            if (type === 'small' || type === 'big') {
-                description = `<strong>${randomCard.name}</strong><br>${randomCard.type.toUpperCase()}`;
-                details = `
-                    <div><strong>Custo Total:</strong> R$ ${randomCard.cost.toLocaleString()}</div>
-                    <div><strong>Entrada:</strong> R$ ${randomCard.down.toLocaleString()}</div>
-                    <div><strong>Renda Mensal:</strong> +R$ ${randomCard.cashflow}</div>
-                `;
-            } else if (type === 'doodad') {
-                description = `<strong>${randomCard.name}</strong><br>${randomCard.description}`;
-                details = `
-                    <div><strong>Custo:</strong> R$ ${randomCard.cost.toLocaleString()}</div>
-                    ${randomCard.monthly > 0 ? `<div><strong>Parcela Mensal:</strong> R$ ${randomCard.monthly}</div>` : ''}
-                `;
-            } else if (type === 'market') {
-                description = `<strong>${randomCard.name}</strong><br>${randomCard.description}`;
-                details = `
-                    <div><strong>Efeito:</strong> ${randomCard.effect === 'ações' ? 'Afeta suas AÇÕES' : 'Afeta seus IMÓVEIS'}</div>
-                    <div><strong>Variação:</strong> ${randomCard.modifier > 1 ? '+' : ''}${((randomCard.modifier - 1) * 100).toFixed(0)}%</div>
-                `;
-            }
-            
-            document.getElementById('cardDescription').innerHTML = description;
-            document.getElementById('cardDetails').innerHTML = details;
+            const cardList = cards[type];
+            return cardList[Math.floor(Math.random() * cardList.length)];
         }
 
-        // =========== ACEITAR CARTA ===========
-        function acceptCard() {
+        function showCard(type, playerId) {
+            const card = getRandomCard(type);
+            gameState.currentCard = { ...card, playerId: playerId, cardType: type };
+            
+            const display = document.getElementById('cardDisplay');
+            const title = document.getElementById('cardTitle');
+            const description = document.getElementById('cardDescription');
+            const details = document.getElementById('cardDetails');
+            const actions = document.getElementById('cardActions');
+            
+            if (type === 'small') {
+                title.textContent = 'PEQUENA OPORTUNIDADE';
+                description.textContent = card.description;
+                
+                details.innerHTML = `
+                    <div class="card-detail">
+                        <div class="detail-label">Nome</div>
+                        <div class="detail-value">${card.name}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Tipo</div>
+                        <div class="detail-value">${card.type}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Custo</div>
+                        <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Entrada</div>
+                        <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Renda Mensal</div>
+                        <div class="detail-value" style="color: #2ecc71;">+R$ ${card.cashflow}</div>
+                    </div>
+                `;
+                
+                actions.innerHTML = `
+                    <button class="button button-success" onclick="buyAsset()">
+                        <i class="fas fa-check"></i> COMPRAR
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> RECUSAR
+                    </button>
+                `;
+                
+            } else if (type === 'big') {
+                title.textContent = 'GRANDE OPORTUNIDADE';
+                description.textContent = card.description;
+                
+                details.innerHTML = `
+                    <div class="card-detail">
+                        <div class="detail-label">Nome</div>
+                        <div class="detail-value">${card.name}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Tipo</div>
+                        <div class="detail-value">${card.type}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Custo Total</div>
+                        <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Entrada</div>
+                        <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Renda Mensal</div>
+                        <div class="detail-value" style="color: #2ecc71;">+R$ ${card.cashflow}</div>
+                    </div>
+                `;
+                
+                actions.innerHTML = `
+                    <button class="button button-success" onclick="buyAsset()">
+                        <i class="fas fa-check"></i> COMPRAR
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> RECUSAR
+                    </button>
+                `;
+                
+            } else if (type === 'market') {
+                title.textContent = 'MERCADO';
+                description.textContent = card.description;
+                
+                const isHighMarket = card.type === 'alta' || card.type === 'oportunidade';
+                
+                details.innerHTML = `
+                    <div class="card-detail">
+                        <div class="detail-label">Evento</div>
+                        <div class="detail-value">${card.name}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Afeta</div>
+                        <div class="detail-value">${card.effect === 'ações' ? 'AÇÕES' : 'IMÓVEIS'}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Variação</div>
+                        <div class="detail-value" style="color: ${card.modifier > 1 ? '#2ecc71' : '#e74c3c'}">
+                            ${card.modifier > 1 ? '+' : ''}${((card.modifier - 1) * 100).toFixed(0)}%
+                        </div>
+                    </div>
+                `;
+                
+                if (isHighMarket) {
+                    actions.innerHTML = `
+                        <button class="button button-success" onclick="marketAction(true)">
+                            <i class="fas fa-check"></i> VENDER ATIVOS
+                        </button>
+                        <button class="button" onclick="marketAction(false)">
+                            <i class="fas fa-times"></i> MANTER ATIVOS
+                        </button>
+                    `;
+                } else {
+                    actions.innerHTML = `
+                        <button class="button" onclick="declineCard()">
+                            <i class="fas fa-check"></i> ENTENDI (APENAS INFORMAÇÃO)
+                        </button>
+                    `;
+                }
+            }
+            
+            display.style.display = 'block';
+            display.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========== DOODADS POR FASE ===========
+        function showDoodadCard(playerId) {
+            const doodads = doodadsByPhase[gameState.gamePhase];
+            const card = doodads[Math.floor(Math.random() * doodads.length)];
+            
+            gameState.currentCard = { 
+                ...card, 
+                playerId: playerId, 
+                cardType: 'doodad',
+                phase: gameState.gamePhase 
+            };
+            
+            const display = document.getElementById('cardDisplay');
+            const title = document.getElementById('cardTitle');
+            const phaseTag = document.getElementById('cardPhaseTag');
+            const description = document.getElementById('cardDescription');
+            const details = document.getElementById('cardDetails');
+            const actions = document.getElementById('cardActions');
+            
+            // Configuração baseada na fase
+            let phaseText = "";
+            let phaseColor = "";
+            
+            switch(gameState.gamePhase) {
+                case 1:
+                    phaseText = "FASE 1 - INÍCIO";
+                    phaseColor = "#2ecc71";
+                    break;
+                case 2:
+                    phaseText = "FASE 2 - MEIO DO JOGO";
+                    phaseColor = "#f39c12";
+                    break;
+                case 3:
+                    phaseText = "FASE 3 - AVANÇADO";
+                    phaseColor = "#e74c3c";
+                    break;
+            }
+            
+            title.textContent = 'DOODAD - GASTO OBRIGATÓRIO';
+            phaseTag.textContent = phaseText;
+            phaseTag.style.backgroundColor = phaseColor;
+            description.textContent = `⚠️ ${card.description} - Este gasto é OBRIGATÓRIO!`;
+            
+            details.innerHTML = `
+                <div class="card-detail">
+                    <div class="detail-label">Item</div>
+                    <div class="detail-value">${card.name}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Fase</div>
+                    <div class="detail-value">${phaseText}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Custo</div>
+                    <div class="detail-value" style="color: #e74c3c;">R$ ${card.cost.toLocaleString()}</div>
+                </div>
+                ${card.monthly > 0 ? `
+                <div class="card-detail">
+                    <div class="detail-label">Despesa Mensal</div>
+                    <div class="detail-value" style="color: #e74c3c;">R$ ${card.monthly}/mês</div>
+                </div>
+                ` : ''}
+            `;
+            
+            actions.innerHTML = `
+                <button class="button button-danger" onclick="payDoodad()">
+                    <i class="fas fa-check"></i> PAGAR (OBRIGATÓRIO)
+                </button>
+            `;
+            
+            display.style.display = 'block';
+            display.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========== SISTEMA DE EMPRÉSTIMOS ===========
+        function takeLoan(playerId, amount) {
+            const player = gameState.players[playerId];
+            const loanAmount = Math.max(1000, Math.ceil(amount / 1000) * 1000);
+            
+            player.loans.push({
+                amount: loanAmount,
+                interestRate: 0.1, // 10% por volta
+                takenAt: Date.now()
+            });
+            
+            player.cash += loanAmount;
+            
+            // Os juros serão aplicados a cada volta, não imediatamente
+            addLog(`🏦 ${player.name} pegou empréstimo de R$ ${loanAmount.toLocaleString()} (juros: 10% por volta)`);
+            
+            updateCurrentPlayerInfo();
+            return loanAmount;
+        }
+
+        // =========== PAGAR DOODAD ===========
+        function payDoodad() {
             const card = gameState.currentCard;
             const player = gameState.players[card.playerId];
             
-            if (card.type === 'small' || card.type === 'big') {
-                // Compra de ativo
-                if (player.cash < card.down) {
-                    alert(`Dinheiro insuficiente! Necessário: R$ ${card.down.toLocaleString()}`);
-                    return;
-                }
-                
-                player.cash -= card.down;
-                player.passiveIncome += card.cashflow;
-                player.assets.push({
-                    name: card.name,
-                    type: card.type,
-                    value: card.down,
-                    cashflow: card.cashflow
-                });
-                
-                addLog(`✅ Jogador ${card.playerId} comprou ${card.name} por R$ ${card.down.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`, 'income');
-                
-                // Verifica se pode sair da Corrida dos Ratos
-                checkExitRatRace(card.playerId);
-                
-            } else if (card.type === 'doodad') {
-                // Gasto
-                if (player.cash < card.cost) {
-                    alert(`Dinheiro insuficiente! Necessário: R$ ${card.cost.toLocaleString()}`);
-                    return;
-                }
-                
+            if (player.cash >= card.cost) {
                 player.cash -= card.cost;
                 
                 if (card.monthly > 0) {
                     player.expenses += card.monthly;
-                    player.cashflow = player.salary - player.expenses;
+                    player.cashflow = player.salary + player.passiveIncome - player.expenses;
                     player.liabilities.push({
                         name: card.name,
-                        monthly: card.monthly
+                        monthly: card.monthly,
+                        phase: card.phase
                     });
                 }
                 
-                addLog(`💸 Jogador ${card.playerId} gastou R$ ${card.cost.toLocaleString()} em ${card.name}`, 'expense');
+                addLog(`💸 ${player.name} pagou R$ ${card.cost.toLocaleString()} por ${card.name} (Fase ${card.phase})`);
                 
-            } else if (card.type === 'market') {
-                // Efeito de mercado
-                applyMarketEffect(card.playerId, card);
-            }
-            
-            // Esconde a carta
-            cardArea.style.display = 'none';
-            updateDisplay();
-        }
-
-        // =========== RECUSAR CARTA ===========
-        function declineCard() {
-            const card = gameState.currentCard;
-            addLog(`❌ Jogador ${card.playerId} recusou a oportunidade`);
-            cardArea.style.display = 'none';
-        }
-
-        // =========== APLICAR EFEITO DE MERCADO ===========
-        function applyMarketEffect(playerId, card) {
-            const player = gameState.players[playerId];
-            let effectApplied = false;
-            
-            player.assets.forEach(asset => {
-                if ((card.effect === 'ações' && asset.type === 'small') || 
-                    (card.effect === 'imóvel' && asset.type === 'big')) {
-                    
-                    // Ajusta valor do ativo
-                    const oldValue = asset.value;
-                    asset.value = Math.round(asset.value * card.modifier);
-                    const difference = asset.value - oldValue;
-                    
-                    // Se for mercado em alta para imóveis, aumenta renda
-                    if (card.effect === 'imóvel' && card.modifier > 1) {
-                        asset.cashflow = Math.round(asset.cashflow * 1.2);
-                        player.passiveIncome += (asset.cashflow - (asset.cashflow / 1.2));
-                    }
-                    
-                    effectApplied = true;
-                    addLog(`📈 ${card.name}: ${asset.name} ${difference >= 0 ? 'valorizou' : 'desvalorizou'} R$ ${Math.abs(difference).toLocaleString()}`, 
-                           difference >= 0 ? 'income' : 'expense');
+            } else {
+                const shortage = card.cost - player.cash;
+                const loanAmount = takeLoan(card.playerId, shortage);
+                
+                player.cash += loanAmount;
+                player.cash -= card.cost;
+                
+                if (card.monthly > 0) {
+                    player.expenses += card.monthly;
+                    player.cashflow = player.salary + player.passiveIncome - player.expenses;
+                    player.liabilities.push({
+                        name: card.name,
+                        monthly: card.monthly,
+                        phase: card.phase
+                    });
                 }
-            });
-            
-            if (!effectApplied) {
-                addLog(`📊 ${card.name} (não afetou seus ativos)`);
+                
+                addLog(`💸 ${player.name} pagou ${card.name} com empréstimo de R$ ${loanAmount.toLocaleString()}`);
             }
             
-            updateDisplay();
+            checkExitRatRace(card.playerId);
+            document.getElementById('cardDisplay').style.display = 'none';
+            updateCurrentPlayerInfo();
         }
 
-        // =========== TER UM BEBÊ ===========
+        // =========== COMPRAR ATIVOS ===========
+        function buyAsset() {
+            const card = gameState.currentCard;
+            const player = gameState.players[card.playerId];
+            
+            if (player.cash < card.downPayment) {
+                const shortage = card.downPayment - player.cash;
+                const neededLoan = Math.max(1000, Math.ceil(shortage / 1000) * 1000);
+                
+                if (confirm(`Dinheiro insuficiente! Você tem R$ ${player.cash.toLocaleString()}, precisa de R$ ${card.downPayment.toLocaleString()}.\n\nPegar empréstimo de R$ ${neededLoan.toLocaleString()}? (Juros: 10% por volta)`)) {
+                    const loanAmount = takeLoan(card.playerId, shortage);
+                    player.cash += loanAmount;
+                    
+                    player.cash -= card.downPayment;
+                    player.passiveIncome += card.cashflow;
+                    player.cashflow = player.salary + player.passiveIncome - player.expenses;
+                    
+                    player.assets.push({
+                        name: card.name,
+                        type: card.cardType === 'small' ? 'pequeno' : 'grande',
+                        value: card.downPayment,
+                        cashflow: card.cashflow,
+                        originalCost: card.cost
+                    });
+                    
+                    addLog(`✅ ${player.name} comprou ${card.name} com empréstimo de R$ ${loanAmount.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                } else {
+                    addLog(`❌ ${player.name} desistiu de comprar ${card.name} por falta de dinheiro`);
+                    document.getElementById('cardDisplay').style.display = 'none';
+                    return;
+                }
+            } else {
+                player.cash -= card.downPayment;
+                player.passiveIncome += card.cashflow;
+                player.cashflow = player.salary + player.passiveIncome - player.expenses;
+                
+                player.assets.push({
+                    name: card.name,
+                    type: card.cardType === 'small' ? 'pequeno' : 'grande',
+                    value: card.downPayment,
+                    cashflow: card.cashflow,
+                    originalCost: card.cost
+                });
+                
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+            }
+            
+            checkExitRatRace(card.playerId);
+            document.getElementById('cardDisplay').style.display = 'none';
+            updateCurrentPlayerInfo();
+        }
+
+        function marketAction(sell) {
+            const card = gameState.currentCard;
+            const player = gameState.players[card.playerId];
+            
+            if (sell) {
+                const assetsToSell = player.assets.filter(asset => {
+                    return (card.effect === 'ações' && asset.type === 'pequeno') ||
+                           (card.effect === 'imóvel' && asset.type === 'grande');
+                });
+                
+                if (assetsToSell.length > 0) {
+                    const asset = assetsToSell[0];
+                    const saleValue = Math.round(asset.value * card.modifier);
+                    
+                    const index = player.assets.indexOf(asset);
+                    player.assets.splice(index, 1);
+                    player.passiveIncome -= asset.cashflow;
+                    player.cashflow = player.salary + player.passiveIncome - player.expenses;
+                    player.cash += saleValue;
+                    
+                    addLog(`💰 ${player.name} vendeu ${asset.name} por R$ ${saleValue.toLocaleString()}`);
+                } else {
+                    addLog(`📊 ${player.name} não tem ativos para vender`);
+                }
+            } else {
+                addLog(`📊 ${player.name} optou por manter os ativos`);
+            }
+            
+            document.getElementById('cardDisplay').style.display = 'none';
+        }
+
+        function declineCard() {
+            const player = gameState.players[gameState.currentCard.playerId];
+            addLog(`❌ ${player.name} recusou a oferta`);
+            document.getElementById('cardDisplay').style.display = 'none';
+        }
+
+        // =========== EVENTOS DO TABULEIRO ===========
+        function payday(playerId) {
+            const player = gameState.players[playerId];
+            const total = player.salary + player.passiveIncome;
+            player.cash += total;
+            
+            addLog(`💰 ${player.name} recebeu R$ ${total.toLocaleString()} (salário + renda passiva)`);
+            updateCurrentPlayerInfo();
+        }
+
         function haveBaby(playerId) {
             const player = gameState.players[playerId];
-            const babyCost = 300;
+            const cost = 300;
             
-            player.expenses += babyCost;
-            player.cashflow = player.salary - player.expenses;
+            player.expenses += cost;
+            player.cashflow = player.salary + player.passiveIncome - player.expenses;
             
-            addLog(`👶 Jogador ${playerId} teve um bebê! Despesas +R$ ${babyCost}/mês`, 'expense');
-            updateDisplay();
+            addLog(`👶 ${player.name} teve um bebê! Despesas +R$ ${cost}/mês`);
+            updateCurrentPlayerInfo();
         }
 
-        // =========== CARIDADE ===========
         function charity(playerId) {
             const player = gameState.players[playerId];
-            const charityAmount = Math.floor(player.salary * 0.1); // 10% do salário
+            const amount = Math.floor(player.salary * 0.1);
             
-            if (player.cash >= charityAmount) {
-                player.cash -= charityAmount;
-                addLog(`❤️ Jogador ${playerId} doou R$ ${charityAmount.toLocaleString()} para caridade`, 'expense');
+            if (player.cash >= amount) {
+                player.cash -= amount;
+                addLog(`❤️ ${player.name} doou R$ ${amount.toLocaleString()} para caridade`);
+                
+                gameState.dice3Enabled = true;
+                gameState.charityPlayer = playerId;
+                addLog(`🎲 Próximo turno, ${player.name} pode rolar 3 dados e usar os 2 maiores!`);
             } else {
-                addLog(`❤️ Jogador ${playerId} quis doar, mas não tinha dinheiro suficiente`);
+                const loanAmount = takeLoan(playerId, amount);
+                player.cash += loanAmount;
+                player.cash -= amount;
+                
+                addLog(`❤️ ${player.name} doou R$ ${amount.toLocaleString()} com empréstimo`);
+                
+                gameState.dice3Enabled = true;
+                gameState.charityPlayer = playerId;
+                addLog(`🎲 Próximo turno, ${player.name} pode rolar 3 dados e usar os 2 maiores!`);
             }
             
-            updateDisplay();
+            updateCurrentPlayerInfo();
         }
 
-        // =========== VERIFICAR SAÍDA DA CORRIDA DOS RATOS ===========
+        // =========== QUITAR DÍVIDAS ===========
+        function showDebtModal() {
+            const player = gameState.players[gameState.currentPlayer];
+            let totalDebt = 0;
+            let lapInterest = 0; // Juros por volta
+            
+            player.loans.forEach(loan => {
+                totalDebt += loan.amount;
+                lapInterest += loan.amount * 0.1;
+            });
+            
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: var(--dark); margin-bottom: 10px;">Situação Financeira</h3>
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                            <span style="color: #666;">Dinheiro Disponível:</span>
+                            <span style="font-weight: bold; color: var(--dark);">R$ ${player.cash.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                            <span style="color: #666;">Dívida Total:</span>
+                            <span style="font-weight: bold; color: #e74c3c;">R$ ${totalDebt.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                            <span style="color: #666;">Juros por Volta:</span>
+                            <span style="font-weight: bold; color: #e74c3c;">R$ ${lapInterest.toLocaleString()}/volta</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                            <span style="color: #666;">Voltas Completas:</span>
+                            <span style="font-weight: bold; color: var(--dark);">${player.lapsCompleted}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            if (totalDebt === 0) {
+                html += `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-check-circle" style="font-size: 3rem; color: #2ecc71;"></i>
+                        <h3 style="color: #2ecc71; margin: 10px 0;">Sem dívidas!</h3>
+                        <p>Você não tem empréstimos para quitar.</p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <h3 style="color: var(--dark); margin-bottom: 15px;">Seus Empréstimos:</h3>
+                `;
+                
+                player.loans.forEach((loan, index) => {
+                    const lapPayment = loan.amount * 0.1;
+                    const canPayFull = player.cash >= loan.amount;
+                    
+                    html += `
+                        <div style="background: ${index % 2 === 0 ? '#f8f9fa' : '#e9ecef'}; 
+                                    padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>Empréstimo #${index + 1}</strong><br>
+                                    <small>Valor: R$ ${loan.amount.toLocaleString()}</small><br>
+                                    <small style="color: #e74c3c;">Juros por volta: R$ ${lapPayment.toLocaleString()}</small>
+                                </div>
+                                <div>
+                                    ${canPayFull ? 
+                                        `<button class="button button-success" onclick="payLoan(${index}, ${loan.amount})" style="padding: 8px 15px;">
+                                            <i class="fas fa-check"></i> Quitar
+                                        </button>` : 
+                                        `<button class="button" onclick="payLoan(${index}, ${player.cash})" style="padding: 8px 15px;">
+                                            <i class="fas fa-check"></i> Pagar R$ ${player.cash.toLocaleString()}
+                                        </button>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button class="button button-danger" onclick="payAllLoans()" style="padding: 12px 30px;">
+                            <i class="fas fa-money-bill-wave"></i> QUITAR TODAS AS DÍVIDAS
+                        </button>
+                        <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Quitar dívidas remove os juros que seriam cobrados nas próximas voltas!
+                        </p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('debtContent').innerHTML = html;
+            document.getElementById('debtModal').style.display = 'flex';
+        }
+
+        function payLoan(loanIndex, amount) {
+            const player = gameState.players[gameState.currentPlayer];
+            const loan = player.loans[loanIndex];
+            
+            if (amount > player.cash) {
+                alert(`Você só tem R$ ${player.cash.toLocaleString()} disponível!`);
+                return;
+            }
+            
+            if (amount >= loan.amount) {
+                // Remove juros que seriam cobrados
+                const interestSaved = loan.amount * 0.1;
+                // Não remove das despesas porque juros são cobrados por volta, não mensalmente
+                
+                player.cash -= loan.amount;
+                player.loans.splice(loanIndex, 1);
+                
+                addLog(`💳 ${player.name} quitou empréstimo de R$ ${loan.amount.toLocaleString()} (evitou juros de R$ ${interestSaved.toLocaleString()}/volta)`);
+            } else {
+                loan.amount -= amount;
+                player.cash -= amount;
+                
+                addLog(`💳 ${player.name} pagou R$ ${amount.toLocaleString()} do empréstimo`);
+            }
+            
+            updateCurrentPlayerInfo();
+            showDebtModal();
+        }
+
+        function payAllLoans() {
+            const player = gameState.players[gameState.currentPlayer];
+            let totalDebt = 0;
+            let totalInterestSaved = 0;
+            
+            player.loans.forEach(loan => {
+                totalDebt += loan.amount;
+                totalInterestSaved += loan.amount * 0.1;
+            });
+            
+            if (player.cash < totalDebt) {
+                alert(`Dinheiro insuficiente! Você tem R$ ${player.cash.toLocaleString()}, precisa de R$ ${totalDebt.toLocaleString()}`);
+                return;
+            }
+            
+            player.cash -= totalDebt;
+            player.loans = [];
+            
+            addLog(`💳 ${player.name} quitou TODAS as dívidas! Total: R$ ${totalDebt.toLocaleString()} (evitou juros de R$ ${totalInterestSaved.toLocaleString()}/volta)`);
+            
+            closeModal('debtModal');
+            updateCurrentPlayerInfo();
+        }
+
+        // =========== SAIR DA CORRIDA DOS RATOS ===========
         function checkExitRatRace(playerId) {
             const player = gameState.players[playerId];
             
             if (player.passiveIncome > player.expenses && player.inRatRace) {
                 player.inRatRace = false;
-                addLog(`🚀🎉 JOGADOR ${playerId} SAIU DA CORRIDA DOS RATOS! Agora está na VIA RÁPIDA!`, 'income');
+                player.position = 39;
                 
-                // Adiciona um sonho
-                const dreams = ['🏝️ Viagem ao Caribe', '🚗 Carro Esportivo', '🏠 Casa na Praia', '✈️ Jato Particular'];
-                const randomDream = dreams[Math.floor(Math.random() * dreams.length)];
-                player.dreams.push(randomDream);
+                // Bônus para entrar na via rápida
+                player.cash += 100000;
                 
-                // Atualiza display do sonho
-                const dreamElement = document.getElementById(`p${playerId}Dreams`);
-                if (dreamElement) {
-                    dreamElement.innerHTML = `<div style="color: gold; margin-top: 10px;">
-                        <i class="fas fa-trophy"></i> SONHO: ${randomDream}
-                    </div>`;
-                }
+                updateBoard();
+                updateFastTrack(); // Atualiza a tabela da via rápida
                 
-                // Verifica vitória
-                if (player.dreams.length >= 2) { // Precisa de 2 sonhos para vencer
-                    declareWinner(playerId);
-                }
+                addLog(`🚀🎉 ${player.name} SAIU DA CORRIDA DOS RATOS!`);
+                addLog(`💰 Bônus de entrada na Via Rápida: R$ 100.000`);
+                addLog(`💰 ${player.name} vive apenas de renda passiva: R$ ${player.passiveIncome}/mês`);
             }
         }
 
-        // =========== DECLARAR VENCEDOR ===========
-        function declareWinner(playerId) {
-            gameState.gameActive = false;
+        // =========== VIA RÁPIDA ===========
+        function showDream(playerId) {
+            const player = gameState.players[playerId];
+            const dreams = [
+                { name: "🏝️ Viagem ao Caribe", cost: 15000, passiveRequired: 5000, description: "2 semanas em resort 5 estrelas" },
+                { name: "🚗 Carro Esportivo", cost: 200000, passiveRequired: 10000, description: "Modelo importado de luxo" },
+                { name: "🏠 Casa na Praia", cost: 500000, passiveRequired: 20000, description: "Casa com piscina e vista para o mar" }
+            ];
             
-            const winnerMessage = document.getElementById('winnerMessage');
-            winnerMessage.innerHTML = `
-                <div class="winner-banner">
-                    🏆🎉 VITÓRIA DO JOGADOR ${playerId}! 🎉🏆<br>
-                    <small>Você realizou seus sonhos na Via Rápida!</small>
+            const dream = dreams[Math.floor(Math.random() * dreams.length)];
+            gameState.currentCard = { ...dream, playerId: playerId, cardType: 'dream' };
+            
+            const display = document.getElementById('cardDisplay');
+            const title = document.getElementById('cardTitle');
+            const description = document.getElementById('cardDescription');
+            const details = document.getElementById('cardDetails');
+            const actions = document.getElementById('cardActions');
+            
+            title.textContent = 'SONHO DA VIA RÁPIDA';
+            description.textContent = dream.description;
+            
+            const canBuy = player.passiveIncome >= dream.passiveRequired && player.cash >= dream.cost;
+            
+            details.innerHTML = `
+                <div class="card-detail">
+                    <div class="detail-label">Sonho</div>
+                    <div class="detail-value">${dream.name}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Custo</div>
+                    <div class="detail-value">R$ ${dream.cost.toLocaleString()}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Renda Passiva Necessária</div>
+                    <div class="detail-value">R$ ${dream.passiveRequired.toLocaleString()}/mês</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Sua Renda Passiva</div>
+                    <div class="detail-value" style="color: ${canBuy ? '#2ecc71' : '#e74c3c'}">
+                        R$ ${player.passiveIncome.toLocaleString()}/mês
+                    </div>
                 </div>
             `;
             
-            addLog(`🏆🎉 JOGADOR ${playerId} VENCEU O JOGO! PARABÉNS! 🎉🏆`, 'income');
+            if (canBuy) {
+                actions.innerHTML = `
+                    <button class="button button-success" onclick="buyDream()">
+                        <i class="fas fa-trophy"></i> REALIZAR SONHO!
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> ESPERAR
+                    </button>
+                `;
+            } else {
+                actions.innerHTML = `
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-check"></i> CONTINUAR
+                    </button>
+                `;
+            }
             
-            // Desativa botões
-            rollDiceBtn.disabled = true;
-            endTurnBtn.disabled = true;
+            display.style.display = 'block';
         }
 
-        // =========== FINALIZAR TURNO ===========
-        function endTurn() {
-            // Passa para o próximo jogador
-            gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
+        function buyDream() {
+            const card = gameState.currentCard;
+            const player = gameState.players[card.playerId];
             
-            // Reseta controles
-            endTurnBtn.disabled = true;
-            rollDiceBtn.disabled = false;
+            if (player.cash < card.cost) {
+                alert(`Dinheiro insuficiente! Necessário: R$ ${card.cost.toLocaleString()}`);
+                return;
+            }
             
-            // Esconde carta se estiver aberta
-            cardArea.style.display = 'none';
+            player.cash -= card.cost;
+            player.dreams.push(card.name);
             
-            // Atualiza display
-            updateDisplay();
+            addLog(`🏆 ${player.name} REALIZOU O SONHO: ${card.name}!`);
             
-            addLog(`🔄 Turno do Jogador ${gameState.currentPlayer}`);
+            if (player.dreams.length >= 1) {
+                declareWinner(card.playerId);
+            }
+            
+            document.getElementById('cardDisplay').style.display = 'none';
+            updateCurrentPlayerInfo();
         }
 
-        // =========== VER ATIVOS ===========
-        function showAssets() {
-            const playerId = gameState.currentPlayer;
+        function declareWinner(playerId) {
             const player = gameState.players[playerId];
+            gameState.gameActive = false;
             
-            let html = `<h3>${player.name} - ${player.profession}</h3>`;
+            const winnerDiv = document.getElementById('winnerMessage');
+            winnerDiv.innerHTML = `
+                <div style="background: linear-gradient(135deg, #f39c12, #e67e22); 
+                           color: white; padding: 15px; border-radius: 10px; 
+                           text-align: center; margin-top: 15px; font-weight: bold;">
+                    🏆🎉 ${player.name} VENCEU O JOGO! 🎉🏆<br>
+                    <small>Realizou o sonho: ${player.dreams[player.dreams.length-1]}</small>
+                </div>
+            `;
+            
+            addLog(`🏆🎉 ${player.name} VENCEU O JOGO! PARABÉNS!`);
+            
+            document.getElementById('rollDiceBtn').disabled = true;
+            document.getElementById('endTurnBtn').disabled = true;
+        }
+
+        // =========== TURNO ===========
+        function endTurn() {
+            gameState.currentPlayer = gameState.currentPlayer % gameState.totalPlayers + 1;
+            
+            // Se voltou ao jogador 1, incrementa rodada
+            if (gameState.currentPlayer === 1) {
+                gameState.currentRound++;
+                addLog(`📅 RODADA ${gameState.currentRound} INICIADA`);
+                updateGameStats();
+            }
+            
+            document.getElementById('endTurnBtn').disabled = true;
+            document.getElementById('rollDiceBtn').disabled = false;
+            
+            document.getElementById('cardDisplay').style.display = 'none';
+            
+            updateCurrentPlayerInfo();
+            
+            const playerName = gameState.players[gameState.currentPlayer].name;
+            addLog(`🔄 Vez de: ${playerName}`);
+        }
+
+        // =========== ATIVOS ===========
+        function showAssets() {
+            const player = gameState.players[gameState.currentPlayer];
+            let html = `<h3 style="color: var(--secondary); margin-bottom: 15px;">${player.name} - ${player.profession}</h3>`;
+            
+            // Estatísticas
+            html += `
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div>
+                            <div style="color: #666; font-size: 0.9rem;">Salário</div>
+                            <div style="font-weight: bold;">R$ ${player.salary.toLocaleString()}/mês</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 0.9rem;">Despesas</div>
+                            <div style="font-weight: bold; color: #e74c3c;">R$ ${player.expenses.toLocaleString()}/mês</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 0.9rem;">Renda Passiva</div>
+                            <div style="font-weight: bold; color: #2ecc71;">R$ ${player.passiveIncome.toLocaleString()}/mês</div>
+                        </div>
+                        <div>
+                            <div style="color: #666; font-size: 0.9rem;">Fluxo de Caixa</div>
+                            <div style="font-weight: bold; color: ${player.cashflow >= 0 ? '#2ecc71' : '#e74c3c'}">
+                                R$ ${player.cashflow.toLocaleString()}/mês
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
             
             // Ativos
-            html += `<h4 style="color: #27ae60; margin-top: 20px;">ATIVOS (Renda Passiva: R$ ${player.passiveIncome}/mês)</h4>`;
+            html += `<h4 style="color: #2ecc71; margin-top: 15px; border-bottom: 2px solid #2ecc71; padding-bottom: 5px;">ATIVOS (Renda Passiva: R$ ${player.passiveIncome}/mês)</h4>`;
             if (player.assets.length === 0) {
                 html += '<p>Nenhum ativo adquirido.</p>';
             } else {
                 player.assets.forEach(asset => {
                     html += `
-                        <div class="asset-card">
-                            <div class="asset-name">${asset.name}</div>
-                            <div>Valor: R$ ${asset.value.toLocaleString()}</div>
-                            <div class="asset-value">Renda: +R$ ${asset.cashflow}/mês</div>
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                            <div><strong>${asset.name}</strong></div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                                <span>Tipo: ${asset.type.toUpperCase()}</span>
+                                <span>Valor: R$ ${asset.value.toLocaleString()}</span>
+                                <span style="color: #2ecc71;">Renda: +R$ ${asset.cashflow}/mês</span>
+                            </div>
                         </div>
                     `;
                 });
             }
             
-            // Passivos
-            html += `<h4 style="color: #e74c3c; margin-top: 20px;">PASSIVOS</h4>`;
+            // Passivos (doodads)
+            html += `<h4 style="color: #e74c3c; margin-top: 20px; border-bottom: 2px solid #e74c3c; padding-bottom: 5px;">PASSIVOS</h4>`;
             if (player.liabilities.length === 0) {
-                html += '<p>Nenhum passivo adquirido.</p>';
+                html += '<p>Nenhum passivo.</p>';
             } else {
                 player.liabilities.forEach(liability => {
                     html += `
-                        <div class="asset-card" style="border-left-color: #e74c3c;">
-                            <div class="asset-name">${liability.name}</div>
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                            <div><strong>${liability.name}</strong></div>
                             <div style="color: #e74c3c;">Despesa: R$ ${liability.monthly}/mês</div>
+                            <div style="color: #666; font-size: 0.8rem;">Fase: ${liability.phase}</div>
                         </div>
                     `;
                 });
+            }
+            
+            // Empréstimos
+            html += `<h4 style="color: #9b59b6; margin-top: 20px; border-bottom: 2px solid #9b59b6; padding-bottom: 5px;">EMPRÉSTIMOS</h4>`;
+            if (player.loans.length === 0) {
+                html += '<p>Nenhum empréstimo.</p>';
+            } else {
+                let totalDebt = 0;
+                let totalInterest = 0;
+                
+                player.loans.forEach((loan, index) => {
+                    totalDebt += loan.amount;
+                    totalInterest += loan.amount * 0.1;
+                    html += `
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                            <div><strong>Empréstimo #${index + 1}</strong></div>
+                            <div>Valor: R$ ${loan.amount.toLocaleString()}</div>
+                            <div style="color: #e74c3c;">Juros por volta: R$ ${(loan.amount * 0.1).toLocaleString()}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `<div style="background: #e74c3c20; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Total:</strong> Dívida: R$ ${totalDebt.toLocaleString()} | Juros por volta: R$ ${totalInterest.toLocaleString()}
+                </div>`;
             }
             
             // Sonhos
             if (player.dreams.length > 0) {
-                html += `<h4 style="color: #f39c12; margin-top: 20px;">SONHOS REALIZADOS</h4>`;
+                html += `<h4 style="color: #f39c12; margin-top: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 5px;">SONHOS REALIZADOS</h4>`;
                 player.dreams.forEach(dream => {
                     html += `<p>⭐ ${dream}</p>`;
                 });
             }
             
             document.getElementById('assetsContent').innerHTML = html;
-            document.getElementById('assetsTitle').textContent = `${player.name} - Ativos e Passivos`;
-            openModal('assetsModal');
-        }
-
-        // =========== NOVO JOGO ===========
-        function newGame() {
-            if (!confirm("Iniciar um novo jogo? O progresso atual será perdido.")) return;
-            
-            // Reseta estado
-            gameState.currentPlayer = 1;
-            gameState.gameActive = true;
-            
-            // Profissões aleatórias
-            const professions = [
-                {name: "Enfermeiro", salary: 3500, expenses: 2800},
-                {name: "Professor", salary: 4200, expenses: 3500},
-                {name: "Mecânico", salary: 2800, expenses: 2350},
-                {name: "Secretária", salary: 3200, expenses: 2650},
-                {name: "Policial", salary: 3800, expenses: 3100},
-                {name: "Motorista", salary: 3000, expenses: 2500}
-            ];
-            
-            const shuffled = [...professions].sort(() => Math.random() - 0.5);
-            
-            // Reseta jogador 1
-            gameState.players[1] = {
-                name: "Jogador 1 (Você)",
-                profession: shuffled[0].name,
-                salary: shuffled[0].salary,
-                expenses: shuffled[0].expenses,
-                cashflow: shuffled[0].salary - shuffled[0].expenses,
-                cash: 1000,
-                passiveIncome: 0,
-                position: 0,
-                inRatRace: true,
-                assets: [],
-                liabilities: [],
-                dreams: []
-            };
-            
-            // Reseta jogador 2
-            gameState.players[2] = {
-                name: "Jogador 2 (Irmão)",
-                profession: shuffled[1].name,
-                salary: shuffled[1].salary,
-                expenses: shuffled[1].expenses,
-                cashflow: shuffled[1].salary - shuffled[1].expenses,
-                cash: 1000,
-                passiveIncome: 0,
-                position: 0,
-                inRatRace: true,
-                assets: [],
-                liabilities: [],
-                dreams: []
-            };
-            
-            // Reseta interface
-            dice1.textContent = "?";
-            dice2.textContent = "?";
-            cardArea.style.display = 'none';
-            document.getElementById('winnerMessage').innerHTML = '';
-            document.getElementById('p1Dreams').innerHTML = '';
-            document.getElementById('p2Dreams').innerHTML = '';
-            
-            // Ativa botões
-            rollDiceBtn.disabled = false;
-            endTurnBtn.disabled = true;
-            
-            // Limpa e reinicia log
-            clearLog();
-            addLog("🔄 NOVO JOGO INICIADO!");
-            addLog(`👤 Jogador 1 é ${gameState.players[1].profession}`);
-            addLog(`👤 Jogador 2 é ${gameState.players[2].profession}`);
-            addLog("🎲 É a vez do Jogador 1");
-            
-            updateDisplay();
+            document.getElementById('assetsTitle').textContent = `${player.name} - Situação Financeira`;
+            document.getElementById('assetsModal').style.display = 'flex';
         }
 
         // =========== FUNÇÕES AUXILIARES ===========
-        function addLog(message, type = '') {
+        function addLog(message) {
+            const log = document.getElementById('gameLog');
             const entry = document.createElement('div');
             entry.className = 'log-entry';
-            
-            if (type === 'income') {
-                entry.classList.add('log-income');
-            } else if (type === 'expense') {
-                entry.classList.add('log-expense');
-            } else if (message.includes('Jogador 1')) {
-                entry.classList.add('log-player1');
-            } else if (message.includes('Jogador 2')) {
-                entry.classList.add('log-player2');
-            }
-            
             entry.textContent = message;
-            gameLog.prepend(entry);
+            log.prepend(entry);
             
-            // Mantém apenas as últimas 20 entradas
-            if (gameLog.children.length > 20) {
-                gameLog.removeChild(gameLog.lastChild);
+            if (log.children.length > 30) {
+                log.removeChild(log.lastChild);
             }
         }
 
         function clearLog() {
-            gameLog.innerHTML = '<div class="log-entry">Log limpo. Jogo em andamento...</div>';
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+            document.getElementById('gameLog').innerHTML = '<div class="log-entry">Histórico limpo</div>';
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // Fecha modal ao clicar fora
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        };
+        // =========== INICIALIZAR ===========
+        document.addEventListener('DOMContentLoaded', initializeGame);
     </script>
 </body>
 </html>
