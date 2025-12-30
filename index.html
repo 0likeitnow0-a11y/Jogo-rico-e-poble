@@ -715,8 +715,7 @@
                 
                 <div class="dice-container">
                     <div class="dice" id="dice1">?</div>
-                    <div class="dice" id="dice2">?</div>
-                    <div class="dice" id="dice3" style="display: none;">?</div>
+                    <div class="dice" id="dice2" style="display: none;">?</div>
                 </div>
                 
                 <div>
@@ -885,6 +884,7 @@
             spaces: [],
             dice3Enabled: false,
             charityPlayer: null,
+            charityRoundsLeft: 0,
             currentRound: 1,
             totalLaps: 0,
             marketEvent: null,
@@ -899,7 +899,7 @@
             {
                 name: "Zelador (Janitor)",
                 salary: 1600,
-                initialCash: 400, // Será sobrescrito pela nova regra
+                initialCash: 400,
                 perChildCost: 70,
                 taxes: 280,
                 mortgage: 300,
@@ -1058,6 +1058,155 @@
             "Observatório Astronômico"
         ];
 
+        // =========== DOODADS ESCALONADOS POR VOLTAS ===========
+        const doodadCardsByLaps = {
+            "voltas_1_5": [
+                {
+                    name: "Celular Novo",
+                    description: "Smartphone de última geração com plano de dados.",
+                    cost: 800
+                },
+                {
+                    name: "Reparo do Carro",
+                    description: "Troca de pneus e manutenção básica.",
+                    cost: 1200
+                },
+                {
+                    name: "Consulta Médica",
+                    description: "Consulta especializada com exames.",
+                    cost: 500
+                },
+                {
+                    name: "Computador Novo",
+                    description: "Notebook para trabalho.",
+                    cost: 3000
+                },
+                {
+                    name: "Curso Online",
+                    description: "Curso de especialização profissional.",
+                    cost: 800
+                },
+                {
+                    name: "Reparo Residencial",
+                    description: "Vazamento e pequenos reparos em casa.",
+                    cost: 1500
+                },
+                {
+                    name: "TV 55''",
+                    description: "Televisão smart básica.",
+                    cost: 2500
+                },
+                {
+                    name: "Jantar Especial",
+                    description: "Jantar em restaurante fino para 2 pessoas.",
+                    cost: 400
+                }
+            ],
+            "voltas_6_10": [
+                {
+                    name: "Curso Presencial",
+                    description: "Curso técnico ou profissionalizante.",
+                    cost: 6000
+                },
+                {
+                    name: "Troca de Eletrodomésticos",
+                    description: "Geladeira e fogão novos.",
+                    cost: 8000
+                },
+                {
+                    name: "Manutenção do Carro",
+                    description: "Reparo completo do motor.",
+                    cost: 7500
+                },
+                {
+                    name: "Tratamento Odontológico",
+                    description: "Implante ou tratamento especializado.",
+                    cost: 5000
+                },
+                {
+                    name: "Viagem Nacional",
+                    description: "Pacote de férias para 2 pessoas.",
+                    cost: 10000
+                },
+                {
+                    name: "Móveis Novos",
+                    description: "Conjunto de sofá e poltronas.",
+                    cost: 7000
+                }
+            ],
+            "voltas_11_15": [
+                {
+                    name: "Reforma da Casa",
+                    description: "Reforma completa da cozinha.",
+                    cost: 15000
+                },
+                {
+                    name: "Tratamento Médico",
+                    description: "Cirurgia ou tratamento hospitalar.",
+                    cost: 20000
+                },
+                {
+                    name: "Imposto Atrasado",
+                    description: "Multas e impostos em atraso.",
+                    cost: 18000
+                },
+                {
+                    name: "Problema Estrutural",
+                    description: "Reparo de infiltração e fundação.",
+                    cost: 22000
+                },
+                {
+                    name: "Veículo Usado",
+                    description: "Carro seminovo para necessidade.",
+                    cost: 35000
+                }
+            ],
+            "voltas_16_20": [
+                {
+                    name: "Carro Novo Popular",
+                    description: "Veículo zero km entrada.",
+                    cost: 35000
+                },
+                {
+                    name: "Processo Judicial",
+                    description: "Ação trabalhista ou cível.",
+                    cost: 25000
+                },
+                {
+                    name: "Emergência Familiar",
+                    description: "Ajuda familiar urgente.",
+                    cost: 30000
+                },
+                {
+                    name: "Reforma Completa",
+                    description: "Reforma de toda a casa.",
+                    cost: 35000
+                }
+            ],
+            "voltas_21_mais": [
+                {
+                    name: "Carro de Luxo",
+                    description: "Veículo importado zero km.",
+                    cost: 50000
+                },
+                {
+                    name: "Crise Financeira",
+                    description: "Grande emergência financeira.",
+                    cost: 45000
+                },
+                {
+                    name: "Emergência Familiar Grave",
+                    description: "Problema de saúde familiar.",
+                    cost: 60000
+                },
+                {
+                    name: "Perda de Investimento",
+                    description: "Falência de negócio parceiro.",
+                    cost: 55000
+                }
+            ]
+        };
+
         // =========== NOVAS CARTAS PEQUENAS OPORTUNIDADES (SMALL DEAL) - REBALANCEADAS ===========
         const smallDealCards = [
             {
@@ -1099,14 +1248,15 @@
                 downPayment: 1000,
                 cashflow: 30
             },
+            // NOVAS CARTAS COM JUROS CONVERTIDOS
             {
                 name: "Previdência Privada",
                 type: "títulos",
                 description: "Plano de aposentadoria com retorno garantido.",
                 cost: 5000,
                 downPayment: 5000,
-                cashflow: 200,
-                roi: "20% ao ano"
+                annualReturn: 20,
+                roi: "20% ao ano (convertido para 1.67% por Payday)"
             },
             {
                 name: "Fundo Imobiliário",
@@ -1114,8 +1264,26 @@
                 description: "Investimento em imóveis comerciais.",
                 cost: 10000,
                 downPayment: 10000,
-                cashflow: 400,
-                roi: "12% ao ano"
+                annualReturn: 12,
+                roi: "12% ao ano (convertido para 1% por Payday)"
+            },
+            {
+                name: "Investimento Conservador",
+                type: "títulos",
+                description: "Renda fixa de baixo risco.",
+                cost: 8000,
+                downPayment: 8000,
+                annualReturn: 10,
+                roi: "10% ao ano (convertido para 0.83% por Payday)"
+            },
+            {
+                name: "Fundo de Renda Estável",
+                type: "títulos",
+                description: "Investimento com retorno consistente.",
+                cost: 6000,
+                downPayment: 6000,
+                annualReturn: 8,
+                roi: "8% ao ano (convertido para 0.67% por Payday)"
             },
             {
                 name: "Seguro Contra Despesas",
@@ -1127,7 +1295,7 @@
             }
         ];
 
-        // =========== NOVAS CARTAS GRANDES OPORTUNIDADES (BIG DEAL) - REBALANCEADAS ===========
+        // =========== BIG DEALS REBALANCEADAS ===========
         const bigDealCards = [
             {
                 name: "Apartamento de 2 Quartos",
@@ -1191,50 +1359,52 @@
                 cashflow: 3000,
                 roi: "36% CCR",
                 requires: "1 volta completa OU renda passiva R$ 2.000/mês"
-            }
-        ];
-
-        // =========== CARTAS DOODAD ATUALIZADAS ===========
-        const doodadCards = [
+            },
+            // NOVAS BIG DEALS REBALANCEADAS
             {
-                name: "Celular Novo",
-                description: "Smartphone de última geração com plano de dados.",
-                cost: 800
+                name: "Pequeno Negócio Local",
+                type: "negócio",
+                description: "Negócio familiar com clientela estabelecida.",
+                cost: 8000,
+                downPayment: 8000,
+                cashflow: 300,
+                requires: null
             },
             {
-                name: "TV 65'' 4K",
-                description: "Televisão smart com sistema de som surround.",
-                cost: 3500
+                name: "Franquia Emergente",
+                type: "negócio",
+                description: "Franquia de mercado em crescimento.",
+                cost: 15000,
+                downPayment: 15000,
+                cashflow: 600,
+                requires: null
             },
             {
-                name: "Férias no Caribe",
-                description: "Pacote all-inclusive para 2 pessoas por 10 dias.",
-                cost: 10000
+                name: "Imóvel de Aluguel Simples",
+                type: "imóvel",
+                description: "Apartamento pequeno para aluguel.",
+                cost: 20000,
+                downPayment: 20000,
+                cashflow: 800,
+                requires: null
             },
             {
-                name: "Carro Novo",
-                description: "Veículo zero km com seguro e licenciamento.",
-                cost: 45000
+                name: "Negócio Digital",
+                type: "negócio",
+                description: "Site ou aplicativo com receita recorrente.",
+                cost: 25000,
+                downPayment: 25000,
+                cashflow: 1000,
+                requires: null
             },
             {
-                name: "Reforma da Casa",
-                description: "Reforma completa da cozinha e banheiro.",
-                cost: 25000
-            },
-            {
-                name: "Academia em Casa",
-                description: "Equipamentos de academia completos.",
-                cost: 15000
-            },
-            {
-                name: "Jantar em Restaurante 5 Estrelas",
-                description: "Jantar para 4 pessoas com vinho.",
-                cost: 2000
-            },
-            {
-                name: "Curso de Especialização",
-                description: "Curso profissionalizante de 6 meses.",
-                cost: 6000
+                name: "Imóvel Comercial",
+                type: "imóvel",
+                description: "Sala comercial em localização privilegiada.",
+                cost: 40000,
+                downPayment: 40000,
+                cashflow: 1500,
+                requires: null
             }
         ];
 
@@ -1393,7 +1563,7 @@
 
         function getRandomDreamForPlayer(playerId) {
             if (!gameState.playerDreams[playerId]) {
-                const availableDreams = allDreams.filter(dream => 
+                let availableDreams = allDreams.filter(dream => 
                     !Object.values(gameState.playerDreams).includes(dream)
                 );
                 
@@ -1437,7 +1607,7 @@
                     name: name,
                     profession: prof.name,
                     salary: prof.salary,
-                    initialCash: initialCash, // Usando a nova regra
+                    initialCash: initialCash,
                     cash: initialCash,
                     passiveIncome: 0,
                     position: 0,
@@ -1465,8 +1635,8 @@
                     lapsCompleted: 0,
                     dreams: [],
                     assignedDream: dream,
-                    isDownsized: false, // Nova flag para demissão
-                    downsizedRounds: 0 // Contador de rodadas demitido
+                    isDownsized: false,
+                    downsizedRounds: 0
                 };
             }
             
@@ -1593,7 +1763,6 @@
                                     prof.creditCard + prof.otherExpenses + prof.studentLoan;
                 const initialCashflow = prof.salary - totalExpenses;
                 
-                // Mostrar o cálculo com a nova regra
                 const initialCashNewRule = totalExpenses * 2;
                 
                 html += `
@@ -1902,7 +2071,7 @@
             updateCurrentPlayerInfo();
         }
 
-        // =========== SISTEMA DE DADOS ===========
+        // =========== SISTEMA DE DADOS SIMPLIFICADO ===========
         function rollDice() {
             if (!gameState.gameActive) {
                 alert("O jogo não está ativo!");
@@ -1921,55 +2090,66 @@
             
             const dice1 = document.getElementById('dice1');
             const dice2 = document.getElementById('dice2');
-            const dice3 = document.getElementById('dice3');
+            
+            dice1.style.display = 'flex';
+            dice2.style.display = 'none';
             
             dice1.classList.add('rolling');
-            dice2.classList.add('rolling');
-            
-            dice3.style.display = 'none';
             
             setTimeout(() => {
                 const dice1Value = Math.floor(Math.random() * 6) + 1;
-                const dice2Value = Math.floor(Math.random() * 6) + 1;
+                let total = dice1Value;
                 
-                let total = dice1Value + dice2Value;
-                
+                // Verificar se tem bônus de caridade para rolar 2 dados
                 if (gameState.dice3Enabled && gameState.charityPlayer === gameState.currentPlayer) {
-                    dice3.style.display = 'flex';
-                    dice3.classList.add('rolling');
+                    dice2.style.display = 'flex';
+                    dice2.classList.add('rolling');
                     
                     setTimeout(() => {
-                        const dice3Value = Math.floor(Math.random() * 6) + 1;
-                        dice3.textContent = dice3Value;
-                        dice3.classList.remove('rolling');
+                        const dice2Value = Math.floor(Math.random() * 6) + 1;
+                        dice2.textContent = dice2Value;
+                        dice2.classList.remove('rolling');
                         
-                        const diceValues = [dice1Value, dice2Value, dice3Value];
-                        diceValues.sort((a, b) => b - a);
-                        total = diceValues[0] + diceValues[1];
+                        total = dice1Value + dice2Value;
                         
-                        addLog(`🎲 ${player.name} rolou 3 dados: ${dice1Value}, ${dice2Value}, ${dice3Value} → usando ${diceValues[0]}+${diceValues[1]}=${total}`);
+                        addLog(`🎲 ${player.name} rolou 2 dados (caridade): ${dice1Value}+${dice2Value}=${total}`);
                         
-                        gameState.dice3Enabled = false;
-                        gameState.charityPlayer = null;
+                        gameState.charityRoundsLeft--;
+                        
+                        if (gameState.charityRoundsLeft <= 0) {
+                            gameState.dice3Enabled = false;
+                            gameState.charityPlayer = null;
+                            dice2.style.display = 'none';
+                            addLog(`🙏 Bônus de caridade de ${player.name} terminou`);
+                        } else {
+                            addLog(`🙏 ${player.name} ainda tem ${gameState.charityRoundsLeft} rodada(s) com bônus de caridade`);
+                        }
                         
                         dice1.textContent = dice1Value;
-                        dice2.textContent = dice2Value;
                         dice1.classList.remove('rolling');
-                        dice2.classList.remove('rolling');
                         
                         movePlayer(gameState.currentPlayer, total);
                         document.getElementById('endTurnBtn').disabled = false;
+                        
+                        // Mostrar carta automaticamente após mover
+                        setTimeout(() => {
+                            showCardForSpace(player.position);
+                        }, 500);
+                        
                     }, 800);
                 } else {
-                    addLog(`🎲 ${player.name} rolou ${dice1Value}+${dice2Value}=${total}`);
+                    addLog(`🎲 ${player.name} rolou ${dice1Value}=${total}`);
                     
                     dice1.textContent = dice1Value;
-                    dice2.textContent = dice2Value;
                     dice1.classList.remove('rolling');
-                    dice2.classList.remove('rolling');
                     
                     movePlayer(gameState.currentPlayer, total);
                     document.getElementById('endTurnBtn').disabled = false;
+                    
+                    // Mostrar carta automaticamente após mover
+                    setTimeout(() => {
+                        showCardForSpace(player.position);
+                    }, 500);
                 }
                 
             }, 800);
@@ -1994,46 +2174,41 @@
             updateBoard();
             updateCurrentPlayerInfo();
             updateGameStats();
-            activateSpace(playerId, newPosition);
         }
 
-        // =========== ATIVAÇÃO DE ESPAÇOS ===========
-        function activateSpace(playerId, position) {
-            const player = gameState.players[playerId];
+        // =========== FUNÇÃO PARA MOSTRAR CARTA DO ESPAÇO ===========
+        function showCardForSpace(position) {
             const space = gameState.spaces[position];
             
-            document.getElementById('cardDisplay').style.display = 'none';
-            
-            addLog(`📍 ${player.name} está no espaço ${space.num}: ${space.name}`);
+            addLog(`📍 ${gameState.players[gameState.currentPlayer].name} está no espaço ${space.num}: ${space.name}`);
             
             setTimeout(() => {
                 switch(space.type) {
                     case 'payday':
-                        payday(playerId);
+                        payday(gameState.currentPlayer);
                         break;
                     case 'baby':
-                        haveBaby(playerId);
+                        haveBaby(gameState.currentPlayer);
                         break;
                     case 'charity':
-                        charity(playerId);
+                        charity(gameState.currentPlayer);
                         break;
                     case 'downsized':
-                        downsized(playerId);
+                        downsized(gameState.currentPlayer);
                         break;
                     case 'opportunity':
-                        // 70% Small Deal, 30% Big Deal
                         const isSmallDeal = Math.random() < 0.7;
                         if (isSmallDeal) {
-                            showSmallDeal(playerId);
+                            showSmallDeal(gameState.currentPlayer);
                         } else {
-                            showBigDeal(playerId);
+                            showBigDeal(gameState.currentPlayer);
                         }
                         break;
                     case 'doodad':
-                        showDoodadCard(playerId);
+                        showDoodadCard(gameState.currentPlayer);
                         break;
                     case 'market':
-                        showMarketCard(playerId);
+                        showMarketCard(gameState.currentPlayer);
                         break;
                 }
             }, 500);
@@ -2130,6 +2305,15 @@
                     </button>
                 `;
             } else {
+                // Para títulos/FII com juros anuais
+                let monthlyReturn = 0;
+                if (card.annualReturn) {
+                    const investmentValue = card.cost || card.downPayment;
+                    monthlyReturn = (investmentValue * (card.annualReturn / 100)) / 12;
+                } else {
+                    monthlyReturn = card.cashflow || 0;
+                }
+                
                 details.innerHTML = `
                     <div class="card-detail">
                         <div class="detail-label">Tipo</div>
@@ -2140,13 +2324,23 @@
                         <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
                     </div>
                     <div class="card-detail">
-                        <div class="detail-label">Renda Mensal</div>
-                        <div class="detail-value" style="color: #2ecc71;">R$ ${card.cashflow}</div>
+                        <div class="detail-label">Renda por Payday</div>
+                        <div class="detail-value" style="color: #2ecc71;">R$ ${monthlyReturn.toFixed(2)}</div>
                     </div>
+                    ${card.annualReturn ? `
+                    <div class="card-detail">
+                        <div class="detail-label">Taxa Anual</div>
+                        <div class="detail-value" style="color: #f39c12;">${card.annualReturn}% ao ano</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Conversão</div>
+                        <div class="detail-value" style="color: #3498db;">${(card.annualReturn/12).toFixed(2)}% por Payday</div>
+                    </div>
+                    ` : ''}
                     ${card.roi ? `
                     <div class="card-detail">
-                        <div class="detail-label">Retorno Anual</div>
-                        <div class="detail-value" style="color: #f39c12;">${card.roi}</div>
+                        <div class="detail-label">Informação</div>
+                        <div class="detail-value" style="color: #666;">${card.roi}</div>
                     </div>
                     ` : ''}
                 `;
@@ -2217,6 +2411,12 @@
             typeTag.style.backgroundColor = '#e67e22';
             description.textContent = card.description;
             
+            let monthlyCashflow = card.cashflow || 0;
+            if (card.annualReturn) {
+                const investmentValue = card.cost || card.downPayment;
+                monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
+            }
+            
             details.innerHTML = `
                 <div class="card-detail">
                     <div class="detail-label">Tipo</div>
@@ -2224,7 +2424,7 @@
                 </div>
                 <div class="card-detail">
                     <div class="detail-label">Valor Total</div>
-                    <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
+                    <div class="detail-value">R$ ${card.cost ? card.cost.toLocaleString() : card.downPayment.toLocaleString()}</div>
                 </div>
                 <div class="card-detail">
                     <div class="detail-label">Entrada Necessária</div>
@@ -2237,9 +2437,19 @@
                 </div>
                 ` : ''}
                 <div class="card-detail">
-                    <div class="detail-label">Renda Mensal</div>
-                    <div class="detail-value" style="color: #2ecc71;">R$ ${card.cashflow}</div>
+                    <div class="detail-label">Renda por Payday</div>
+                    <div class="detail-value" style="color: #2ecc71;">R$ ${monthlyCashflow.toFixed(2)}</div>
                 </div>
+                ${card.annualReturn ? `
+                <div class="card-detail">
+                    <div class="detail-label">Taxa Anual</div>
+                    <div class="detail-value" style="color: #f39c12;">${card.annualReturn}% ao ano</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Conversão</div>
+                    <div class="detail-value" style="color: #3498db;">${(card.annualReturn/12).toFixed(2)}% por Payday</div>
+                </div>
+                ` : ''}
                 ${card.roi ? `
                 <div class="card-detail">
                     <div class="detail-label">Retorno</div>
@@ -2320,41 +2530,72 @@
                 addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} ${card.cashflow ? `(renda: +R$ ${card.cashflow}/mês)` : ''}`);
                 
             } else if (card.type === 'imóvel') {
-                player.passiveIncome += card.cashflow || 0;
+                // Calcular renda mensal (se for anual, converter)
+                let monthlyCashflow = card.cashflow || 0;
+                
+                // Se tiver annualReturn, calcular renda mensal
+                if (card.annualReturn) {
+                    const investmentValue = card.cost || card.downPayment;
+                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
+                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
+                }
+                
+                player.passiveIncome += monthlyCashflow;
                 player.assets.realEstate.push({
                     name: card.name,
                     cost: card.cost,
                     downPayment: card.downPayment,
                     mortgage: card.mortgage || 0,
-                    cashflow: card.cashflow || 0,
-                    roi: card.roi || ""
+                    cashflow: monthlyCashflow,
+                    roi: card.roi || "",
+                    annualReturn: card.annualReturn || 0
                 });
                 
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
                 
             } else if (card.type === 'negócio') {
-                player.passiveIncome += card.cashflow || 0;
+                let monthlyCashflow = card.cashflow || 0;
+                
+                // Se tiver annualReturn, calcular renda mensal
+                if (card.annualReturn) {
+                    const investmentValue = card.cost || card.downPayment;
+                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
+                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
+                }
+                
+                player.passiveIncome += monthlyCashflow;
                 player.assets.businesses.push({
                     name: card.name,
                     cost: card.cost,
                     downPayment: card.downPayment,
                     mortgage: card.mortgage || 0,
-                    cashflow: card.cashflow || 0,
-                    roi: card.roi || ""
+                    cashflow: monthlyCashflow,
+                    roi: card.roi || "",
+                    annualReturn: card.annualReturn || 0
                 });
                 
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
                 
             } else if (card.type === 'títulos' || card.type === 'fii') {
-                player.passiveIncome += card.cashflow || 0;
+                let monthlyCashflow = card.cashflow || 0;
+                
+                // Se tiver annualReturn, calcular renda mensal
+                if (card.annualReturn) {
+                    const investmentValue = card.cost || card.downPayment;
+                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
+                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
+                }
+                
+                player.passiveIncome += monthlyCashflow;
                 player.assets.bonds.push({
                     name: card.name,
                     cost: card.cost || card.downPayment,
-                    cashflow: card.cashflow || 0,
-                    roi: card.roi || ""
+                    cashflow: monthlyCashflow,
+                    roi: card.roi || "",
+                    annualReturn: card.annualReturn || 0
                 });
                 
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
             }
             
             checkExitRatRace(card.playerId);
@@ -2363,10 +2604,11 @@
             updateCurrentPlayerInfo();
         }
 
-        // =========== DOODADS COM PROTEÇÃO ===========
+        // =========== DOODAD COM ESCALONAMENTO ===========
         function showDoodadCard(playerId) {
             const player = gameState.players[playerId];
             
+            // Verificar proteção
             if (gameState.nextDoodadProtected && gameState.protectedPlayer === playerId) {
                 addLog(`🛡️ ${player.name} usou proteção! Doodad anulado.`);
                 gameState.nextDoodadProtected = false;
@@ -2374,7 +2616,26 @@
                 return;
             }
             
-            const card = doodadCards[Math.floor(Math.random() * doodadCards.length)];
+            // Determinar categoria baseado nas voltas
+            let doodadCategory;
+            if (player.lapsCompleted <= 5) {
+                doodadCategory = "voltas_1_5";
+            } else if (player.lapsCompleted <= 10) {
+                doodadCategory = "voltas_6_10";
+            } else if (player.lapsCompleted <= 15) {
+                doodadCategory = "voltas_11_15";
+            } else if (player.lapsCompleted <= 20) {
+                doodadCategory = "voltas_16_20";
+            } else {
+                doodadCategory = "voltas_21_mais";
+            }
+            
+            // Sortear doodad da categoria apropriada
+            const availableDoodads = doodadCardsByLaps[doodadCategory];
+            const card = availableDoodads[Math.floor(Math.random() * availableDoodads.length)];
+            
+            addLog(`📊 ${player.name} está na categoria ${doodadCategory.replace('_', ' ')} (${player.lapsCompleted} voltas)`);
+            
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'doodad' };
             
             const display = document.getElementById('cardDisplay');
@@ -2392,11 +2653,23 @@
             details.innerHTML = `
                 <div class="card-detail">
                     <div class="detail-label">Tipo</div>
-                    <div class="detail-label">Despesa Obrigatória</div>
+                    <div class="detail-value">Despesa Obrigatória</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Categoria</div>
+                    <div class="detail-value">${doodadCategory.replace('_', ' ')}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Suas Voltas</div>
+                    <div class="detail-value">${player.lapsCompleted}</div>
                 </div>
                 <div class="card-detail">
                     <div class="detail-label">Custo</div>
                     <div class="detail-value" style="color: #e74c3c;">R$ ${card.cost.toLocaleString()}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Regra</div>
+                    <div class="detail-value">Escalonado por voltas no tabuleiro</div>
                 </div>
             `;
             
@@ -2725,16 +2998,14 @@
             if (player.isDownsized) {
                 player.downsizedRounds++;
                 
-                // Após 2 rodadas, volta a receber salário
                 if (player.downsizedRounds >= 2) {
                     player.isDownsized = false;
                     player.downsizedRounds = 0;
                     addLog(`🎉 ${player.name} voltou ao trabalho! Agora recebe salário normalmente.`);
                 } else {
-                    // Demitido: não recebe salário, só renda passiva
                     const childExpenses = player.children * player.perChildCost;
                     const totalExpenses = player.expenses + childExpenses;
-                    const totalIncome = player.passiveIncome; // Sem salário
+                    const totalIncome = player.passiveIncome;
                     
                     let loanPayments = 0;
                     player.loans.forEach(loan => {
@@ -2790,7 +3061,12 @@
                 
                 gameState.dice3Enabled = true;
                 gameState.charityPlayer = playerId;
-                addLog(`🎲 Próximas 3 rodadas, ${player.name} pode rolar 3 dados e usar os 2 maiores!`);
+                gameState.charityRoundsLeft = 3;
+                
+                document.getElementById('dice2').style.display = 'flex';
+                document.getElementById('dice2').textContent = '?';
+                
+                addLog(`🎲 Próximas 3 rodadas, ${player.name} pode rolar 2 dados!`);
             } else {
                 alert(`Dinheiro insuficiente para caridade! Necessário: R$ ${amount.toLocaleString()}`);
             }
@@ -2803,7 +3079,6 @@
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             
-            // Verificar se tem negócio Fast Food (reduz fluxo em 50%)
             player.assets.businesses.forEach(business => {
                 if (business.name.includes("Fast Food")) {
                     const reducedCashflow = Math.floor(business.cashflow * 0.5);
@@ -2812,19 +3087,14 @@
                 }
             });
             
-            // **NOVA REGRA: VERIFICAÇÃO DE SALDO E EMPRÉSTIMO AUTOMÁTICO**
             if (player.cash >= totalExpenses) {
-                // Tem dinheiro suficiente
                 player.cash -= totalExpenses;
                 addLog(`⚠️ ${player.name} foi demitido! Pagou R$ ${totalExpenses.toLocaleString()} em despesas.`);
             } else {
-                // **NOVA REGRA: Dinheiro insuficiente vira empréstimo automático**
                 const deficit = totalExpenses - player.cash;
                 
-                // Zerar o saldo
                 player.cash = 0;
                 
-                // Criar empréstimo automático para o valor que faltou
                 const loanAmount = deficit;
                 const monthlyPayment = loanAmount * 0.1;
                 
@@ -2843,7 +3113,6 @@
                 addLog(`💰 Saldo zerado. Dívida total: R$ ${player.loans.reduce((sum, loan) => sum + loan.amount, 0).toLocaleString()}`);
             }
             
-            // Marcar jogador como demitido
             player.isDownsized = true;
             player.downsizedRounds = 0;
             
@@ -3091,7 +3360,9 @@
 
         // =========== TURNO ===========
         function endTurn() {
-            document.getElementById('dice3').style.display = 'none';
+            if (!gameState.dice3Enabled) {
+                document.getElementById('dice2').style.display = 'none';
+            }
             
             gameState.currentPlayer = gameState.currentPlayer % gameState.totalPlayers + 1;
             
