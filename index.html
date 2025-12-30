@@ -6,6 +6,7 @@
     <title>Cashflow Online | Edição Original</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* CSS completo (mantido igual ao original) */
         * {
             margin: 0;
             padding: 0;
@@ -42,7 +43,6 @@
             margin: 0 auto;
         }
 
-        /* CONFIGURAÇÃO INICIAL */
         .setup-screen {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -88,7 +88,6 @@
             margin-top: 15px;
         }
 
-        /* TABELA DO TABULEIRO */
         .board-table-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
@@ -153,7 +152,6 @@
             min-width: 180px;
         }
 
-        /* Cores dos espaços */
         .space-start { background: rgba(243, 156, 18, 0.15); border-left: 4px solid var(--warning); }
         .space-opportunity { background: rgba(52, 152, 219, 0.15); border-left: 4px solid var(--player2); }
         .space-payday { background: rgba(155, 89, 182, 0.15); border-left: 4px solid var(--player4); }
@@ -163,7 +161,6 @@
         .space-downsized { background: rgba(230, 126, 34, 0.15); border-left: 4px solid #E67E22; }
         .space-charity { background: rgba(230, 126, 34, 0.15); border-left: 4px solid #E67E22; }
 
-        /* Marcadores dos jogadores */
         .player-markers {
             display: flex;
             justify-content: center;
@@ -185,7 +182,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* CONTROLES */
         .controls {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
@@ -261,7 +257,6 @@
         .button-purple { background: #9b59b6; }
         .button-protection { background: var(--protection); }
 
-        /* CARD DISPLAY */
         .card-display {
             background: white;
             color: var(--dark);
@@ -321,7 +316,6 @@
             flex-wrap: wrap;
         }
 
-        /* MODAL PARA VENDA DE ATIVOS */
         .asset-selection-modal {
             max-height: 60vh;
             overflow-y: auto;
@@ -343,7 +337,6 @@
             margin-left: 15px;
         }
 
-        /* LOG */
         .log-section {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
@@ -366,7 +359,6 @@
             font-size: 0.85rem;
         }
 
-        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -414,7 +406,6 @@
             color: var(--danger);
         }
 
-        /* INFORMAÇÕES DO JOGADOR ATUAL (AGORA ABAIXO DA TABELA) */
         .player-info-below-table {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
@@ -451,7 +442,6 @@
         .info-warning { color: var(--warning); }
         .info-protection { color: var(--protection); }
 
-        /* DEBT INDICATOR */
         .debt-indicator {
             background: rgba(231, 76, 60, 0.2);
             border: 1px solid var(--danger);
@@ -466,7 +456,6 @@
             justify-content: center;
         }
 
-        /* RESPONSIVO */
         @media (max-width: 768px) {
             .board-table {
                 font-size: 0.8rem;
@@ -516,7 +505,6 @@
             }
         }
 
-        /* CORES DOS JOGADORES */
         .color-1 { background: var(--player1); }
         .color-2 { background: var(--player2); }
         .color-3 { background: var(--player3); }
@@ -524,7 +512,6 @@
         .color-5 { background: var(--player5); }
         .color-6 { background: var(--player6); }
 
-        /* ANIMAÇÕES */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -535,7 +522,6 @@
             animation: pulse 1s infinite;
         }
 
-        /* GAME STATS */
         .game-stats {
             display: flex;
             justify-content: space-around;
@@ -556,7 +542,6 @@
             font-size: 1.1rem;
         }
 
-        /* FAST TRACK (AGORA NO FINAL) */
         .fast-track-section {
             background: rgba(155, 89, 182, 0.3);
             border: 2px solid #9b59b6;
@@ -592,7 +577,6 @@
             margin: 5px 0;
         }
 
-        /* PROFISSÕES INFO */
         .professions-info {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -615,12 +599,10 @@
             border-left: 3px solid var(--warning);
         }
 
-        /* BOTÃO DE EMPRÉSTIMO */
         .button-loan {
             background: #9b59b6;
         }
 
-        /* PROTEÇÃO FINANCEIRA */
         .protection-badge {
             background: var(--protection);
             color: white;
@@ -667,7 +649,7 @@
             </div>
         </div>
 
-        <!-- ÁREA DO JOGO (inicialmente escondida) -->
+        <!-- ÁREA DO JOGO -->
         <div id="gameArea" style="display: none;">
             <header style="text-align: center; margin-bottom: 20px;">
                 <h1 style="color: var(--warning); font-size: 2rem;">
@@ -702,7 +684,7 @@
                 </table>
             </div>
 
-            <!-- INFORMAÇÕES DO JOGADOR ATUAL (AGORA ABAIXO DA TABELA) -->
+            <!-- INFORMAÇÕES DO JOGADOR ATUAL -->
             <div class="player-info-below-table" id="currentPlayerInfo">
                 <!-- Informações serão inseridas aqui -->
             </div>
@@ -733,6 +715,10 @@
                     
                     <button class="button button-loan" id="takeLoanBtn">
                         <i class="fas fa-university"></i> PEGAR EMPRÉSTIMO
+                    </button>
+                    
+                    <button class="button button-danger" id="payLoansBtn" style="display: none;">
+                        <i class="fas fa-money-check-alt"></i> QUITAR DÍVIDAS
                     </button>
                     
                     <button class="button button-protection" id="useProtectionBtn" style="display: none;">
@@ -792,7 +778,7 @@
                 </div>
             </div>
 
-            <!-- FAST TRACK SECTION (AGORA NO FINAL) -->
+            <!-- FAST TRACK SECTION -->
             <div class="fast-track-section" id="fastTrackSection">
                 <h3 style="color: #9b59b6; margin-bottom: 15px; text-align: center;">
                     <i class="fas fa-bolt"></i> VIA RÁPIDA (FAST TRACK)
@@ -803,29 +789,24 @@
             </div>
         </div>
 
-        <!-- MODAL DE ATIVOS -->
+        <!-- MODAIS -->
         <div class="modal" id="assetsModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title" id="assetsTitle">MEUS ATIVOS</div>
                     <button class="close-modal" onclick="closeModal('assetsModal')">&times;</button>
                 </div>
-                <div id="assetsContent">
-                    <!-- Conteúdo aqui -->
-                </div>
+                <div id="assetsContent"></div>
             </div>
         </div>
 
-        <!-- MODAL PARA VENDA DE IMÓVEIS -->
         <div class="modal" id="sellAssetsModal">
             <div class="modal-content asset-selection-modal">
                 <div class="modal-header">
                     <div class="modal-title"><i class="fas fa-home"></i> VENDER IMÓVEIS</div>
                     <button class="close-modal" onclick="closeModal('sellAssetsModal')">&times;</button>
                 </div>
-                <div id="sellAssetsContent">
-                    <!-- Lista de imóveis aqui -->
-                </div>
+                <div id="sellAssetsContent"></div>
                 <div style="text-align: center; margin-top: 20px;">
                     <button class="button button-success" onclick="confirmSellAssets()">
                         <i class="fas fa-check"></i> VENDER SELECIONADOS
@@ -837,16 +818,13 @@
             </div>
         </div>
 
-        <!-- MODAL PARA VENDA DE AÇÕES -->
         <div class="modal" id="sellStocksModal">
             <div class="modal-content asset-selection-modal">
                 <div class="modal-header">
                     <div class="modal-title"><i class="fas fa-chart-line"></i> VENDER AÇÕES</div>
                     <button class="close-modal" onclick="closeModal('sellStocksModal')">&times;</button>
                 </div>
-                <div id="sellStocksContent">
-                    <!-- Lista de ações aqui -->
-                </div>
+                <div id="sellStocksContent"></div>
                 <div style="text-align: center; margin-top: 20px;">
                     <button class="button button-success" onclick="confirmSellStocks()">
                         <i class="fas fa-check"></i> VENDER SELECIONADOS
@@ -858,18 +836,27 @@
             </div>
         </div>
 
-        <!-- MODAL DE EMPRÉSTIMO -->
         <div class="modal" id="loanModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title"><i class="fas fa-university"></i> PEGAR EMPRÉSTIMO</div>
                     <button class="close-modal" onclick="closeModal('loanModal')">&times;</button>
                 </div>
-                <div id="loanContent">
-                    <!-- Conteúdo aqui -->
-                </div>
+                <div id="loanContent"></div>
             </div>
         </div>
+
+        <!-- MODAL PARA QUITAR DÍVIDAS -->
+        <div class="modal" id="payLoansModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-money-check-alt"></i> QUITAR DÍVIDAS</div>
+                    <button class="close-modal" onclick="closeModal('payLoansModal')">&times;</button>
+                </div>
+                <div id="payLoansContent"></div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -899,7 +886,6 @@
             {
                 name: "Zelador (Janitor)",
                 salary: 1600,
-                initialCash: 400,
                 perChildCost: 70,
                 taxes: 280,
                 mortgage: 300,
@@ -911,7 +897,6 @@
             {
                 name: "Caminhoneiro",
                 salary: 2500,
-                initialCash: 700,
                 perChildCost: 140,
                 taxes: 460,
                 mortgage: 400,
@@ -923,7 +908,6 @@
             {
                 name: "Secretária",
                 salary: 2500,
-                initialCash: 500,
                 perChildCost: 120,
                 taxes: 460,
                 mortgage: 400,
@@ -935,7 +919,6 @@
             {
                 name: "Policial",
                 salary: 3000,
-                initialCash: 500,
                 perChildCost: 160,
                 taxes: 580,
                 mortgage: 500,
@@ -947,7 +930,6 @@
             {
                 name: "Professor",
                 salary: 3300,
-                initialCash: 500,
                 perChildCost: 110,
                 taxes: 630,
                 mortgage: 500,
@@ -959,7 +941,6 @@
             {
                 name: "Mecânico",
                 salary: 3300,
-                initialCash: 700,
                 perChildCost: 140,
                 taxes: 630,
                 mortgage: 500,
@@ -971,7 +952,6 @@
             {
                 name: "Enfermeiro",
                 salary: 3600,
-                initialCash: 600,
                 perChildCost: 170,
                 taxes: 700,
                 mortgage: 600,
@@ -983,7 +963,6 @@
             {
                 name: "Gerente",
                 salary: 4600,
-                initialCash: 1000,
                 perChildCost: 240,
                 taxes: 910,
                 mortgage: 900,
@@ -995,7 +974,6 @@
             {
                 name: "Engenheiro",
                 salary: 4900,
-                initialCash: 700,
                 perChildCost: 250,
                 taxes: 1050,
                 mortgage: 750,
@@ -1007,7 +985,6 @@
             {
                 name: "Advogado",
                 salary: 7500,
-                initialCash: 1000,
                 perChildCost: 380,
                 taxes: 1830,
                 mortgage: 1100,
@@ -1019,7 +996,6 @@
             {
                 name: "Piloto",
                 salary: 9500,
-                initialCash: 1000,
                 perChildCost: 380,
                 taxes: 2350,
                 mortgage: 1300,
@@ -1031,7 +1007,6 @@
             {
                 name: "Médico",
                 salary: 13000,
-                initialCash: 1000,
                 perChildCost: 640,
                 taxes: 3400,
                 mortgage: 1900,
@@ -1042,7 +1017,7 @@
             }
         ];
 
-        // =========== SONHOS PARA CADA JOGADOR ===========
+        // =========== SONHOS ===========
         const allDreams = [
             "Iate de Luxo",
             "Mansão na Praia",
@@ -1058,244 +1033,41 @@
             "Observatório Astronômico"
         ];
 
-        // =========== DOODADS ESCALONADOS POR VOLTAS ===========
-        const doodadCardsByLaps = {
-            "voltas_1_5": [
-                {
-                    name: "Celular Novo",
-                    description: "Smartphone de última geração com plano de dados.",
-                    cost: 800
-                },
-                {
-                    name: "Reparo do Carro",
-                    description: "Troca de pneus e manutenção básica.",
-                    cost: 1200
-                },
-                {
-                    name: "Consulta Médica",
-                    description: "Consulta especializada com exames.",
-                    cost: 500
-                },
-                {
-                    name: "Computador Novo",
-                    description: "Notebook para trabalho.",
-                    cost: 3000
-                },
-                {
-                    name: "Curso Online",
-                    description: "Curso de especialização profissional.",
-                    cost: 800
-                },
-                {
-                    name: "Reparo Residencial",
-                    description: "Vazamento e pequenos reparos em casa.",
-                    cost: 1500
-                },
-                {
-                    name: "TV 55''",
-                    description: "Televisão smart básica.",
-                    cost: 2500
-                },
-                {
-                    name: "Jantar Especial",
-                    description: "Jantar em restaurante fino para 2 pessoas.",
-                    cost: 400
-                }
-            ],
-            "voltas_6_10": [
-                {
-                    name: "Curso Presencial",
-                    description: "Curso técnico ou profissionalizante.",
-                    cost: 6000
-                },
-                {
-                    name: "Troca de Eletrodomésticos",
-                    description: "Geladeira e fogão novos.",
-                    cost: 8000
-                },
-                {
-                    name: "Manutenção do Carro",
-                    description: "Reparo completo do motor.",
-                    cost: 7500
-                },
-                {
-                    name: "Tratamento Odontológico",
-                    description: "Implante ou tratamento especializado.",
-                    cost: 5000
-                },
-                {
-                    name: "Viagem Nacional",
-                    description: "Pacote de férias para 2 pessoas.",
-                    cost: 10000
-                },
-                {
-                    name: "Móveis Novos",
-                    description: "Conjunto de sofá e poltronas.",
-                    cost: 7000
-                }
-            ],
-            "voltas_11_15": [
-                {
-                    name: "Reforma da Casa",
-                    description: "Reforma completa da cozinha.",
-                    cost: 15000
-                },
-                {
-                    name: "Tratamento Médico",
-                    description: "Cirurgia ou tratamento hospitalar.",
-                    cost: 20000
-                },
-                {
-                    name: "Imposto Atrasado",
-                    description: "Multas e impostos em atraso.",
-                    cost: 18000
-                },
-                {
-                    name: "Problema Estrutural",
-                    description: "Reparo de infiltração e fundação.",
-                    cost: 22000
-                },
-                {
-                    name: "Veículo Usado",
-                    description: "Carro seminovo para necessidade.",
-                    cost: 35000
-                }
-            ],
-            "voltas_16_20": [
-                {
-                    name: "Carro Novo Popular",
-                    description: "Veículo zero km entrada.",
-                    cost: 35000
-                },
-                {
-                    name: "Processo Judicial",
-                    description: "Ação trabalhista ou cível.",
-                    cost: 25000
-                },
-                {
-                    name: "Emergência Familiar",
-                    description: "Ajuda familiar urgente.",
-                    cost: 30000
-                },
-                {
-                    name: "Reforma Completa",
-                    description: "Reforma de toda a casa.",
-                    cost: 35000
-                }
-            ],
-            "voltas_21_mais": [
-                {
-                    name: "Carro de Luxo",
-                    description: "Veículo importado zero km.",
-                    cost: 50000
-                },
-                {
-                    name: "Crise Financeira",
-                    description: "Grande emergência financeira.",
-                    cost: 45000
-                },
-                {
-                    name: "Emergência Familiar Grave",
-                    description: "Problema de saúde familiar.",
-                    cost: 60000
-                },
-                {
-                    name: "Perda de Investimento",
-                    description: "Falência de negócio parceiro.",
-                    cost: 55000
-                }
-            ]
-        };
-
-        // =========== NOVAS CARTAS PEQUENAS OPORTUNIDADES (SMALL DEAL) - REBALANCEADAS ===========
+        // =========== NOVAS CARTAS PEQUENAS OPORTUNIDADES (COM CUSTO) ===========
         const smallDealCards = [
-            {
-                name: "LOANER - Ações a R$ 5 cada",
-                type: "ações",
-                description: "Corretora de investimentos. Compra mínima de 100 ações.",
-                costPerShare: 5,
-                shares: 100,
-                downPayment: 500,
-                cashflow: 0,
-                roi: "Venda por R$ 40 por ação (somente em mercado)"
-            },
-            {
-                name: "MYT4U - Ações a R$ 1 cada",
-                type: "ações",
-                description: "Empresa de tecnologia. Oportunidade de alto crescimento.",
-                costPerShare: 1,
-                shares: 100,
-                downPayment: 100,
-                cashflow: 0,
-                roi: "Venda por R$ 8,00 por ação (50% por evento de mercado)"
-            },
-            {
-                name: "ON2U - Ações a R$ 0,10 cada",
-                type: "ações",
-                description: "Startup de internet. Risco alto, potencial alto.",
-                costPerShare: 0.10,
-                shares: 1000,
-                downPayment: 100,
-                cashflow: 0,
-                roi: "Venda por R$ 1,50 por ação (somente em mercado de alta)"
-            },
-            {
-                name: "OK4U - Ações a R$ 10 cada",
-                type: "ações",
-                description: "Empresa de telecomunicações consolidada.",
-                costPerShare: 10,
-                shares: 100,
-                downPayment: 1000,
-                cashflow: 30
-            },
-            // NOVAS CARTAS COM JUROS CONVERTIDOS
-            {
-                name: "Previdência Privada",
-                type: "títulos",
-                description: "Plano de aposentadoria com retorno garantido.",
-                cost: 5000,
-                downPayment: 5000,
-                annualReturn: 20,
-                roi: "20% ao ano (convertido para 1.67% por Payday)"
-            },
-            {
-                name: "Fundo Imobiliário",
-                type: "fii",
-                description: "Investimento em imóveis comerciais.",
-                cost: 10000,
-                downPayment: 10000,
-                annualReturn: 12,
-                roi: "12% ao ano (convertido para 1% por Payday)"
-            },
-            {
-                name: "Investimento Conservador",
-                type: "títulos",
-                description: "Renda fixa de baixo risco.",
-                cost: 8000,
-                downPayment: 8000,
-                annualReturn: 10,
-                roi: "10% ao ano (convertido para 0.83% por Payday)"
-            },
-            {
-                name: "Fundo de Renda Estável",
-                type: "títulos",
-                description: "Investimento com retorno consistente.",
-                cost: 6000,
-                downPayment: 6000,
-                annualReturn: 8,
-                roi: "8% ao ano (convertido para 0.67% por Payday)"
-            },
-            {
-                name: "Seguro Contra Despesas",
-                type: "proteção",
-                description: "Anula o próximo Doodad que você cair. Uso único.",
-                cost: 300,
-                downPayment: 300,
-                protection: true
-            }
+            // Ações Brasileiras com Dividendos
+            { name: "ITUB4 – Banco Itaú", type: "ações", cost: 2500, cashflow: 120, description: "Ação brasileira com bons dividendos." },
+            { name: "BBAS3 – Banco do Brasil", type: "ações", cost: 2800, cashflow: 130, description: "Banco estatal com dividendos consistentes." },
+            { name: "TAEE11 – Transmissora", type: "ações", cost: 3000, cashflow: 150, description: "Empresa de transmissão de energia." },
+            { name: "TRPL4 – Transmissora Paulista", type: "ações", cost: 3200, cashflow: 160, description: "Concessionária de energia estável." },
+            { name: "EGIE3 – Energia", type: "ações", cost: 3500, cashflow: 170, description: "Geradora de energia renovável." },
+            { name: "CPLE6 – Copel", type: "ações", cost: 3800, cashflow: 180, description: "Companhia Paranaense de Energia." },
+            { name: "BBSE3 – Seguros", type: "ações", cost: 4000, cashflow: 200, description: "Seguradora com bons retornos." },
+            { name: "VIVT3 – Telecomunicações", type: "ações", cost: 4500, cashflow: 220, description: "Operadora de telecomunicações." },
+            { name: "CMIG4 – Energia MG", type: "ações", cost: 5000, cashflow: 240, description: "Companhia Energética de Minas Gerais." },
+            { name: "SANB11 – Santander Brasil", type: "ações", cost: 5500, cashflow: 260, description: "Banco com forte presença no Brasil." },
+            
+            // Renda Passiva Real
+            { name: "Aluguel de quarto", type: "renda", cost: 4000, cashflow: 250, description: "Quarto alugado em local movimentado." },
+            { name: "Contrato de estacionamento", type: "renda", cost: 4500, cashflow: 280, description: "Vaga de estacionamento alugada." },
+            { name: "Aluguel de garagem", type: "renda", cost: 5000, cashflow: 300, description: "Garagem para veículos." },
+            { name: "Máquina vending", type: "renda", cost: 5500, cashflow: 320, description: "Máquina de venda automática." },
+            { name: "Contrato de publicidade", type: "renda", cost: 6000, cashflow: 350, description: "Espaço publicitário alugado." },
+            { name: "Ponto de aluguel simples", type: "renda", cost: 6500, cashflow: 380, description: "Pequeno ponto comercial." },
+            { name: "Aluguel compartilhado", type: "renda", cost: 7000, cashflow: 400, description: "Espaço compartilhado para coworking." },
+            { name: "Contrato recorrente local", type: "renda", cost: 7500, cashflow: 430, description: "Contrato com empresa local." },
+            { name: "Pequeno imóvel alugado", type: "renda", cost: 8000, cashflow: 460, description: "Imóvel pequeno para aluguel." },
+            { name: "Contrato corporativo leve", type: "renda", cost: 8500, cashflow: 500, description: "Contrato com pequena empresa." },
+            
+            // Ativos Operacionais Leves
+            { name: "Canal digital monetizado", type: "digital", cost: 6000, cashflow: 350, description: "Canal online com receita recorrente." },
+            { name: "Infoproduto simples", type: "digital", cost: 6500, cashflow: 380, description: "Produto digital com vendas constantes." },
+            { name: "Licenciamento de marca", type: "digital", cost: 7000, cashflow: 420, description: "Licenciamento de marca local." },
+            { name: "Serviço automatizado", type: "digital", cost: 7500, cashflow: 450, description: "Sistema automatizado com assinaturas." },
+            { name: "Plataforma simples", type: "digital", cost: 8000, cashflow: 480, description: "Plataforma digital com receita mensal." }
         ];
 
-        // =========== BIG DEALS REBALANCEADAS ===========
+        // =========== BIG DEALS ===========
         const bigDealCards = [
             {
                 name: "Apartamento de 2 Quartos",
@@ -1304,109 +1076,88 @@
                 cost: 65000,
                 downPayment: 13000,
                 mortgage: 52000,
-                cashflow: 90,
-                roi: "10% ao ano"
+                cashflow: 90
             },
             {
-                name: "Casa de 3 Quartos com Piscina",
+                name: "Casa de 3 Quartos",
                 type: "imóvel",
-                description: "Casa familiar em bairro nobre.",
+                description: "Casa em bairro nobre.",
                 cost: 135000,
                 downPayment: 27000,
                 mortgage: 108000,
-                cashflow: 500,
-                roi: "15% ao ano"
-            },
-            {
-                name: "Prédio de 24 Apartamentos",
-                type: "imóvel",
-                description: "Edifício residencial com alta taxa de ocupação.",
-                cost: 1200000,
-                downPayment: 150000,
-                mortgage: 1050000,
-                cashflow: 3000,
-                roi: "24% CCR",
-                requires: "1 volta completa"
-            },
-            {
-                name: "Shopping Center",
-                type: "imóvel",
-                description: "Complexo comercial com várias lojas.",
-                cost: 5000000,
-                downPayment: 600000,
-                mortgage: 4400000,
-                cashflow: 18000,
-                roi: "36% CCR",
-                requires: "Renda passiva mínima R$ 5.000/mês"
+                cashflow: 500
             },
             {
                 name: "Franquia de Fast Food",
                 type: "negócio",
-                description: "Restaurante de rede conhecida.",
+                description: "Restaurante de rede.",
                 cost: 250000,
                 downPayment: 50000,
                 mortgage: 200000,
-                cashflow: 2000,
-                roi: "48% CCR"
+                cashflow: 2000
+            },
+            {
+                name: "Prédio de 24 Apartamentos",
+                type: "imóvel",
+                description: "Edifício residencial completo.",
+                cost: 1200000,
+                downPayment: 150000,
+                mortgage: 1050000,
+                cashflow: 3000,
+                requires: "1 volta completa"
             },
             {
                 name: "Empresa de Software",
                 type: "negócio",
-                description: "Startup de tecnologia com contrato governamental.",
+                description: "Startup de tecnologia.",
                 cost: 500000,
                 downPayment: 100000,
                 mortgage: 400000,
                 cashflow: 3000,
-                roi: "36% CCR",
                 requires: "1 volta completa OU renda passiva R$ 2.000/mês"
-            },
-            // NOVAS BIG DEALS REBALANCEADAS
-            {
-                name: "Pequeno Negócio Local",
-                type: "negócio",
-                description: "Negócio familiar com clientela estabelecida.",
-                cost: 8000,
-                downPayment: 8000,
-                cashflow: 300,
-                requires: null
-            },
-            {
-                name: "Franquia Emergente",
-                type: "negócio",
-                description: "Franquia de mercado em crescimento.",
-                cost: 15000,
-                downPayment: 15000,
-                cashflow: 600,
-                requires: null
-            },
-            {
-                name: "Imóvel de Aluguel Simples",
-                type: "imóvel",
-                description: "Apartamento pequeno para aluguel.",
-                cost: 20000,
-                downPayment: 20000,
-                cashflow: 800,
-                requires: null
-            },
-            {
-                name: "Negócio Digital",
-                type: "negócio",
-                description: "Site ou aplicativo com receita recorrente.",
-                cost: 25000,
-                downPayment: 25000,
-                cashflow: 1000,
-                requires: null
-            },
-            {
-                name: "Imóvel Comercial",
-                type: "imóvel",
-                description: "Sala comercial em localização privilegiada.",
-                cost: 40000,
-                downPayment: 40000,
-                cashflow: 1500,
-                requires: null
             }
         ];
+
+        // =========== DOODADS ESCALONADOS ===========
+        const doodadCardsByLaps = {
+            "voltas_1_3": [
+                { name: "Celular quebrado", description: "Troca de tela e bateria.", cost: 500 },
+                { name: "Consulta médica básica", description: "Consulta com clínico geral.", cost: 300 },
+                { name: "Livros didáticos", description: "Material escolar para filhos.", cost: 400 },
+                { name: "Manutenção preventiva", description: "Manutenção básica do carro.", cost: 800 },
+                { name: "Presente de aniversário", description: "Presente para familiar.", cost: 200 },
+                { name: "Curso online básico", description: "Curso de qualificação.", cost: 600 },
+                { name: "Roupas novas", description: "Roupas para trabalho.", cost: 700 },
+                { name: "Jantar especial", description: "Jantar em restaurante.", cost: 250 }
+            ],
+            "voltas_4_6": [
+                { name: "Reparo no carro", description: "Troca de peças importantes.", cost: 3000 },
+                { name: "Curso presencial", description: "Curso profissionalizante.", cost: 2000 },
+                { name: "Móveis novos", description: "Móveis para casa.", cost: 4000 },
+                { name: "Viagem de fim de semana", description: "Viagem para descanso.", cost: 3500 },
+                { name: "Eletrodoméstico", description: "Geladeira ou fogão novo.", cost: 2500 },
+                { name: "Tratamento odontológico", description: "Tratamento dentário.", cost: 5000 },
+                { name: "Computador novo", description: "Computador para trabalho.", cost: 4000 },
+                { name: "Reforma pequena", description: "Pequena reforma em casa.", cost: 6000 }
+            ],
+            "voltas_7_9": [
+                { name: "Cirurgia médica", description: "Cirurgia eletiva.", cost: 15000 },
+                { name: "Reforma completa", description: "Reforma da casa.", cost: 20000 },
+                { name: "Carro usado", description: "Compra de carro seminovo.", cost: 18000 },
+                { name: "Problema judicial", description: "Custas advocatícias.", cost: 12000 },
+                { name: "Emergência familiar", description: "Ajuda para familiar.", cost: 10000 },
+                { name: "Férias em família", description: "Férias para família toda.", cost: 22000 },
+                { name: "Tratamento especializado", description: "Tratamento médico.", cost: 25000 }
+            ],
+            "voltas_10_mais": [
+                { name: "Carro novo", description: "Carro zero km básico.", cost: 30000 },
+                { name: "Crise financeira", description: "Perda de investimento.", cost: 35000 },
+                { name: "Problema de saúde grave", description: "Tratamento hospitalar.", cost: 40000 },
+                { name: "Dívida antiga", description: "Dívida que apareceu.", cost: 25000 },
+                { name: "Prejuízo no negócio", description: "Prejuízo em investimento.", cost: 45000 },
+                { name: "Emergência grave", description: "Emergência familiar grave.", cost: 50000 }
+            ]
+        };
 
         // =========== CARTAS DE MERCADO ===========
         const marketCards = [
@@ -1414,36 +1165,29 @@
                 name: "IMÓVEIS VALORIZARAM!",
                 type: "alta",
                 assetType: "imóvel",
-                description: "Grande demanda por imóveis! Você pode vender seus imóveis por um bom preço.",
+                description: "Grande demanda por imóveis!",
                 modifier: 1.5
             },
             {
                 name: "AÇÕES EM ALTA!",
                 type: "alta",
                 assetType: "ações",
-                description: "O mercado de ações está em alta! Você pode vender suas ações com lucro.",
+                description: "Mercado de ações em alta!",
                 modifier: 2.0
             },
             {
                 name: "CRISE IMOBILIÁRIA",
                 type: "baixa",
                 assetType: "imóvel",
-                description: "O mercado imobiliário está em crise. Os preços caíram significativamente.",
+                description: "Mercado imobiliário em crise.",
                 modifier: 0.7
             },
             {
-                name: "BOLSA EM QUEDA LIVRE",
+                name: "BOLSA EM QUEDA",
                 type: "baixa",
                 assetType: "ações",
-                description: "Crise financeira global afetou o mercado de ações.",
+                description: "Crise no mercado de ações.",
                 modifier: 0.5
-            },
-            {
-                name: "JUROS SUBIRAM",
-                type: "baixa",
-                assetType: "títulos",
-                description: "Taxa de juros aumentou, afetando títulos de renda fixa.",
-                modifier: 0.8
             }
         ];
 
@@ -1452,71 +1196,34 @@
             {
                 id: "floresta",
                 nome: "Compre uma Floresta",
-                descricao: "500 hectares de floresta preservada para ecoturismo.",
+                descricao: "500 hectares de floresta.",
                 tipo: "gasto",
                 custo: 125000
             },
             {
                 id: "carnaval",
                 nome: "Festival de Carnaval",
-                descricao: "Patrocine um bloco de carnaval para 5.000 pessoas.",
+                descricao: "Patrocine um bloco.",
                 tipo: "gasto",
                 custo: 62500
             },
             {
-                id: "cabana_pesca",
-                nome: "Cabana de Pesca Exclusiva",
-                descricao: "Cabana privativa em lago particular com helicóptero.",
-                tipo: "gasto",
-                custo: 50000
-            },
-            {
-                id: "parque_nome",
-                nome: "Parque com Seu Nome",
-                descricao: "Parque público nomeado em sua homenagem.",
-                tipo: "gasto",
-                custo: 112500
-            },
-            {
                 id: "franquia_frango",
-                nome: "Franquia Internacional de Frango",
-                descricao: "Rede de fast-food com 50 unidades.",
+                nome: "Franquia de Frango",
+                descricao: "Rede de fast-food.",
                 tipo: "investimento",
                 entrada: 150000,
                 ccr: 40
             },
             {
-                id: "camisetas",
-                nome: "Cadeia de Lojas de Camisetas",
-                descricao: "100 lojas em shoppings centers.",
-                tipo: "investimento",
-                entrada: 125000,
-                fluxo: 25000
-            },
-            {
-                id: "80_apart",
-                nome: "80 Apartamentos Classe A",
-                descricao: "Condomínio de luxo em área nobre.",
-                tipo: "investimento",
-                entrada: 150000,
-                ccr: 30
-            },
-            {
                 id: "auditoria",
-                nome: "Auditoria Fiscal Federal",
-                descricao: "Multa por irregularidades contábeis.",
+                nome: "Auditoria Fiscal",
+                descricao: "Multa por irregularidades.",
                 tipo: "penalidade"
-            },
-            {
-                id: "processo",
-                nome: "Processo Judicial por Danos Morais",
-                descricao: "Ação movida por ex-funcionário.",
-                tipo: "penalidade",
-                custo: 50000
             }
         ];
 
-        // =========== CONFIGURAÇÃO INICIAL ===========
+        // =========== INICIALIZAÇÃO ===========
         function initializeGame() {
             setupPlayerNames();
             
@@ -1526,6 +1233,7 @@
             document.getElementById('endTurnBtn').addEventListener('click', endTurn);
             document.getElementById('showAssetsBtn').addEventListener('click', showAssets);
             document.getElementById('takeLoanBtn').addEventListener('click', showLoanModal);
+            document.getElementById('payLoansBtn').addEventListener('click', showPayLoansModal);
             document.getElementById('useProtectionBtn').addEventListener('click', useProtection);
             document.getElementById('newGameBtn').addEventListener('click', () => location.reload());
             
@@ -1555,7 +1263,6 @@
             
             const randomIndex = Math.floor(Math.random() * gameState.availableProfessions.length);
             const profession = gameState.availableProfessions[randomIndex];
-            
             gameState.availableProfessions.splice(randomIndex, 1);
             
             return profession;
@@ -1584,22 +1291,17 @@
             gameState.totalPlayers = numPlayers;
             gameState.players = {};
             gameState.currentRound = 1;
-            gameState.totalLaps = 0;
             gameState.availableProfessions = [...allProfessions];
             gameState.playerDreams = {};
-            gameState.nextDoodadProtected = false;
-            gameState.protectedPlayer = null;
             
             for (let i = 1; i <= numPlayers; i++) {
                 const name = document.getElementById(`playerName${i}`).value || `Jogador ${i}`;
                 const prof = getRandomProfession();
                 const dream = getRandomDreamForPlayer(i);
                 
-                // Calcular despesas totais
                 const totalExpenses = prof.taxes + prof.mortgage + prof.carPayment + 
                                     prof.creditCard + prof.otherExpenses + prof.studentLoan;
                 
-                // NOVA REGRA: Dinheiro Inicial = 2 × Despesas Mensais
                 const initialCash = totalExpenses * 2;
                 
                 gameState.players[i] = {
@@ -1625,12 +1327,6 @@
                         protection: null
                     },
                     loans: [],
-                    liabilities: {
-                        studentLoan: prof.studentLoan,
-                        carLoan: prof.carPayment,
-                        creditCard: prof.creditCard,
-                        mortgage: prof.mortgage
-                    },
                     hasCharityBonus: false,
                     lapsCompleted: 0,
                     dreams: [],
@@ -1648,14 +1344,13 @@
             updateCurrentPlayerInfo();
             updateGameStats();
             updateProtectionButton();
+            updatePayLoansButton();
             
-            addLog("🎮 JOGO INICIADO - CASHFLOW ORIGINAL!");
-            addLog("💰 NOVA REGRA: Dinheiro Inicial = 2 × Despesas Mensais");
+            addLog("🎮 JOGO INICIADO!");
             
             for (let i = 1; i <= numPlayers; i++) {
                 const player = gameState.players[i];
-                addLog(`👤 ${player.name} é ${player.profession} (Salário: R$ ${player.salary.toLocaleString()}, Inicial: R$ ${player.cash.toLocaleString()})`);
-                addLog(`💭 Sonho de ${player.name}: ${player.assignedDream}`);
+                addLog(`👤 ${player.name} é ${player.profession}`);
             }
             addLog(`🎲 Vez de: ${gameState.players[1].name}`);
         }
@@ -1753,7 +1448,6 @@
             updateFastTrackSection();
         }
 
-        // =========== MOSTRAR INFORMAÇÕES DAS PROFISSÕES ===========
         function showProfessionsInfo() {
             const container = document.getElementById('professionsGrid');
             let html = '';
@@ -1761,18 +1455,15 @@
             allProfessions.forEach(prof => {
                 const totalExpenses = prof.taxes + prof.mortgage + prof.carPayment + 
                                     prof.creditCard + prof.otherExpenses + prof.studentLoan;
+                const initialCash = totalExpenses * 2;
                 const initialCashflow = prof.salary - totalExpenses;
-                
-                const initialCashNewRule = totalExpenses * 2;
                 
                 html += `
                     <div class="profession-item">
                         <strong>${prof.name}</strong><br>
                         <small>Salário: R$ ${prof.salary.toLocaleString()}</small><br>
-                        <small>Despesas: R$ ${totalExpenses.toLocaleString()}/mês</small><br>
-                        <small>Inicial (2×): R$ ${initialCashNewRule.toLocaleString()}</small><br>
-                        <small>Fluxo: R$ ${initialCashflow.toLocaleString()}/mês</small><br>
-                        <small>Filho: R$ ${prof.perChildCost}/mês</small>
+                        <small>Inicial: R$ ${initialCash.toLocaleString()}</small><br>
+                        <small>Fluxo: R$ ${initialCashflow.toLocaleString()}/mês</small>
                     </div>
                 `;
             });
@@ -1780,7 +1471,6 @@
             container.innerHTML = html;
         }
 
-        // =========== ATUALIZAR FAST TRACK SECTION ===========
         function updateFastTrackSection() {
             const section = document.getElementById('fastTrackSection');
             const content = document.getElementById('fastTrackContent');
@@ -1805,14 +1495,6 @@
                             </div>
                             <p>Saldo: R$ ${player.cash.toLocaleString()}</p>
                             <p><strong>Sonho:</strong> ${player.assignedDream}</p>
-                            ${player.dreams.length > 0 ? `
-                                <div style="margin-top: 10px;">
-                                    <strong>Sonhos Realizados:</strong>
-                                    ${player.dreams.map(dream => `
-                                        <div class="dream-achieved">${dream}</div>
-                                    `).join('')}
-                                </div>
-                            ` : ''}
                         </div>
                     `;
                 });
@@ -1825,7 +1507,6 @@
             document.getElementById('fastTrackCount').textContent = fastTrackPlayers.length;
         }
 
-        // =========== ATUALIZAR ESTATÍSTICAS DO JOGO ===========
         function updateGameStats() {
             document.getElementById('currentRound').textContent = gameState.currentRound;
             
@@ -1850,7 +1531,6 @@
             }
         }
 
-        // =========== ATUALIZAR INFORMAÇÕES DO JOGADOR ===========
         function updateCurrentPlayerInfo() {
             const player = gameState.players[gameState.currentPlayer];
             const infoBar = document.getElementById('currentPlayerInfo');
@@ -1859,9 +1539,14 @@
             const totalExpenses = player.expenses + childExpenses;
             
             let totalLoans = 0;
+            let totalLoanPayments = 0;
             player.loans.forEach(loan => {
                 totalLoans += loan.amount;
+                totalLoanPayments += loan.monthlyPayment;
             });
+            
+            const totalIncome = player.salary + player.passiveIncome;
+            const netIncome = Math.max(totalIncome - totalExpenses - totalLoanPayments, 0);
             
             let html = `
                 <div class="player-info-item">
@@ -1869,11 +1554,6 @@
                     <div class="info-value" style="color: var(--player${player.id})">
                         ${player.name}
                     </div>
-                </div>
-                
-                <div class="player-info-item">
-                    <div class="info-label">PROFISSÃO</div>
-                    <div class="info-value">${player.profession}</div>
                 </div>
                 
                 <div class="player-info-item">
@@ -1893,8 +1573,8 @@
                 
                 <div class="player-info-item">
                     <div class="info-label">FLUXO DE CAIXA</div>
-                    <div class="info-value" style="color: ${player.salary + player.passiveIncome - totalExpenses >= 0 ? '#2ecc71' : '#e74c3c'}">
-                        R$ ${(player.salary + player.passiveIncome - totalExpenses).toLocaleString()}/mês
+                    <div class="info-value" style="color: ${netIncome >= 0 ? '#2ecc71' : '#e74c3c'}">
+                        R$ ${netIncome.toLocaleString()}/mês
                     </div>
                 </div>
             `;
@@ -1903,7 +1583,7 @@
                 html += `
                     <div class="player-info-item">
                         <div class="info-label">FILHOS</div>
-                        <div class="info-value">${player.children} (R$ ${childExpenses}/mês)</div>
+                        <div class="info-value">${player.children}</div>
                     </div>
                 `;
             }
@@ -1930,24 +1610,10 @@
             
             if (player.isDownsized) {
                 html += `
-                    <div class="player-info-item" style="grid-column: 1 / -1;">
+                    <div class="player-info-item">
                         <div class="info-value info-warning">
-                            <i class="fas fa-exclamation-triangle"></i> DEMITIDO (${player.downsizedRounds}/2 rodadas)
+                            <i class="fas fa-exclamation-triangle"></i> DEMITIDO
                         </div>
-                    </div>
-                `;
-            }
-            
-            if (!player.inRatRace) {
-                html += `
-                    <div class="player-info-item" style="grid-column: 1 / -1;">
-                        <div class="info-value" style="color: #9b59b6;">
-                            🚀 VIA RÁPIDA (FAST TRACK)
-                        </div>
-                    </div>
-                    <div class="player-info-item" style="grid-column: 1 / -1;">
-                        <div class="info-label">SONHO</div>
-                        <div class="info-value" style="color: #f39c12;">${player.assignedDream}</div>
                     </div>
                 `;
             }
@@ -1955,21 +1621,29 @@
             infoBar.innerHTML = html;
         }
 
-        // =========== ATUALIZAR BOTÃO DE PROTEÇÃO ===========
         function updateProtectionButton() {
             const player = gameState.players[gameState.currentPlayer];
             const protectionBtn = document.getElementById('useProtectionBtn');
             
             if (player.assets.protection) {
                 protectionBtn.style.display = 'inline-flex';
-                protectionBtn.disabled = false;
-                protectionBtn.innerHTML = '<i class="fas fa-shield-alt"></i> USAR PROTEÇÃO';
             } else {
                 protectionBtn.style.display = 'none';
             }
         }
 
-        // =========== USAR PROTEÇÃO ===========
+        function updatePayLoansButton() {
+            const player = gameState.players[gameState.currentPlayer];
+            const payLoansBtn = document.getElementById('payLoansBtn');
+            
+            if (player.loans.length > 0) {
+                payLoansBtn.style.display = 'inline-flex';
+            } else {
+                payLoansBtn.style.display = 'none';
+            }
+        }
+
+        // =========== PROTEÇÃO ===========
         function useProtection() {
             const player = gameState.players[gameState.currentPlayer];
             
@@ -1980,18 +1654,15 @@
             
             gameState.nextDoodadProtected = true;
             gameState.protectedPlayer = player.id;
-            
             player.assets.protection = null;
             
-            addLog(`🛡️ ${player.name} ativou proteção! Próximo Doodad será anulado.`);
+            addLog(`🛡️ ${player.name} ativou proteção!`);
             
             updateProtectionButton();
             updateCurrentPlayerInfo();
-            
-            document.getElementById('useProtectionBtn').style.display = 'none';
         }
 
-        // =========== SISTEMA DE EMPRÉSTIMOS ===========
+        // =========== EMPRÉSTIMOS ===========
         function showLoanModal() {
             const player = gameState.players[gameState.currentPlayer];
             
@@ -2000,15 +1671,11 @@
                     <h3 style="color: var(--dark); margin-bottom: 10px;">Solicitar Empréstimo</h3>
                     <div style="background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
                         <div style="display: flex; justify-content: space-between; margin: 8px 0;">
-                            <span style="color: #666;">Saldo Disponível:</span>
-                            <span style="font-weight: bold; color: var(--dark);">R$ ${player.cash.toLocaleString()}</span>
+                            <span style="color: #666;">Saldo:</span>
+                            <span style="font-weight: bold;">R$ ${player.cash.toLocaleString()}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin: 8px 0;">
-                            <span style="color: #666;">Total de Empréstimos:</span>
-                            <span style="font-weight: bold; color: #e74c3c;">R$ ${player.loans.reduce((sum, loan) => sum + loan.amount, 0).toLocaleString()}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin: 8px 0;">
-                            <span style="color: #666;">Juros do Banco:</span>
+                            <span style="color: #666;">Juros:</span>
                             <span style="font-weight: bold; color: #e74c3c;">10% ao mês</span>
                         </div>
                     </div>
@@ -2019,7 +1686,7 @@
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
             `;
             
-            const loanAmounts = [1000, 5000, 10000, 20000, 50000, 100000];
+            const loanAmounts = [1000, 5000, 10000, 20000, 50000];
             
             loanAmounts.forEach(amount => {
                 const monthlyPayment = amount * 0.1;
@@ -2038,13 +1705,6 @@
             
             html += `
                 </div>
-                
-                <div style="text-align: center; padding: 15px; background: #e74c3c10; border-radius: 8px; margin-top: 20px;">
-                    <p style="color: #666; font-size: 0.9rem;">
-                        <i class="fas fa-exclamation-triangle"></i> Atenção: Os empréstimos têm juros de 10% ao mês. 
-                        O pagamento é deduzido automaticamente no Dia de Pagamento.
-                    </p>
-                </div>
             `;
             
             document.getElementById('loanContent').innerHTML = html;
@@ -2053,30 +1713,92 @@
 
         function takeLoan(amount) {
             const player = gameState.players[gameState.currentPlayer];
+            const monthlyPayment = amount * 0.1;
             
             player.loans.push({
                 amount: amount,
-                interestRate: 0.1,
-                monthlyPayment: amount * 0.1,
-                takenAt: Date.now()
+                monthlyPayment: monthlyPayment
             });
             
             player.cash += amount;
-            player.expenses += amount * 0.1;
-            player.cashflow = player.salary + player.passiveIncome - player.expenses;
+            player.expenses += monthlyPayment;
             
-            addLog(`🏦 ${player.name} pegou empréstimo de R$ ${amount.toLocaleString()} (pagamento: R$ ${(amount * 0.1).toLocaleString()}/mês)`);
+            addLog(`🏦 ${player.name} pegou empréstimo de R$ ${amount.toLocaleString()}`);
             
             closeModal('loanModal');
             updateCurrentPlayerInfo();
+            updatePayLoansButton();
         }
 
-        // =========== SISTEMA DE DADOS SIMPLIFICADO ===========
-        function rollDice() {
-            if (!gameState.gameActive) {
-                alert("O jogo não está ativo!");
+        function showPayLoansModal() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            if (player.loans.length === 0) {
+                alert("Você não tem dívidas!");
                 return;
             }
+            
+            let html = `
+                <h3 style="color: var(--dark); margin-bottom: 15px;">Suas Dívidas</h3>
+                <p style="margin-bottom: 15px; color: #666;">Saldo: <strong>R$ ${player.cash.toLocaleString()}</strong></p>
+                <div style="max-height: 300px; overflow-y: auto;">
+            `;
+            
+            player.loans.forEach((loan, index) => {
+                html += `
+                    <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>Empréstimo #${index + 1}</strong><br>
+                                <small>Valor: R$ ${loan.amount.toLocaleString()}</small><br>
+                                <small>Pagamento: R$ ${loan.monthlyPayment.toLocaleString()}/mês</small>
+                            </div>
+                            <button class="button ${player.cash >= loan.amount ? 'button-success' : 'button-danger'}" 
+                                    onclick="payOffLoan(${index})" 
+                                    ${player.cash < loan.amount ? 'disabled' : ''}>
+                                Quitar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="closeModal('payLoansModal')">
+                        <i class="fas fa-times"></i> FECHAR
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('payLoansContent').innerHTML = html;
+            document.getElementById('payLoansModal').style.display = 'flex';
+        }
+
+        function payOffLoan(loanIndex) {
+            const player = gameState.players[gameState.currentPlayer];
+            const loan = player.loans[loanIndex];
+            
+            if (player.cash < loan.amount) {
+                alert("Dinheiro insuficiente!");
+                return;
+            }
+            
+            player.cash -= loan.amount;
+            player.expenses -= loan.monthlyPayment;
+            player.loans.splice(loanIndex, 1);
+            
+            addLog(`✅ ${player.name} quitou um empréstimo de R$ ${loan.amount.toLocaleString()}`);
+            
+            closeModal('payLoansModal');
+            updateCurrentPlayerInfo();
+            updatePayLoansButton();
+        }
+
+        // =========== DADOS ===========
+        function rollDice() {
+            if (!gameState.gameActive) return;
             
             const player = gameState.players[gameState.currentPlayer];
             
@@ -2089,68 +1811,22 @@
             rollBtn.disabled = true;
             
             const dice1 = document.getElementById('dice1');
-            const dice2 = document.getElementById('dice2');
-            
             dice1.style.display = 'flex';
-            dice2.style.display = 'none';
-            
             dice1.classList.add('rolling');
             
             setTimeout(() => {
                 const dice1Value = Math.floor(Math.random() * 6) + 1;
-                let total = dice1Value;
+                dice1.textContent = dice1Value;
+                dice1.classList.remove('rolling');
                 
-                // Verificar se tem bônus de caridade para rolar 2 dados
-                if (gameState.dice3Enabled && gameState.charityPlayer === gameState.currentPlayer) {
-                    dice2.style.display = 'flex';
-                    dice2.classList.add('rolling');
-                    
-                    setTimeout(() => {
-                        const dice2Value = Math.floor(Math.random() * 6) + 1;
-                        dice2.textContent = dice2Value;
-                        dice2.classList.remove('rolling');
-                        
-                        total = dice1Value + dice2Value;
-                        
-                        addLog(`🎲 ${player.name} rolou 2 dados (caridade): ${dice1Value}+${dice2Value}=${total}`);
-                        
-                        gameState.charityRoundsLeft--;
-                        
-                        if (gameState.charityRoundsLeft <= 0) {
-                            gameState.dice3Enabled = false;
-                            gameState.charityPlayer = null;
-                            dice2.style.display = 'none';
-                            addLog(`🙏 Bônus de caridade de ${player.name} terminou`);
-                        } else {
-                            addLog(`🙏 ${player.name} ainda tem ${gameState.charityRoundsLeft} rodada(s) com bônus de caridade`);
-                        }
-                        
-                        dice1.textContent = dice1Value;
-                        dice1.classList.remove('rolling');
-                        
-                        movePlayer(gameState.currentPlayer, total);
-                        document.getElementById('endTurnBtn').disabled = false;
-                        
-                        // Mostrar carta automaticamente após mover
-                        setTimeout(() => {
-                            showCardForSpace(player.position);
-                        }, 500);
-                        
-                    }, 800);
-                } else {
-                    addLog(`🎲 ${player.name} rolou ${dice1Value}=${total}`);
-                    
-                    dice1.textContent = dice1Value;
-                    dice1.classList.remove('rolling');
-                    
-                    movePlayer(gameState.currentPlayer, total);
-                    document.getElementById('endTurnBtn').disabled = false;
-                    
-                    // Mostrar carta automaticamente após mover
-                    setTimeout(() => {
-                        showCardForSpace(player.position);
-                    }, 500);
-                }
+                addLog(`🎲 ${player.name} rolou ${dice1Value}`);
+                
+                movePlayer(gameState.currentPlayer, dice1Value);
+                document.getElementById('endTurnBtn').disabled = false;
+                
+                setTimeout(() => {
+                    showCardForSpace(player.position);
+                }, 500);
                 
             }, 800);
         }
@@ -2166,8 +1842,7 @@
                 gameState.totalLaps = Math.max(gameState.totalLaps, player.lapsCompleted);
                 
                 payday(playerId);
-                
-                addLog(`🔄 ${player.name} completou uma volta! Total: ${player.lapsCompleted} volta(s)`);
+                addLog(`🔄 ${player.name} completou uma volta!`);
             }
             
             player.position = newPosition;
@@ -2176,45 +1851,53 @@
             updateGameStats();
         }
 
-        // =========== FUNÇÃO PARA MOSTRAR CARTA DO ESPAÇO ===========
+        // =========== CARTAS DO ESPAÇO ===========
         function showCardForSpace(position) {
             const space = gameState.spaces[position];
+            const player = gameState.players[gameState.currentPlayer];
             
-            addLog(`📍 ${gameState.players[gameState.currentPlayer].name} está no espaço ${space.num}: ${space.name}`);
+            addLog(`📍 ${player.name} está no espaço ${space.num}: ${space.name}`);
             
+            // Scroll automático para a carta
             setTimeout(() => {
-                switch(space.type) {
-                    case 'payday':
-                        payday(gameState.currentPlayer);
-                        break;
-                    case 'baby':
-                        haveBaby(gameState.currentPlayer);
-                        break;
-                    case 'charity':
-                        charity(gameState.currentPlayer);
-                        break;
-                    case 'downsized':
-                        downsized(gameState.currentPlayer);
-                        break;
-                    case 'opportunity':
-                        const isSmallDeal = Math.random() < 0.7;
-                        if (isSmallDeal) {
-                            showSmallDeal(gameState.currentPlayer);
-                        } else {
-                            showBigDeal(gameState.currentPlayer);
-                        }
-                        break;
-                    case 'doodad':
-                        showDoodadCard(gameState.currentPlayer);
-                        break;
-                    case 'market':
-                        showMarketCard(gameState.currentPlayer);
-                        break;
+                const cardDisplay = document.getElementById('cardDisplay');
+                if (cardDisplay.style.display === 'block') {
+                    cardDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            }, 500);
+            }, 100);
+            
+            switch(space.type) {
+                case 'payday':
+                    payday(gameState.currentPlayer);
+                    break;
+                case 'baby':
+                    haveBaby(gameState.currentPlayer);
+                    break;
+                case 'charity':
+                    charity(gameState.currentPlayer);
+                    break;
+                case 'downsized':
+                    downsized(gameState.currentPlayer);
+                    break;
+                case 'opportunity':
+                    // 70% Small Deal, 30% Big Deal
+                    const isSmallDeal = Math.random() < 0.7;
+                    if (isSmallDeal) {
+                        showSmallDeal(gameState.currentPlayer);
+                    } else {
+                        showBigDeal(gameState.currentPlayer);
+                    }
+                    break;
+                case 'doodad':
+                    showDoodadCard(gameState.currentPlayer);
+                    break;
+                case 'market':
+                    showMarketCard(gameState.currentPlayer);
+                    break;
+            }
         }
 
-        // =========== OPORTUNIDADES ALEATÓRIAS ===========
+        // =========== NOVAS CARTAS PEQUENAS (COM CUSTO) ===========
         function showSmallDeal(playerId) {
             const card = smallDealCards[Math.floor(Math.random() * smallDealCards.length)];
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'small' };
@@ -2231,163 +1914,96 @@
             typeTag.style.backgroundColor = '#3498db';
             description.textContent = card.description;
             
-            if (card.type === 'proteção') {
-                details.innerHTML = `
-                    <div class="card-detail">
-                        <div class="detail-label">Tipo</div>
-                        <div class="detail-value">Proteção Financeira</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Efeito</div>
-                        <div class="detail-value">Anula o próximo Doodad</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Custo</div>
-                        <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Duração</div>
-                        <div class="detail-value">Uso único</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Regra</div>
-                        <div class="detail-value">Máximo 1 por jogador</div>
-                    </div>
-                `;
-                
-                actions.innerHTML = `
-                    <button class="button button-protection" onclick="buyAsset()">
-                        <i class="fas fa-shield-alt"></i> COMPRAR PROTEÇÃO
-                    </button>
-                    <button class="button" onclick="declineCard()">
-                        <i class="fas fa-times"></i> RECUSAR
-                    </button>
-                `;
-                
-            } else if (card.type === 'ações') {
-                details.innerHTML = `
-                    <div class="card-detail">
-                        <div class="detail-label">Tipo</div>
-                        <div class="detail-value">Ações</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Preço por Ação</div>
-                        <div class="detail-value">R$ ${card.costPerShare.toLocaleString()}</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Quantidade Mínima</div>
-                        <div class="detail-value">${card.shares} ações</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Investimento Mínimo</div>
-                        <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
-                    </div>
-                    ${card.cashflow > 0 ? `
-                    <div class="card-detail">
-                        <div class="detail-label">Dividendo Mensal</div>
-                        <div class="detail-value" style="color: #2ecc71;">R$ ${card.cashflow}</div>
-                    </div>
-                    ` : ''}
-                    ${card.roi ? `
-                    <div class="card-detail">
-                        <div class="detail-label">Potencial de Venda</div>
-                        <div class="detail-value" style="color: #f39c12;">${card.roi}</div>
-                    </div>
-                    ` : ''}
-                `;
-                
-                actions.innerHTML = `
-                    <button class="button button-success" onclick="buyAsset()">
-                        <i class="fas fa-check"></i> COMPRAR
-                    </button>
-                    <button class="button" onclick="declineCard()">
-                        <i class="fas fa-times"></i> RECUSAR
-                    </button>
-                `;
-            } else {
-                // Para títulos/FII com juros anuais
-                let monthlyReturn = 0;
-                if (card.annualReturn) {
-                    const investmentValue = card.cost || card.downPayment;
-                    monthlyReturn = (investmentValue * (card.annualReturn / 100)) / 12;
-                } else {
-                    monthlyReturn = card.cashflow || 0;
-                }
-                
-                details.innerHTML = `
-                    <div class="card-detail">
-                        <div class="detail-label">Tipo</div>
-                        <div class="detail-value">${card.type === 'títulos' ? 'Títulos' : 'Fundo Imobiliário'}</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Investimento Mínimo</div>
-                        <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Renda por Payday</div>
-                        <div class="detail-value" style="color: #2ecc71;">R$ ${monthlyReturn.toFixed(2)}</div>
-                    </div>
-                    ${card.annualReturn ? `
-                    <div class="card-detail">
-                        <div class="detail-label">Taxa Anual</div>
-                        <div class="detail-value" style="color: #f39c12;">${card.annualReturn}% ao ano</div>
-                    </div>
-                    <div class="card-detail">
-                        <div class="detail-label">Conversão</div>
-                        <div class="detail-value" style="color: #3498db;">${(card.annualReturn/12).toFixed(2)}% por Payday</div>
-                    </div>
-                    ` : ''}
-                    ${card.roi ? `
-                    <div class="card-detail">
-                        <div class="detail-label">Informação</div>
-                        <div class="detail-value" style="color: #666;">${card.roi}</div>
-                    </div>
-                    ` : ''}
-                `;
-                
-                actions.innerHTML = `
-                    <button class="button button-success" onclick="buyAsset()">
-                        <i class="fas fa-check"></i> COMPRAR
-                    </button>
-                    <button class="button" onclick="declineCard()">
-                        <i class="fas fa-times"></i> RECUSAR
-                    </button>
-                `;
-            }
+            details.innerHTML = `
+                <div class="card-detail">
+                    <div class="detail-label">Tipo</div>
+                    <div class="detail-value">${card.type === 'ações' ? 'Ações' : card.type === 'renda' ? 'Renda Passiva' : 'Ativo Digital'}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Custo</div>
+                    <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Renda por Payday</div>
+                    <div class="detail-value" style="color: #2ecc71;">+R$ ${card.cashflow}/mês</div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-label">Retorno</div>
+                    <div class="detail-value" style="color: #f39c12;">${Math.round((card.cashflow / card.cost) * 100 * 12)}% ao ano</div>
+                </div>
+            `;
+            
+            actions.innerHTML = `
+                <button class="button button-success" onclick="buySmallDeal()">
+                    <i class="fas fa-check"></i> COMPRAR
+                </button>
+                <button class="button" onclick="declineCard()">
+                    <i class="fas fa-times"></i> RECUSAR
+                </button>
+            `;
             
             display.style.display = 'block';
         }
 
+        function buySmallDeal() {
+            const card = gameState.currentCard;
+            const player = gameState.players[card.playerId];
+            
+            if (player.cash < card.cost) {
+                if (confirm(`Dinheiro insuficiente! Você tem R$ ${player.cash.toLocaleString()}, precisa de R$ ${card.cost.toLocaleString()}.\n\nDeseja pegar um empréstimo?`)) {
+                    showLoanModal();
+                }
+                return;
+            }
+            
+            player.cash -= card.cost;
+            player.passiveIncome += card.cashflow;
+            
+            // Adicionar ao tipo correto de ativos
+            if (card.type === 'ações') {
+                player.assets.stocks.push({
+                    name: card.name,
+                    cost: card.cost,
+                    cashflow: card.cashflow,
+                    type: 'ações'
+                });
+            } else if (card.type === 'renda') {
+                player.assets.realEstate.push({
+                    name: card.name,
+                    cost: card.cost,
+                    cashflow: card.cashflow,
+                    type: 'renda'
+                });
+            } else {
+                player.assets.businesses.push({
+                    name: card.name,
+                    cost: card.cost,
+                    cashflow: card.cashflow,
+                    type: 'digital'
+                });
+            }
+            
+            addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.cost.toLocaleString()} (+R$ ${card.cashflow}/mês)`);
+            
+            checkExitRatRace(card.playerId);
+            
+            document.getElementById('cardDisplay').style.display = 'none';
+            updateCurrentPlayerInfo();
+            updatePayLoansButton();
+        }
+
+        // =========== BIG DEALS ===========
         function showBigDeal(playerId) {
             const player = gameState.players[playerId];
-            let availableCards = [...bigDealCards];
-            
-            availableCards = availableCards.filter(card => {
+            const availableCards = bigDealCards.filter(card => {
                 if (!card.requires) return true;
-                
                 if (card.requires === "1 volta completa") {
                     return player.lapsCompleted >= 1;
                 }
-                
                 if (card.requires.includes("renda passiva mínima")) {
                     const minIncome = parseInt(card.requires.match(/R\$ (\d+)/)[1]);
                     return player.passiveIncome >= minIncome;
                 }
-                
-                if (card.requires.includes("OU")) {
-                    const conditions = card.requires.split(" OU ");
-                    return conditions.some(condition => {
-                        if (condition === "1 volta completa") {
-                            return player.lapsCompleted >= 1;
-                        }
-                        if (condition.includes("renda passiva mínima")) {
-                            const minIncome = parseInt(condition.match(/R\$ (\d+)/)[1]);
-                            return player.passiveIncome >= minIncome;
-                        }
-                        return false;
-                    });
-                }
-                
                 return true;
             });
             
@@ -2411,12 +2027,6 @@
             typeTag.style.backgroundColor = '#e67e22';
             description.textContent = card.description;
             
-            let monthlyCashflow = card.cashflow || 0;
-            if (card.annualReturn) {
-                const investmentValue = card.cost || card.downPayment;
-                monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
-            }
-            
             details.innerHTML = `
                 <div class="card-detail">
                     <div class="detail-label">Tipo</div>
@@ -2424,10 +2034,10 @@
                 </div>
                 <div class="card-detail">
                     <div class="detail-label">Valor Total</div>
-                    <div class="detail-value">R$ ${card.cost ? card.cost.toLocaleString() : card.downPayment.toLocaleString()}</div>
+                    <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
                 </div>
                 <div class="card-detail">
-                    <div class="detail-label">Entrada Necessária</div>
+                    <div class="detail-label">Entrada</div>
                     <div class="detail-value">R$ ${card.downPayment.toLocaleString()}</div>
                 </div>
                 ${card.mortgage ? `
@@ -2438,24 +2048,8 @@
                 ` : ''}
                 <div class="card-detail">
                     <div class="detail-label">Renda por Payday</div>
-                    <div class="detail-value" style="color: #2ecc71;">R$ ${monthlyCashflow.toFixed(2)}</div>
+                    <div class="detail-value" style="color: #2ecc71;">+R$ ${card.cashflow}/mês</div>
                 </div>
-                ${card.annualReturn ? `
-                <div class="card-detail">
-                    <div class="detail-label">Taxa Anual</div>
-                    <div class="detail-value" style="color: #f39c12;">${card.annualReturn}% ao ano</div>
-                </div>
-                <div class="card-detail">
-                    <div class="detail-label">Conversão</div>
-                    <div class="detail-value" style="color: #3498db;">${(card.annualReturn/12).toFixed(2)}% por Payday</div>
-                </div>
-                ` : ''}
-                ${card.roi ? `
-                <div class="card-detail">
-                    <div class="detail-label">Retorno</div>
-                    <div class="detail-value" style="color: #f39c12;">${card.roi}</div>
-                </div>
-                ` : ''}
                 ${card.requires ? `
                 <div class="card-detail">
                     <div class="detail-label">Pré-requisito</div>
@@ -2465,7 +2059,7 @@
             `;
             
             actions.innerHTML = `
-                <button class="button button-success" onclick="buyAsset()">
+                <button class="button button-success" onclick="buyBigDeal()">
                     <i class="fas fa-check"></i> COMPRAR
                 </button>
                 <button class="button" onclick="declineCard()">
@@ -2476,139 +2070,53 @@
             display.style.display = 'block';
         }
 
-        // =========== COMPRAR ATIVOS ===========
-        function buyAsset() {
+        function buyBigDeal() {
             const card = gameState.currentCard;
             const player = gameState.players[card.playerId];
             
             if (player.cash < card.downPayment) {
-                if (confirm(`Dinheiro insuficiente! Você tem R$ ${player.cash.toLocaleString()}, precisa de R$ ${card.downPayment.toLocaleString()}.\n\nDeseja pegar um empréstimo?`)) {
+                if (confirm(`Dinheiro insuficiente para entrada! Deseja pegar empréstimo?`)) {
                     showLoanModal();
                 }
                 return;
             }
             
             player.cash -= card.downPayment;
+            player.passiveIncome += card.cashflow;
             
-            if (card.type === 'proteção') {
-                if (player.assets.protection) {
-                    alert("Você já possui uma proteção ativa! Máximo 1 por jogador.");
-                    player.cash += card.downPayment;
-                    return;
-                }
-                
-                player.assets.protection = {
-                    name: card.name,
-                    description: card.description,
-                    active: true
-                };
-                
-                addLog(`🛡️ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()}`);
-                updateProtectionButton();
-                
-            } else if (card.type === 'ações') {
-                player.passiveIncome += card.cashflow || 0;
-                
-                let specialRules = "";
-                if (card.name.includes("ON2U")) {
-                    specialRules = "Venda somente em mercado de ações | Risco: perde 50% em baixa";
-                } else if (card.name.includes("MYT4U")) {
-                    specialRules = "Venda limitada a 50% por evento de mercado";
-                }
-                
-                player.assets.stocks.push({
-                    name: card.name,
-                    shares: card.shares,
-                    costPerShare: card.costPerShare,
-                    cashflow: card.cashflow || 0,
-                    roi: card.roi || "",
-                    specialRules: specialRules,
-                    purchasePrice: card.downPayment,
-                    canSell: false
-                });
-                
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} ${card.cashflow ? `(renda: +R$ ${card.cashflow}/mês)` : ''}`);
-                
-            } else if (card.type === 'imóvel') {
-                // Calcular renda mensal (se for anual, converter)
-                let monthlyCashflow = card.cashflow || 0;
-                
-                // Se tiver annualReturn, calcular renda mensal
-                if (card.annualReturn) {
-                    const investmentValue = card.cost || card.downPayment;
-                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
-                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
-                }
-                
-                player.passiveIncome += monthlyCashflow;
+            if (card.type === 'imóvel') {
                 player.assets.realEstate.push({
                     name: card.name,
                     cost: card.cost,
                     downPayment: card.downPayment,
                     mortgage: card.mortgage || 0,
-                    cashflow: monthlyCashflow,
-                    roi: card.roi || "",
-                    annualReturn: card.annualReturn || 0
+                    cashflow: card.cashflow,
+                    type: 'imóvel'
                 });
-                
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
-                
-            } else if (card.type === 'negócio') {
-                let monthlyCashflow = card.cashflow || 0;
-                
-                // Se tiver annualReturn, calcular renda mensal
-                if (card.annualReturn) {
-                    const investmentValue = card.cost || card.downPayment;
-                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
-                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
-                }
-                
-                player.passiveIncome += monthlyCashflow;
+            } else {
                 player.assets.businesses.push({
                     name: card.name,
                     cost: card.cost,
                     downPayment: card.downPayment,
                     mortgage: card.mortgage || 0,
-                    cashflow: monthlyCashflow,
-                    roi: card.roi || "",
-                    annualReturn: card.annualReturn || 0
+                    cashflow: card.cashflow,
+                    type: 'negócio'
                 });
-                
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
-                
-            } else if (card.type === 'títulos' || card.type === 'fii') {
-                let monthlyCashflow = card.cashflow || 0;
-                
-                // Se tiver annualReturn, calcular renda mensal
-                if (card.annualReturn) {
-                    const investmentValue = card.cost || card.downPayment;
-                    monthlyCashflow = (investmentValue * (card.annualReturn / 100)) / 12;
-                    addLog(`📊 ${card.name}: ${card.annualReturn}% ao ano convertido para ${(card.annualReturn/12).toFixed(2)}% por Payday`);
-                }
-                
-                player.passiveIncome += monthlyCashflow;
-                player.assets.bonds.push({
-                    name: card.name,
-                    cost: card.cost || card.downPayment,
-                    cashflow: monthlyCashflow,
-                    roi: card.roi || "",
-                    annualReturn: card.annualReturn || 0
-                });
-                
-                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${monthlyCashflow.toFixed(2)}/mês)`);
             }
+            
+            addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} de entrada (+R$ ${card.cashflow}/mês)`);
             
             checkExitRatRace(card.playerId);
             
             document.getElementById('cardDisplay').style.display = 'none';
             updateCurrentPlayerInfo();
+            updatePayLoansButton();
         }
 
-        // =========== DOODAD COM ESCALONAMENTO ===========
+        // =========== DOODADS ESCALONADOS ===========
         function showDoodadCard(playerId) {
             const player = gameState.players[playerId];
             
-            // Verificar proteção
             if (gameState.nextDoodadProtected && gameState.protectedPlayer === playerId) {
                 addLog(`🛡️ ${player.name} usou proteção! Doodad anulado.`);
                 gameState.nextDoodadProtected = false;
@@ -2616,25 +2124,20 @@
                 return;
             }
             
-            // Determinar categoria baseado nas voltas
+            // Determinar categoria baseada nas voltas
             let doodadCategory;
-            if (player.lapsCompleted <= 5) {
-                doodadCategory = "voltas_1_5";
-            } else if (player.lapsCompleted <= 10) {
-                doodadCategory = "voltas_6_10";
-            } else if (player.lapsCompleted <= 15) {
-                doodadCategory = "voltas_11_15";
-            } else if (player.lapsCompleted <= 20) {
-                doodadCategory = "voltas_16_20";
+            if (player.lapsCompleted <= 3) {
+                doodadCategory = "voltas_1_3";
+            } else if (player.lapsCompleted <= 6) {
+                doodadCategory = "voltas_4_6";
+            } else if (player.lapsCompleted <= 9) {
+                doodadCategory = "voltas_7_9";
             } else {
-                doodadCategory = "voltas_21_mais";
+                doodadCategory = "voltas_10_mais";
             }
             
-            // Sortear doodad da categoria apropriada
             const availableDoodads = doodadCardsByLaps[doodadCategory];
             const card = availableDoodads[Math.floor(Math.random() * availableDoodads.length)];
-            
-            addLog(`📊 ${player.name} está na categoria ${doodadCategory.replace('_', ' ')} (${player.lapsCompleted} voltas)`);
             
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'doodad' };
             
@@ -2667,10 +2170,6 @@
                     <div class="detail-label">Custo</div>
                     <div class="detail-value" style="color: #e74c3c;">R$ ${card.cost.toLocaleString()}</div>
                 </div>
-                <div class="card-detail">
-                    <div class="detail-label">Regra</div>
-                    <div class="detail-value">Escalonado por voltas no tabuleiro</div>
-                </div>
             `;
             
             actions.innerHTML = `
@@ -2687,20 +2186,35 @@
             const player = gameState.players[card.playerId];
             
             if (player.cash >= card.cost) {
+                // Tem dinheiro suficiente
                 player.cash -= card.cost;
                 addLog(`💸 ${player.name} pagou R$ ${card.cost.toLocaleString()} por ${card.name}`);
             } else {
-                if (confirm(`Dinheiro insuficiente! Você precisa de R$ ${card.cost.toLocaleString()}.\n\nDeseja pegar um empréstimo?`)) {
-                    showLoanModal();
-                }
-                return;
+                // Não tem dinheiro suficiente - criar dívida
+                const deficit = card.cost - player.cash;
+                player.cash = 0;
+                
+                const loanAmount = deficit;
+                const monthlyPayment = loanAmount * 0.1;
+                
+                player.loans.push({
+                    amount: loanAmount,
+                    monthlyPayment: monthlyPayment,
+                    reason: "Doodad - Déficit automático"
+                });
+                
+                player.expenses += monthlyPayment;
+                
+                addLog(`💸 ${player.name} pagou R$ ${(card.cost - deficit).toLocaleString()} e gerou dívida de R$ ${loanAmount.toLocaleString()} por ${card.name}`);
+                addLog(`🏦 Empréstimo automático: R$ ${loanAmount.toLocaleString()} (pagamento: R$ ${monthlyPayment.toLocaleString()}/mês)`);
             }
             
             document.getElementById('cardDisplay').style.display = 'none';
             updateCurrentPlayerInfo();
+            updatePayLoansButton();
         }
 
-        // =========== MERCADO COM REGRAS ESPECIAIS ===========
+        // =========== MERCADO ===========
         function showMarketCard(playerId) {
             const card = marketCards[Math.floor(Math.random() * marketCards.length)];
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'market' };
@@ -2718,23 +2232,21 @@
             typeTag.style.backgroundColor = card.type === 'alta' ? '#2ecc71' : '#e74c3c';
             description.textContent = card.description;
             
-            const variation = ((card.modifier - 1) * 100).toFixed(0);
-            
             details.innerHTML = `
                 <div class="card-detail">
-                    <div class="detail-label">Tipo de Mercado</div>
+                    <div class="detail-label">Tipo</div>
                     <div class="detail-value" style="color: ${card.type === 'alta' ? '#2ecc71' : '#e74c3c'}">
                         ${card.type === 'alta' ? 'ALTA' : 'BAIXA'}
                     </div>
                 </div>
                 <div class="card-detail">
-                    <div class="detail-label">Afeta</div>
-                    <div class="detail-value">${card.assetType === 'imóvel' ? 'IMÓVEIS' : card.assetType === 'ações' ? 'AÇÕES' : 'TÍTULOS'}</div>
+                    <div class="detail-label">Ativo</div>
+                    <div class="detail-value">${card.assetType === 'imóvel' ? 'IMÓVEIS' : 'AÇÕES'}</div>
                 </div>
                 <div class="card-detail">
-                    <div class="detail-label">Variação de Preço</div>
+                    <div class="detail-label">Variação</div>
                     <div class="detail-value" style="color: ${card.modifier > 1 ? '#2ecc71' : '#e74c3c'}">
-                        ${variation > 0 ? '+' : ''}${variation}%
+                        ${((card.modifier - 1) * 100).toFixed(0)}%
                     </div>
                 </div>
             `;
@@ -2746,78 +2258,41 @@
                             <i class="fas fa-home"></i> VENDER IMÓVEIS
                         </button>
                         <button class="button" onclick="declineCard()">
-                            <i class="fas fa-times"></i> MANTER ATIVOS
+                            <i class="fas fa-times"></i> MANTER
                         </button>
                     `;
-                } else if (card.assetType === 'ações') {
+                } else {
                     actions.innerHTML = `
                         <button class="button button-success" onclick="showSellStocksModal(${playerId})">
                             <i class="fas fa-chart-line"></i> VENDER AÇÕES
                         </button>
                         <button class="button" onclick="declineCard()">
-                            <i class="fas fa-times"></i> MANTER ATIVOS
-                        </button>
-                    `;
-                } else {
-                    actions.innerHTML = `
-                        <button class="button" onclick="declineCard()">
-                            <i class="fas fa-check"></i> ENTENDI
+                            <i class="fas fa-times"></i> MANTER
                         </button>
                     `;
                 }
             } else {
-                if (card.assetType === 'ações') {
-                    const player = gameState.players[playerId];
-                    let lostStocks = false;
-                    
-                    player.assets.stocks.forEach(stock => {
-                        if (stock.name.includes("ON2U")) {
-                            const lostShares = Math.floor(stock.shares * 0.5);
-                            if (lostShares > 0) {
-                                stock.shares -= lostShares;
-                                lostStocks = true;
-                                addLog(`📉 ${player.name} perdeu ${lostShares} ações ON2U em queda do mercado`);
-                            }
-                        }
-                    });
-                    
-                    if (lostStocks) {
-                        actions.innerHTML = `
-                            <button class="button button-danger" onclick="declineCard()">
-                                <i class="fas fa-exclamation-triangle"></i> ACEITAR PERDAS
-                            </button>
-                        `;
-                    } else {
-                        actions.innerHTML = `
-                            <button class="button" onclick="declineCard()">
-                                <i class="fas fa-check"></i> ENTENDI
-                            </button>
-                        `;
-                    }
-                } else {
-                    actions.innerHTML = `
-                        <button class="button" onclick="declineCard()">
-                            <i class="fas fa-check"></i> ENTENDI
-                        </button>
-                    `;
-                }
+                actions.innerHTML = `
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-check"></i> ENTENDI
+                    </button>
+                `;
             }
             
             display.style.display = 'block';
         }
 
-        // =========== MODAL PARA VENDA DE IMÓVEIS ===========
         function showSellRealEstateModal(playerId) {
             const player = gameState.players[playerId];
             const marketCard = gameState.marketEvent;
             
             if (player.assets.realEstate.length === 0) {
-                alert("Você não possui imóveis para vender.");
+                alert("Você não possui imóveis!");
                 declineCard();
                 return;
             }
             
-            let html = '<p>Selecione quais imóveis deseja vender:</p>';
+            let html = '<p>Selecione imóveis para vender:</p>';
             
             player.assets.realEstate.forEach((asset, index) => {
                 const saleValue = Math.round(asset.cost * marketCard.modifier);
@@ -2827,13 +2302,11 @@
                     <div class="asset-item">
                         <div class="asset-info">
                             <strong>${asset.name}</strong><br>
-                            <small>Valor original: R$ ${asset.cost.toLocaleString()}</small><br>
-                            <small>Valor de venda: R$ ${saleValue.toLocaleString()} (${profit > 0 ? '+' : ''}R$ ${profit.toLocaleString()})</small><br>
-                            <small>Renda mensal: R$ ${asset.cashflow}</small>
+                            <small>Valor: R$ ${saleValue.toLocaleString()} (${profit > 0 ? '+' : ''}R$ ${profit.toLocaleString()})</small><br>
+                            <small>Renda atual: R$ ${asset.cashflow}/mês</small>
                         </div>
                         <div class="sell-checkbox">
                             <input type="checkbox" id="realEstate${index}" data-index="${index}" data-value="${saleValue}" data-cashflow="${asset.cashflow}">
-                            <label for="realEstate${index}">Vender</label>
                         </div>
                     </div>
                 `;
@@ -2848,7 +2321,7 @@
             const checkboxes = document.querySelectorAll('#sellAssetsContent input[type="checkbox"]:checked');
             
             if (checkboxes.length === 0) {
-                alert("Selecione pelo menos um imóvel para vender.");
+                alert("Selecione pelo menos um imóvel!");
                 return;
             }
             
@@ -2860,7 +2333,6 @@
                 const index = parseInt(checkbox.dataset.index);
                 const saleValue = parseInt(checkbox.dataset.value);
                 const cashflow = parseInt(checkbox.dataset.cashflow);
-                
                 indicesToRemove.push({ index, saleValue, cashflow });
             });
             
@@ -2878,54 +2350,38 @@
                 player.assets.realEstate.splice(item.index, 1);
             });
             
-            addLog(`📊 Total recebido: R$ ${totalCash.toLocaleString()} | Redução de renda: R$ ${totalCashflowReduction}/mês`);
+            addLog(`📊 Total recebido: R$ ${totalCash.toLocaleString()}`);
             
             closeModal('sellAssetsModal');
             declineCard();
             updateCurrentPlayerInfo();
         }
 
-        // =========== MODAL PARA VENDA DE AÇÕES (COM REGRAS ESPECIAIS) ===========
         function showSellStocksModal(playerId) {
             const player = gameState.players[playerId];
             const marketCard = gameState.marketEvent;
             
             if (player.assets.stocks.length === 0) {
-                alert("Você não possui ações para vender.");
+                alert("Você não possui ações!");
                 declineCard();
                 return;
             }
             
-            let html = '<p>Selecione quais ações deseja vender:</p>';
+            let html = '<p>Selecione ações para vender:</p>';
             
             player.assets.stocks.forEach((asset, index) => {
-                const totalCost = asset.shares * asset.costPerShare;
-                let saleValue = Math.round(totalCost * marketCard.modifier);
-                
-                if (asset.name.includes("MYT4U")) {
-                    const maxSellableShares = Math.floor(asset.shares * 0.5);
-                    const maxSaleValue = Math.round((maxSellableShares * asset.costPerShare) * marketCard.modifier);
-                    saleValue = maxSaleValue;
-                    html += `<div style="color: #e67e22; font-size: 0.8rem; margin-bottom: 5px;"><i class="fas fa-info-circle"></i> MYT4U: só pode vender 50% das ações por evento</div>`;
-                } else if (asset.name.includes("ON2U")) {
-                    html += `<div style="color: #e67e22; font-size: 0.8rem; margin-bottom: 5px;"><i class="fas fa-info-circle"></i> ON2U: venda somente permitida em mercado de alta</div>`;
-                }
-                
-                const profit = saleValue - totalCost;
+                const saleValue = Math.round(asset.cost * marketCard.modifier);
+                const profit = saleValue - asset.cost;
                 
                 html += `
                     <div class="asset-item">
                         <div class="asset-info">
                             <strong>${asset.name}</strong><br>
-                            <small>${asset.shares} ações a R$ ${asset.costPerShare}/cada</small><br>
-                            <small>Investido: R$ ${totalCost.toLocaleString()}</small><br>
-                            <small>Valor de venda: R$ ${saleValue.toLocaleString()} (${profit > 0 ? '+' : ''}R$ ${profit.toLocaleString()})</small><br>
-                            ${asset.cashflow > 0 ? `<small>Dividendo: R$ ${asset.cashflow}/mês</small>` : ''}
-                            ${asset.specialRules ? `<small style="color: #666;">${asset.specialRules}</small>` : ''}
+                            <small>Valor: R$ ${saleValue.toLocaleString()} (${profit > 0 ? '+' : ''}R$ ${profit.toLocaleString()})</small><br>
+                            <small>Renda atual: R$ ${asset.cashflow}/mês</small>
                         </div>
                         <div class="sell-checkbox">
-                            <input type="checkbox" id="stocks${index}" data-index="${index}" data-value="${saleValue}" data-cashflow="${asset.cashflow}" data-name="${asset.name}" data-shares="${asset.shares}">
-                            <label for="stocks${index}">Vender</label>
+                            <input type="checkbox" id="stocks${index}" data-index="${index}" data-value="${saleValue}" data-cashflow="${asset.cashflow}">
                         </div>
                     </div>
                 `;
@@ -2940,7 +2396,7 @@
             const checkboxes = document.querySelectorAll('#sellStocksContent input[type="checkbox"]:checked');
             
             if (checkboxes.length === 0) {
-                alert("Selecione pelo menos uma ação para vender.");
+                alert("Selecione pelo menos uma ação!");
                 return;
             }
             
@@ -2952,38 +2408,23 @@
                 const index = parseInt(checkbox.dataset.index);
                 const saleValue = parseInt(checkbox.dataset.value);
                 const cashflow = parseInt(checkbox.dataset.cashflow);
-                const stockName = checkbox.dataset.name;
-                const currentShares = parseInt(checkbox.dataset.shares);
-                
-                indicesToRemove.push({ index, saleValue, cashflow, stockName, currentShares });
+                indicesToRemove.push({ index, saleValue, cashflow });
             });
             
             indicesToRemove.sort((a, b) => b.index - a.index);
             
             indicesToRemove.forEach(item => {
                 const asset = player.assets.stocks[item.index];
-                
-                if (item.stockName.includes("MYT4U")) {
-                    const sharesToRemove = Math.floor(item.currentShares * 0.5);
-                    if (sharesToRemove > 0) {
-                        asset.shares -= sharesToRemove;
-                        if (asset.shares <= 0) {
-                            player.assets.stocks.splice(item.index, 1);
-                        }
-                    }
-                } else {
-                    player.assets.stocks.splice(item.index, 1);
-                }
-                
                 player.cash += item.saleValue;
                 player.passiveIncome -= item.cashflow;
                 totalCash += item.saleValue;
                 totalCashflowReduction += item.cashflow;
                 
-                addLog(`💰 ${player.name} vendeu ${item.stockName} por R$ ${item.saleValue.toLocaleString()}`);
+                addLog(`💰 ${player.name} vendeu ${asset.name} por R$ ${item.saleValue.toLocaleString()}`);
+                player.assets.stocks.splice(item.index, 1);
             });
             
-            addLog(`📊 Total recebido: R$ ${totalCash.toLocaleString()} | Redução de renda: R$ ${totalCashflowReduction}/mês`);
+            addLog(`📊 Total recebido: R$ ${totalCash.toLocaleString()}`);
             
             closeModal('sellStocksModal');
             declineCard();
@@ -2994,14 +2435,12 @@
         function payday(playerId) {
             const player = gameState.players[playerId];
             
-            // Verificar se está demitido
             if (player.isDownsized) {
                 player.downsizedRounds++;
-                
                 if (player.downsizedRounds >= 2) {
                     player.isDownsized = false;
                     player.downsizedRounds = 0;
-                    addLog(`🎉 ${player.name} voltou ao trabalho! Agora recebe salário normalmente.`);
+                    addLog(`🎉 ${player.name} voltou ao trabalho!`);
                 } else {
                     const childExpenses = player.children * player.perChildCost;
                     const totalExpenses = player.expenses + childExpenses;
@@ -3012,10 +2451,10 @@
                         loanPayments += loan.monthlyPayment;
                     });
                     
-                    const netIncome = totalIncome - totalExpenses - loanPayments;
+                    const netIncome = Math.max(totalIncome - totalExpenses - loanPayments, 0);
                     player.cash += netIncome;
                     
-                    addLog(`⏸️ ${player.name} está demitido! Recebeu apenas: Renda Passiva R$ ${player.passiveIncome} - Despesas R$ ${totalExpenses} - Empréstimos R$ ${loanPayments} = R$ ${netIncome.toLocaleString()}`);
+                    addLog(`⏸️ ${player.name} está demitido! Recebeu: R$ ${netIncome.toLocaleString()}`);
                     updateCurrentPlayerInfo();
                     return;
                 }
@@ -3030,10 +2469,10 @@
                 loanPayments += loan.monthlyPayment;
             });
             
-            const netIncome = totalIncome - totalExpenses - loanPayments;
+            const netIncome = Math.max(totalIncome - totalExpenses - loanPayments, 0);
             player.cash += netIncome;
             
-            addLog(`💰 ${player.name} recebeu: Salário R$ ${player.salary} + Renda Passiva R$ ${player.passiveIncome} - Despesas R$ ${totalExpenses} - Empréstimos R$ ${loanPayments} = R$ ${netIncome.toLocaleString()}`);
+            addLog(`💰 ${player.name} recebeu: R$ ${netIncome.toLocaleString()}`);
             
             updateCurrentPlayerInfo();
         }
@@ -3042,12 +2481,12 @@
             const player = gameState.players[playerId];
             
             if (player.children >= player.maxChildren) {
-                addLog(`👶 ${player.name} já tem o máximo de 3 filhos!`);
+                addLog(`👶 ${player.name} já tem 3 filhos!`);
                 return;
             }
             
             player.children++;
-            addLog(`👶 ${player.name} teve um bebê! Total: ${player.children} filho(s) (+R$ ${player.perChildCost}/mês cada)`);
+            addLog(`👶 ${player.name} teve um bebê! Total: ${player.children}`);
             updateCurrentPlayerInfo();
         }
 
@@ -3057,18 +2496,16 @@
             
             if (player.cash >= amount) {
                 player.cash -= amount;
-                addLog(`❤️ ${player.name} doou R$ ${amount.toLocaleString()} para caridade`);
+                addLog(`❤️ ${player.name} doou R$ ${amount.toLocaleString()}`);
                 
                 gameState.dice3Enabled = true;
                 gameState.charityPlayer = playerId;
                 gameState.charityRoundsLeft = 3;
                 
                 document.getElementById('dice2').style.display = 'flex';
-                document.getElementById('dice2').textContent = '?';
-                
                 addLog(`🎲 Próximas 3 rodadas, ${player.name} pode rolar 2 dados!`);
             } else {
-                alert(`Dinheiro insuficiente para caridade! Necessário: R$ ${amount.toLocaleString()}`);
+                alert(`Dinheiro insuficiente para caridade!`);
             }
             
             updateCurrentPlayerInfo();
@@ -3079,20 +2516,11 @@
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             
-            player.assets.businesses.forEach(business => {
-                if (business.name.includes("Fast Food")) {
-                    const reducedCashflow = Math.floor(business.cashflow * 0.5);
-                    addLog(`🍔 ${player.name} negócio Fast Food afetado! Fluxo reduzido de R$ ${business.cashflow} para R$ ${reducedCashflow}/mês por 2 rodadas`);
-                    business.cashflow = reducedCashflow;
-                }
-            });
-            
             if (player.cash >= totalExpenses) {
                 player.cash -= totalExpenses;
-                addLog(`⚠️ ${player.name} foi demitido! Pagou R$ ${totalExpenses.toLocaleString()} em despesas.`);
+                addLog(`⚠️ ${player.name} foi demitido! Pagou R$ ${totalExpenses.toLocaleString()}`);
             } else {
                 const deficit = totalExpenses - player.cash;
-                
                 player.cash = 0;
                 
                 const loanAmount = deficit;
@@ -3100,26 +2528,21 @@
                 
                 player.loans.push({
                     amount: loanAmount,
-                    interestRate: 0.1,
-                    monthlyPayment: monthlyPayment,
-                    takenAt: Date.now(),
-                    reason: "Demissão - Déficit automático"
+                    monthlyPayment: monthlyPayment
                 });
                 
                 player.expenses += monthlyPayment;
                 
-                addLog(`⚠️ ${player.name} foi demitido! Saldo insuficiente: R$ ${(totalExpenses - deficit).toLocaleString()} disponíveis, precisa de R$ ${totalExpenses.toLocaleString()}`);
-                addLog(`🏦 Empréstimo automático gerado: R$ ${loanAmount.toLocaleString()} (pagamento: R$ ${monthlyPayment.toLocaleString()}/mês)`);
-                addLog(`💰 Saldo zerado. Dívida total: R$ ${player.loans.reduce((sum, loan) => sum + loan.amount, 0).toLocaleString()}`);
+                addLog(`⚠️ ${player.name} foi demitido! Empréstimo gerado: R$ ${loanAmount.toLocaleString()}`);
             }
             
             player.isDownsized = true;
             player.downsizedRounds = 0;
             
             updateCurrentPlayerInfo();
+            updatePayLoansButton();
         }
 
-        // =========== SAIR DA CORRIDA DOS RATOS ===========
         function checkExitRatRace(playerId) {
             const player = gameState.players[playerId];
             const childExpenses = player.children * player.perChildCost;
@@ -3128,9 +2551,6 @@
             if (player.passiveIncome > totalExpenses && player.inRatRace) {
                 player.inRatRace = false;
                 addLog(`🚀🎉 ${player.name} SAIU DA CORRIDA DOS RATOS!`);
-                addLog(`💰 Renda passiva (R$ ${player.passiveIncome}/mês) > Despesas (R$ ${totalExpenses}/mês)`);
-                addLog(`🎯 Agora está na VIA RÁPIDA (FAST TRACK)!`);
-                addLog(`💭 Sonho de ${player.name}: ${player.assignedDream}`);
                 
                 updateBoard();
                 updateGameStats();
@@ -3159,7 +2579,7 @@
                 details.innerHTML = `
                     <div class="card-detail">
                         <div class="detail-label">Tipo</div>
-                        <div class="detail-value">Experiência / Gasto</div>
+                        <div class="detail-value">Experiência</div>
                     </div>
                     <div class="card-detail">
                         <div class="detail-label">Custo</div>
@@ -3186,18 +2606,6 @@
                         <div class="detail-label">Entrada</div>
                         <div class="detail-value">R$ ${card.entrada.toLocaleString()}</div>
                     </div>
-                    ${card.ccr ? `
-                    <div class="card-detail">
-                        <div class="detail-label">CCR</div>
-                        <div class="detail-value">${card.ccr}%</div>
-                    </div>
-                    ` : ''}
-                    ${card.fluxo ? `
-                    <div class="card-detail">
-                        <div class="detail-label">Fluxo Mensal</div>
-                        <div class="detail-value" style="color: #2ecc71;">+R$ ${card.fluxo.toLocaleString()}</div>
-                    </div>
-                    ` : ''}
                 `;
                 
                 actions.innerHTML = `
@@ -3218,43 +2626,14 @@
                             <div class="detail-value">Penalidade</div>
                         </div>
                         <div class="card-detail">
-                            <div class="detail-label">Descrição</div>
-                            <div class="detail-value">Auditoria Fiscal</div>
-                        </div>
-                        <div class="card-detail">
-                            <div class="detail-label">Valor</div>
-                            <div class="detail-value" style="color: #e74c3c;">50% do seu dinheiro: R$ ${amount.toLocaleString()}</div>
-                        </div>
-                        <div class="card-detail">
-                            <div class="detail-label">Regra</div>
-                            <div class="detail-value">Não pode ser evitada por proteção</div>
+                            <div class="detail-label">Multa</div>
+                            <div class="detail-value" style="color: #e74c3c;">50% do seu dinheiro</div>
                         </div>
                     `;
                     
                     actions.innerHTML = `
                         <button class="button button-danger" onclick="fastTrackPenalty(${player.id})">
                             <i class="fas fa-exclamation-triangle"></i> PAGAR
-                        </button>
-                    `;
-                } else if (card.id === 'processo') {
-                    details.innerHTML = `
-                        <div class="card-detail">
-                            <div class="detail-label">Tipo</div>
-                            <div class="detail-value">Penalidade</div>
-                        </div>
-                        <div class="card-detail">
-                            <div class="detail-label">Descrição</div>
-                            <div class="detail-value">Processo Judicial</div>
-                        </div>
-                        <div class="card-detail">
-                            <div class="detail-label">Custo</div>
-                            <div class="detail-value" style="color: #e74c3c;">R$ ${card.custo.toLocaleString()}</div>
-                        </div>
-                    `;
-                    
-                    actions.innerHTML = `
-                        <button class="button ${player.cash >= card.custo ? 'button-danger' : ''}" onclick="fastTrackPenalty(${player.id})" ${player.cash < card.custo ? 'disabled' : ''}>
-                            <i class="fas fa-exclamation-triangle"></i> ${player.cash >= card.custo ? 'PAGAR' : 'DINHEIRO INSUFICIENTE'}
                         </button>
                     `;
                 }
@@ -3274,20 +2653,15 @@
             
             player.cash -= card.custo;
             
-            if (card.nome === player.assignedDream || card.custo >= 100000) {
+            if (card.nome === player.assignedDream) {
                 player.dreams.push(card.nome);
-                addLog(`🏆 ${player.name} realizou o sonho: ${card.nome} por R$ ${card.custo.toLocaleString()}`);
-                
-                if (card.nome === player.assignedDream) {
-                    declareWinner(playerId);
-                }
+                declareWinner(playerId);
             } else {
-                addLog(`💸 ${player.name} gastou R$ ${card.custo.toLocaleString()} em ${card.nome}`);
+                addLog(`💸 ${player.name} gastou R$ ${card.custo.toLocaleString()}`);
             }
             
             document.getElementById('cardDisplay').style.display = 'none';
             updateCurrentPlayerInfo();
-            updateFastTrackSection();
         }
 
         function fastTrackInvest(playerId) {
@@ -3301,18 +2675,14 @@
             
             player.cash -= card.entrada;
             
-            if (card.fluxo) {
-                player.passiveIncome += card.fluxo;
-                addLog(`✅ ${player.name} investiu R$ ${card.entrada.toLocaleString()} em ${card.nome} (renda: +R$ ${card.fluxo}/mês)`);
-            } else if (card.ccr) {
-                const monthlyReturn = (card.entrada * (card.ccr / 100)) / 12;
+            if (card.ccr) {
+                const monthlyReturn = Math.round((card.entrada * (card.ccr / 100)) / 12);
                 player.passiveIncome += monthlyReturn;
-                addLog(`✅ ${player.name} investiu R$ ${card.entrada.toLocaleString()} em ${card.nome} (CCR: ${card.ccr}%, renda: +R$ ${monthlyReturn.toLocaleString()}/mês)`);
+                addLog(`✅ ${player.name} investiu R$ ${card.entrada.toLocaleString()}`);
             }
             
             document.getElementById('cardDisplay').style.display = 'none';
             updateCurrentPlayerInfo();
-            updateFastTrackSection();
         }
 
         function fastTrackPenalty(playerId) {
@@ -3322,14 +2692,7 @@
             if (card.id === 'auditoria') {
                 const amount = Math.floor(player.cash * 0.5);
                 player.cash -= amount;
-                addLog(`⚠️ ${player.name} pagou R$ ${amount.toLocaleString()} em auditoria fiscal`);
-            } else if (card.id === 'processo') {
-                if (player.cash < card.custo) {
-                    alert("Dinheiro insuficiente para pagar o processo!");
-                    return;
-                }
-                player.cash -= card.custo;
-                addLog(`⚠️ ${player.name} pagou R$ ${card.custo.toLocaleString()} em processo judicial`);
+                addLog(`⚠️ ${player.name} pagou R$ ${amount.toLocaleString()} em auditoria`);
             }
             
             document.getElementById('cardDisplay').style.display = 'none';
@@ -3351,8 +2714,7 @@
                 </div>
             `;
             
-            addLog(`🏆🎉 ${player.name} VENCEU O JOGO NO FAST TRACK! PARABÉNS!`);
-            addLog(`🎯 Sonho realizado: ${player.assignedDream}`);
+            addLog(`🏆🎉 ${player.name} VENCEU O JOGO!`);
             
             document.getElementById('rollDiceBtn').disabled = true;
             document.getElementById('endTurnBtn').disabled = true;
@@ -3360,10 +2722,6 @@
 
         // =========== TURNO ===========
         function endTurn() {
-            if (!gameState.dice3Enabled) {
-                document.getElementById('dice2').style.display = 'none';
-            }
-            
             gameState.currentPlayer = gameState.currentPlayer % gameState.totalPlayers + 1;
             
             if (gameState.currentPlayer === 1) {
@@ -3379,9 +2737,13 @@
             
             updateCurrentPlayerInfo();
             updateProtectionButton();
+            updatePayLoansButton();
             
             const playerName = gameState.players[gameState.currentPlayer].name;
             addLog(`🔄 Vez de: ${playerName}`);
+            
+            // REMOVIDO: Scroll automático ao finalizar turno
+            // A tela não se mexe mais quando clicar em finalizar rodada
             
             if (!gameState.players[gameState.currentPlayer].inRatRace) {
                 setTimeout(() => {
@@ -3393,7 +2755,7 @@
         // =========== ATIVOS ===========
         function showAssets() {
             const player = gameState.players[gameState.currentPlayer];
-            let html = `<h3 style="color: var(--secondary); margin-bottom: 15px;">${player.name} - ${player.profession}</h3>`;
+            let html = `<h3 style="color: var(--secondary); margin-bottom: 15px;">${player.name}</h3>`;
             
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
@@ -3405,6 +2767,9 @@
                 totalLoanPayments += loan.monthlyPayment;
             });
             
+            const totalIncome = player.salary + player.passiveIncome;
+            const netIncome = Math.max(totalIncome - totalExpenses - totalLoanPayments, 0);
+            
             html += `
                 <div style="background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
@@ -3413,16 +2778,8 @@
                             <div style="font-weight: bold;">R$ ${player.salary.toLocaleString()}/mês</div>
                         </div>
                         <div>
-                            <div style="color: #666; font-size: 0.9rem;">Despesas Fixas</div>
-                            <div style="font-weight: bold; color: #e74c3c;">R$ ${player.expenses.toLocaleString()}/mês</div>
-                        </div>
-                        <div>
                             <div style="color: #666; font-size: 0.9rem;">Renda Passiva</div>
                             <div style="font-weight: bold; color: #2ecc71;">R$ ${player.passiveIncome.toLocaleString()}/mês</div>
-                        </div>
-                        <div>
-                            <div style="color: #666; font-size: 0.9rem;">Filhos</div>
-                            <div style="font-weight: bold;">${player.children} (R$ ${childExpenses}/mês)</div>
                         </div>
                         <div>
                             <div style="color: #666; font-size: 0.9rem;">Despesas Totais</div>
@@ -3430,15 +2787,15 @@
                         </div>
                         <div>
                             <div style="color: #666; font-size: 0.9rem;">Fluxo de Caixa</div>
-                            <div style="font-weight: bold; color: ${player.salary + player.passiveIncome - totalExpenses - totalLoanPayments >= 0 ? '#2ecc71' : '#e74c3c'}">
-                                R$ ${(player.salary + player.passiveIncome - totalExpenses - totalLoanPayments).toLocaleString()}/mês
+                            <div style="font-weight: bold; color: ${netIncome >= 0 ? '#2ecc71' : '#e74c3c'}">
+                                R$ ${netIncome.toLocaleString()}/mês
                             </div>
                         </div>
                         ${totalLoans > 0 ? `
-                        <div style="grid-column: 1 / -1; background: #e74c3c10; padding: 10px; border-radius: 5px;">
+                        <div style="grid-column: 1 / -1;">
                             <div style="color: #666; font-size: 0.9rem;">Empréstimos</div>
                             <div style="font-weight: bold; color: #e74c3c;">
-                                Total: R$ ${totalLoans.toLocaleString()} | Pagamentos: R$ ${totalLoanPayments.toLocaleString()}/mês
+                                Total: R$ ${totalLoans.toLocaleString()}
                             </div>
                         </div>
                         ` : ''}
@@ -3447,103 +2804,53 @@
             `;
             
             if (player.assets.stocks.length > 0) {
-                html += `<h4 style="color: #3498db; margin-top: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">AÇÕES E FUNDOS</h4>`;
+                html += `<h4 style="color: #3498db; margin-top: 15px;">AÇÕES</h4>`;
                 player.assets.stocks.forEach((stock, index) => {
-                    const totalCost = stock.shares * stock.costPerShare;
                     html += `
                         <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
                             <div><strong>${stock.name}</strong></div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                <span>${stock.shares} ações a R$ ${stock.costPerShare}</span>
-                                <span>Investido: R$ ${totalCost.toLocaleString()}</span>
-                                ${stock.cashflow > 0 ? `<span style="color: #2ecc71;">Renda: +R$ ${stock.cashflow}/mês</span>` : ''}
-                            </div>
-                            ${stock.specialRules ? `<div style="color: #e67e22; font-size: 0.8rem; margin-top: 3px;"><i class="fas fa-exclamation-triangle"></i> ${stock.specialRules}</div>` : ''}
-                            ${stock.roi ? `<div style="color: #666; font-size: 0.8rem; margin-top: 3px;">${stock.roi}</div>` : ''}
+                            <div>Investido: R$ ${stock.cost.toLocaleString()}</div>
+                            <div style="color: #2ecc71;">Renda: R$ ${stock.cashflow}/mês</div>
                         </div>
                     `;
                 });
             }
             
             if (player.assets.realEstate.length > 0) {
-                html += `<h4 style="color: #e67e22; margin-top: 15px; border-bottom: 2px solid #e67e22; padding-bottom: 5px;">IMÓVEIS</h4>`;
+                html += `<h4 style="color: #e67e22; margin-top: 15px;">IMÓVEIS E RENDA PASSIVA</h4>`;
                 player.assets.realEstate.forEach((property, index) => {
                     html += `
                         <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
                             <div><strong>${property.name}</strong></div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                <span>Valor: R$ ${property.cost.toLocaleString()}</span>
-                                <span>Entrada: R$ ${property.downPayment.toLocaleString()}</span>
-                                <span style="color: #2ecc71;">Renda: +R$ ${property.cashflow}/mês</span>
-                            </div>
-                            ${property.mortgage > 0 ? `<div style="color: #666; font-size: 0.8rem;">Financiamento: R$ ${property.mortgage.toLocaleString()}</div>` : ''}
-                            ${property.roi ? `<div style="color: #666; font-size: 0.8rem; margin-top: 3px;">${property.roi}</div>` : ''}
+                            <div>Investido: R$ ${property.cost.toLocaleString()}</div>
+                            <div style="color: #2ecc71;">Renda: R$ ${property.cashflow}/mês</div>
                         </div>
                     `;
                 });
             }
             
             if (player.assets.businesses.length > 0) {
-                html += `<h4 style="color: #9b59b6; margin-top: 15px; border-bottom: 2px solid #9b59b6; padding-bottom: 5px;">NEGÓCIOS</h4>`;
+                html += `<h4 style="color: #9b59b6; margin-top: 15px;">NEGÓCIOS E ATIVOS DIGITAIS</h4>`;
                 player.assets.businesses.forEach((business, index) => {
                     html += `
                         <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
                             <div><strong>${business.name}</strong></div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                <span>Valor: R$ ${business.cost.toLocaleString()}</span>
-                                <span>Entrada: R$ ${business.downPayment.toLocaleString()}</span>
-                                <span style="color: #2ecc71;">Renda: +R$ ${business.cashflow}/mês</span>
-                            </div>
-                            ${business.roi ? `<div style="color: #666; font-size: 0.8rem; margin-top: 3px;">${business.roi}</div>` : ''}
+                            <div>Investido: R$ ${business.cost.toLocaleString()}</div>
+                            <div style="color: #2ecc71;">Renda: R$ ${business.cashflow}/mês</div>
                         </div>
                     `;
                 });
-            }
-            
-            if (player.assets.bonds.length > 0) {
-                html += `<h4 style="color: #2ecc71; margin-top: 15px; border-bottom: 2px solid #2ecc71; padding-bottom: 5px;">TÍTULOS E FUNDOS</h4>`;
-                player.assets.bonds.forEach((bond, index) => {
-                    html += `
-                        <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                            <div><strong>${bond.name}</strong></div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                <span>Investido: R$ ${bond.cost.toLocaleString()}</span>
-                                <span style="color: #2ecc71;">Renda: +R$ ${bond.cashflow}/mês</span>
-                            </div>
-                            ${bond.roi ? `<div style="color: #666; font-size: 0.8rem; margin-top: 3px;">${bond.roi}</div>` : ''}
-                        </div>
-                    `;
-                });
-            }
-            
-            if (player.assets.protection) {
-                html += `<h4 style="color: #27ae60; margin-top: 15px; border-bottom: 2px solid #27ae60; padding-bottom: 5px;">PROTEÇÃO FINANCEIRA</h4>`;
-                html += `
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-                        <div><strong>${player.assets.protection.name}</strong></div>
-                        <div style="color: #666; margin-top: 5px;">${player.assets.protection.description}</div>
-                        <div style="color: #27ae60; margin-top: 5px;"><i class="fas fa-shield-alt"></i> Pronta para uso</div>
-                    </div>
-                `;
             }
             
             if (player.assets.stocks.length === 0 && player.assets.realEstate.length === 0 && 
-                player.assets.businesses.length === 0 && player.assets.bonds.length === 0 && !player.assets.protection) {
+                player.assets.businesses.length === 0 && player.assets.bonds.length === 0) {
                 html += '<p>Nenhum ativo adquirido.</p>';
             }
             
-            html += `<h4 style="color: #f39c12; margin-top: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 5px;">SONHO</h4>`;
+            html += `<h4 style="color: #f39c12; margin-top: 20px;">SONHO</h4>`;
             html += `<p><strong>${player.assignedDream}</strong></p>`;
             
-            if (player.dreams.length > 0) {
-                html += `<h4 style="color: #f39c12; margin-top: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 5px;">SONHOS REALIZADOS</h4>`;
-                player.dreams.forEach(dream => {
-                    html += `<p>⭐ ${dream}</p>`;
-                });
-            }
-            
             document.getElementById('assetsContent').innerHTML = html;
-            document.getElementById('assetsTitle').textContent = `${player.name} - Situação Financeira`;
             document.getElementById('assetsModal').style.display = 'flex';
         }
 
