@@ -27,6 +27,7 @@
             --player4: #9B59B6;
             --player5: #F39C12;
             --player6: #1ABC9C;
+            --protection: #27ae60;
         }
 
         body {
@@ -258,6 +259,7 @@
         .button-danger { background: var(--danger); }
         .button-warning { background: var(--warning); }
         .button-purple { background: #9b59b6; }
+        .button-protection { background: var(--protection); }
 
         /* CARD DISPLAY */
         .card-display {
@@ -447,6 +449,7 @@
         .info-income { color: var(--success); }
         .info-expense { color: var(--danger); }
         .info-warning { color: var(--warning); }
+        .info-protection { color: var(--protection); }
 
         /* DEBT INDICATOR */
         .debt-indicator {
@@ -616,6 +619,20 @@
         .button-loan {
             background: #9b59b6;
         }
+
+        /* PROTEÇÃO FINANCEIRA */
+        .protection-badge {
+            background: var(--protection);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -717,6 +734,10 @@
                     
                     <button class="button button-loan" id="takeLoanBtn">
                         <i class="fas fa-university"></i> PEGAR EMPRÉSTIMO
+                    </button>
+                    
+                    <button class="button button-protection" id="useProtectionBtn" style="display: none;">
+                        <i class="fas fa-shield-alt"></i> USAR PROTEÇÃO
                     </button>
                     
                     <button class="button button-purple" id="newGameBtn">
@@ -867,8 +888,10 @@
             currentRound: 1,
             totalLaps: 0,
             marketEvent: null,
-            availableProfessions: [], // Para garantir que profissões não se repitam
-            playerDreams: {} // Sonhos aleatórios para cada jogador
+            availableProfessions: [],
+            playerDreams: {},
+            nextDoodadProtected: false,
+            protectedPlayer: null
         };
 
         // =========== PROFISSÕES DO JOGO ORIGINAL ===========
@@ -876,7 +899,7 @@
             {
                 name: "Zelador (Janitor)",
                 salary: 1600,
-                initialCash: 400,
+                initialCash: 400, // Será sobrescrito pela nova regra
                 perChildCost: 70,
                 taxes: 280,
                 mortgage: 300,
@@ -1035,7 +1058,7 @@
             "Observatório Astronômico"
         ];
 
-        // =========== NOVAS CARTAS PEQUENAS OPORTUNIDADES (SMALL DEAL) ===========
+        // =========== NOVAS CARTAS PEQUENAS OPORTUNIDADES (SMALL DEAL) - REBALANCEADAS ===========
         const smallDealCards = [
             {
                 name: "LOANER - Ações a R$ 5 cada",
@@ -1045,7 +1068,7 @@
                 shares: 100,
                 downPayment: 500,
                 cashflow: 0,
-                roi: "Venda por R$ 40 por ação"
+                roi: "Venda por R$ 40 por ação (somente em mercado)"
             },
             {
                 name: "MYT4U - Ações a R$ 1 cada",
@@ -1055,7 +1078,7 @@
                 shares: 100,
                 downPayment: 100,
                 cashflow: 0,
-                roi: "Venda por R$ 10-30 por ação"
+                roi: "Venda por R$ 8,00 por ação (50% por evento de mercado)"
             },
             {
                 name: "ON2U - Ações a R$ 0,10 cada",
@@ -1065,7 +1088,7 @@
                 shares: 1000,
                 downPayment: 100,
                 cashflow: 0,
-                roi: "Venda por R$ 5 por ação"
+                roi: "Venda por R$ 1,50 por ação (somente em mercado de alta)"
             },
             {
                 name: "OK4U - Ações a R$ 10 cada",
@@ -1093,10 +1116,18 @@
                 downPayment: 10000,
                 cashflow: 400,
                 roi: "12% ao ano"
+            },
+            {
+                name: "Seguro Contra Despesas",
+                type: "proteção",
+                description: "Anula o próximo Doodad que você cair. Uso único.",
+                cost: 300,
+                downPayment: 300,
+                protection: true
             }
         ];
 
-        // =========== NOVAS CARTAS GRANDES OPORTUNIDADES (BIG DEAL) ===========
+        // =========== NOVAS CARTAS GRANDES OPORTUNIDADES (BIG DEAL) - REBALANCEADAS ===========
         const bigDealCards = [
             {
                 name: "Apartamento de 2 Quartos",
@@ -1122,21 +1153,23 @@
                 name: "Prédio de 24 Apartamentos",
                 type: "imóvel",
                 description: "Edifício residencial com alta taxa de ocupação.",
-                cost: 480000,
-                downPayment: 96000,
-                mortgage: 384000,
-                cashflow: 4800,
-                roi: "40% CCR"
+                cost: 1200000,
+                downPayment: 150000,
+                mortgage: 1050000,
+                cashflow: 3000,
+                roi: "24% CCR",
+                requires: "1 volta completa"
             },
             {
                 name: "Shopping Center",
                 type: "imóvel",
                 description: "Complexo comercial com várias lojas.",
-                cost: 2250000,
-                downPayment: 450000,
-                mortgage: 1800000,
-                cashflow: 30000,
-                roi: "40% CCR"
+                cost: 5000000,
+                downPayment: 600000,
+                mortgage: 4400000,
+                cashflow: 18000,
+                roi: "36% CCR",
+                requires: "Renda passiva mínima R$ 5.000/mês"
             },
             {
                 name: "Franquia de Fast Food",
@@ -1145,18 +1178,19 @@
                 cost: 250000,
                 downPayment: 50000,
                 mortgage: 200000,
-                cashflow: 2500,
-                roi: "30% CCR"
+                cashflow: 2000,
+                roi: "48% CCR"
             },
             {
                 name: "Empresa de Software",
                 type: "negócio",
                 description: "Startup de tecnologia com contrato governamental.",
                 cost: 500000,
-                downPayment: 50000,
-                mortgage: 450000,
-                cashflow: 5000,
-                roi: "50% CCR"
+                downPayment: 100000,
+                mortgage: 400000,
+                cashflow: 3000,
+                roi: "36% CCR",
+                requires: "1 volta completa OU renda passiva R$ 2.000/mês"
             }
         ];
 
@@ -1245,7 +1279,6 @@
 
         // =========== FAST TRACK CARDS ===========
         const fastTrackCards = [
-            // GASTOS / EXPERIÊNCIAS
             {
                 id: "floresta",
                 nome: "Compre uma Floresta",
@@ -1274,7 +1307,6 @@
                 tipo: "gasto",
                 custo: 112500
             },
-            // INVESTIMENTOS
             {
                 id: "franquia_frango",
                 nome: "Franquia Internacional de Frango",
@@ -1299,7 +1331,6 @@
                 entrada: 150000,
                 ccr: 30
             },
-            // PENALIDADES
             {
                 id: "auditoria",
                 nome: "Auditoria Fiscal Federal",
@@ -1325,9 +1356,9 @@
             document.getElementById('endTurnBtn').addEventListener('click', endTurn);
             document.getElementById('showAssetsBtn').addEventListener('click', showAssets);
             document.getElementById('takeLoanBtn').addEventListener('click', showLoanModal);
+            document.getElementById('useProtectionBtn').addEventListener('click', useProtection);
             document.getElementById('newGameBtn').addEventListener('click', () => location.reload());
             
-            // Mostrar informações das profissões
             showProfessionsInfo();
         }
 
@@ -1349,28 +1380,24 @@
 
         function getRandomProfession() {
             if (gameState.availableProfessions.length === 0) {
-                // Se acabaram as profissões, recomeça
                 gameState.availableProfessions = [...allProfessions];
             }
             
             const randomIndex = Math.floor(Math.random() * gameState.availableProfessions.length);
             const profession = gameState.availableProfessions[randomIndex];
             
-            // Remove a profissão da lista para não repetir
             gameState.availableProfessions.splice(randomIndex, 1);
             
             return profession;
         }
 
         function getRandomDreamForPlayer(playerId) {
-            // Atribui um sonho aleatório único para cada jogador
             if (!gameState.playerDreams[playerId]) {
                 const availableDreams = allDreams.filter(dream => 
                     !Object.values(gameState.playerDreams).includes(dream)
                 );
                 
                 if (availableDreams.length === 0) {
-                    // Se todos os sonhos já foram usados, recomeça
                     gameState.playerDreams = {};
                     availableDreams = [...allDreams];
                 }
@@ -1388,8 +1415,10 @@
             gameState.players = {};
             gameState.currentRound = 1;
             gameState.totalLaps = 0;
-            gameState.availableProfessions = [...allProfessions]; // Reinicia as profissões disponíveis
-            gameState.playerDreams = {}; // Reinicia os sonhos
+            gameState.availableProfessions = [...allProfessions];
+            gameState.playerDreams = {};
+            gameState.nextDoodadProtected = false;
+            gameState.protectedPlayer = null;
             
             for (let i = 1; i <= numPlayers; i++) {
                 const name = document.getElementById(`playerName${i}`).value || `Jogador ${i}`;
@@ -1400,13 +1429,16 @@
                 const totalExpenses = prof.taxes + prof.mortgage + prof.carPayment + 
                                     prof.creditCard + prof.otherExpenses + prof.studentLoan;
                 
+                // NOVA REGRA: Dinheiro Inicial = 2 × Despesas Mensais
+                const initialCash = totalExpenses * 2;
+                
                 gameState.players[i] = {
                     id: i,
                     name: name,
                     profession: prof.name,
                     salary: prof.salary,
-                    initialCash: prof.initialCash,
-                    cash: prof.initialCash,
+                    initialCash: initialCash, // Usando a nova regra
+                    cash: initialCash,
                     passiveIncome: 0,
                     position: 0,
                     inRatRace: true,
@@ -1419,7 +1451,8 @@
                         stocks: [],
                         realEstate: [],
                         businesses: [],
-                        bonds: []
+                        bonds: [],
+                        protection: null
                     },
                     loans: [],
                     liabilities: {
@@ -1431,7 +1464,9 @@
                     hasCharityBonus: false,
                     lapsCompleted: 0,
                     dreams: [],
-                    assignedDream: dream // Sonho aleatório atribuído
+                    assignedDream: dream,
+                    isDownsized: false, // Nova flag para demissão
+                    downsizedRounds: 0 // Contador de rodadas demitido
                 };
             }
             
@@ -1442,8 +1477,10 @@
             updateBoard();
             updateCurrentPlayerInfo();
             updateGameStats();
+            updateProtectionButton();
             
             addLog("🎮 JOGO INICIADO - CASHFLOW ORIGINAL!");
+            addLog("💰 NOVA REGRA: Dinheiro Inicial = 2 × Despesas Mensais");
             
             for (let i = 1; i <= numPlayers; i++) {
                 const player = gameState.players[i];
@@ -1453,98 +1490,37 @@
             addLog(`🎲 Vez de: ${gameState.players[1].name}`);
         }
 
-        // =========== TABULEIRO FIEL AO ORIGINAL ===========
+        // =========== TABULEIRO ===========
         function createBoard() {
             gameState.spaces = [];
             
-            // Seguindo exatamente o padrão do círculo interno da patente
             const spaceTypes = [
-                'start',        // START HERE
-                'opportunity',  // OPPORTUNITY
-                'doodad',       // DOODADS
-                'opportunity',  // OPPORTUNITY
-                'market',       // THE MARKET
-                'opportunity',  // OPPORTUNITY
-                'payday',       // PAY CHECK
-                'opportunity',  // OPPORTUNITY
-                'downsized',    // DOWNSIZED
-                'opportunity',  // OPPORTUNITY
-                'doodad',       // DOODADS
-                'opportunity',  // OPPORTUNITY
-                'market',       // THE MARKET
-                'opportunity',  // OPPORTUNITY
-                'payday',       // PAY CHECK
-                'opportunity',  // OPPORTUNITY
-                'baby',         // BABY
-                'opportunity',  // OPPORTUNITY
-                'doodad',       // DOODADS
-                'opportunity',  // OPPORTUNITY
-                'charity',      // CHARITY
-                'opportunity',  // OPPORTUNITY
-                'payday',       // PAY CHECK
-                'opportunity',  // OPPORTUNITY
-                'market'        // THE MARKET
+                'start', 'opportunity', 'doodad', 'opportunity', 'market',
+                'opportunity', 'payday', 'opportunity', 'downsized', 'opportunity',
+                'doodad', 'opportunity', 'market', 'opportunity', 'payday',
+                'opportunity', 'baby', 'opportunity', 'doodad', 'opportunity',
+                'charity', 'opportunity', 'payday', 'opportunity', 'market'
             ];
             
             const spaceNames = [
-                'INÍCIO',
-                'OPORTUNIDADE',
-                'DOODADS',
-                'OPORTUNIDADE',
-                'MERCADO',
-                'OPORTUNIDADE',
-                'DIA DE PAGAMENTO',
-                'OPORTUNIDADE',
-                'DEMISSÃO',
-                'OPORTUNIDADE',
-                'DOODADS',
-                'OPORTUNIDADE',
-                'MERCADO',
-                'OPORTUNIDADE',
-                'DIA DE PAGAMENTO',
-                'OPORTUNIDADE',
-                'BEBÊ',
-                'OPORTUNIDADE',
-                'DOODADS',
-                'OPORTUNIDADE',
-                'CARIDADE',
-                'OPORTUNIDADE',
-                'DIA DE PAGAMENTO',
-                'OPORTUNIDADE',
-                'MERCADO'
+                'INÍCIO', 'OPORTUNIDADE', 'DOODADS', 'OPORTUNIDADE', 'MERCADO',
+                'OPORTUNIDADE', 'DIA DE PAGAMENTO', 'OPORTUNIDADE', 'DEMISSÃO', 'OPORTUNIDADE',
+                'DOODADS', 'OPORTUNIDADE', 'MERCADO', 'OPORTUNIDADE', 'DIA DE PAGAMENTO',
+                'OPORTUNIDADE', 'BEBÊ', 'OPORTUNIDADE', 'DOODADS', 'OPORTUNIDADE',
+                'CARIDADE', 'OPORTUNIDADE', 'DIA DE PAGAMENTO', 'OPORTUNIDADE', 'MERCADO'
             ];
             
             const spaceActions = [
-                'Comece aqui!',
-                'Compre Small Deal ou Big Deal',
-                'Gasto obrigatório!',
-                'Compre Small Deal ou Big Deal',
-                'Venda ou compre ativos',
-                'Compre Small Deal ou Big Deal',
-                'Receba salário + renda passiva',
-                'Compre Small Deal ou Big Deal',
-                'Pague 1 mês de despesas',
-                'Compre Small Deal ou Big Deal',
-                'Gasto obrigatório!',
-                'Compre Small Deal ou Big Deal',
-                'Venda ou compre ativos',
-                'Compre Small Deal ou Big Deal',
-                'Receba salário + renda passiva',
-                'Compre Small Deal ou Big Deal',
-                'Despesas aumentam',
-                'Compre Small Deal ou Big Deal',
-                'Gasto obrigatório!',
-                'Compre Small Deal ou Big Deal',
-                'Doação 10% do salário',
-                'Compre Small Deal ou Big Deal',
-                'Receba salário + renda passiva',
-                'Compre Small Deal ou Big Deal',
-                'Venda ou compre ativos'
+                'Comece aqui!', 'Compre Small Deal ou Big Deal', 'Gasto obrigatório!', 'Compre Small Deal ou Big Deal', 'Venda ou compre ativos',
+                'Compre Small Deal ou Big Deal', 'Receba salário + renda passiva', 'Compre Small Deal ou Big Deal', 'Pague 1 mês de despesas', 'Compre Small Deal ou Big Deal',
+                'Gasto obrigatório!', 'Compre Small Deal ou Big Deal', 'Venda ou compre ativos', 'Compre Small Deal ou Big Deal', 'Receba salário + renda passiva',
+                'Compre Small Deal ou Big Deal', 'Despesas aumentam', 'Compre Small Deal ou Big Deal', 'Gasto obrigatório!', 'Compre Small Deal ou Big Deal',
+                'Doação 10% do salário', 'Compre Small Deal ou Big Deal', 'Receba salário + renda passiva', 'Compre Small Deal ou Big Deal', 'Venda ou compre ativos'
             ];
             
             for (let i = 0; i < 25; i++) {
                 gameState.spaces.push({
-                    num: i + 1, // Começa do 1 em vez do 0
+                    num: i + 1,
                     type: spaceTypes[i],
                     name: spaceNames[i],
                     action: spaceActions[i]
@@ -1583,17 +1559,14 @@
         }
 
         function updateBoard() {
-            // Limpa todos os marcadores
             for (let i = 0; i < 25; i++) {
                 const markersDiv = document.getElementById(`markers${i}`);
                 if (markersDiv) markersDiv.innerHTML = '';
             }
             
-            // Adiciona marcadores dos jogadores
             for (let playerId = 1; playerId <= gameState.totalPlayers; playerId++) {
                 const player = gameState.players[playerId];
                 
-                // Se está no Fast Track, não aparece no tabuleiro normal
                 if (!player.inRatRace) continue;
                 
                 const markersDiv = document.getElementById(`markers${player.position}`);
@@ -1607,7 +1580,6 @@
                 }
             }
             
-            // Atualiza seção Fast Track
             updateFastTrackSection();
         }
 
@@ -1621,11 +1593,15 @@
                                     prof.creditCard + prof.otherExpenses + prof.studentLoan;
                 const initialCashflow = prof.salary - totalExpenses;
                 
+                // Mostrar o cálculo com a nova regra
+                const initialCashNewRule = totalExpenses * 2;
+                
                 html += `
                     <div class="profession-item">
                         <strong>${prof.name}</strong><br>
                         <small>Salário: R$ ${prof.salary.toLocaleString()}</small><br>
-                        <small>Inicial: R$ ${prof.initialCash.toLocaleString()}</small><br>
+                        <small>Despesas: R$ ${totalExpenses.toLocaleString()}/mês</small><br>
+                        <small>Inicial (2×): R$ ${initialCashNewRule.toLocaleString()}</small><br>
                         <small>Fluxo: R$ ${initialCashflow.toLocaleString()}/mês</small><br>
                         <small>Filho: R$ ${prof.perChildCost}/mês</small>
                     </div>
@@ -1693,7 +1669,6 @@
             
             document.getElementById('fastTrackCount').textContent = fastTrackCount;
             
-            // Atualiza status do jogo
             if (fastTrackCount === gameState.totalPlayers) {
                 document.getElementById('gameStatus').textContent = "TODOS NO FAST TRACK";
                 document.getElementById('gameStatus').style.color = "#9b59b6";
@@ -1711,11 +1686,9 @@
             const player = gameState.players[gameState.currentPlayer];
             const infoBar = document.getElementById('currentPlayerInfo');
             
-            // Calcular despesas com filhos
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             
-            // Calcular total de empréstimos
             let totalLoans = 0;
             player.loans.forEach(loan => {
                 totalLoans += loan.amount;
@@ -1775,6 +1748,27 @@
                 `;
             }
             
+            if (player.assets.protection) {
+                html += `
+                    <div class="player-info-item">
+                        <div class="info-label">PROTEÇÃO</div>
+                        <div class="info-value info-protection">
+                            <i class="fas fa-shield-alt"></i> ATIVA
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (player.isDownsized) {
+                html += `
+                    <div class="player-info-item" style="grid-column: 1 / -1;">
+                        <div class="info-value info-warning">
+                            <i class="fas fa-exclamation-triangle"></i> DEMITIDO (${player.downsizedRounds}/2 rodadas)
+                        </div>
+                    </div>
+                `;
+            }
+            
             if (!player.inRatRace) {
                 html += `
                     <div class="player-info-item" style="grid-column: 1 / -1;">
@@ -1790,6 +1784,42 @@
             }
             
             infoBar.innerHTML = html;
+        }
+
+        // =========== ATUALIZAR BOTÃO DE PROTEÇÃO ===========
+        function updateProtectionButton() {
+            const player = gameState.players[gameState.currentPlayer];
+            const protectionBtn = document.getElementById('useProtectionBtn');
+            
+            if (player.assets.protection) {
+                protectionBtn.style.display = 'inline-flex';
+                protectionBtn.disabled = false;
+                protectionBtn.innerHTML = '<i class="fas fa-shield-alt"></i> USAR PROTEÇÃO';
+            } else {
+                protectionBtn.style.display = 'none';
+            }
+        }
+
+        // =========== USAR PROTEÇÃO ===========
+        function useProtection() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            if (!player.assets.protection) {
+                alert("Você não possui proteção!");
+                return;
+            }
+            
+            gameState.nextDoodadProtected = true;
+            gameState.protectedPlayer = player.id;
+            
+            player.assets.protection = null;
+            
+            addLog(`🛡️ ${player.name} ativou proteção! Próximo Doodad será anulado.`);
+            
+            updateProtectionButton();
+            updateCurrentPlayerInfo();
+            
+            document.getElementById('useProtectionBtn').style.display = 'none';
         }
 
         // =========== SISTEMA DE EMPRÉSTIMOS ===========
@@ -1855,7 +1885,6 @@
         function takeLoan(amount) {
             const player = gameState.players[gameState.currentPlayer];
             
-            // Adiciona empréstimo à lista
             player.loans.push({
                 amount: amount,
                 interestRate: 0.1,
@@ -1863,10 +1892,7 @@
                 takenAt: Date.now()
             });
             
-            // Adiciona dinheiro ao jogador
             player.cash += amount;
-            
-            // Aumenta despesas (pagamento mensal do empréstimo)
             player.expenses += amount * 0.1;
             player.cashflow = player.salary + player.passiveIncome - player.expenses;
             
@@ -1885,7 +1911,6 @@
             
             const player = gameState.players[gameState.currentPlayer];
             
-            // Se o jogador está no Fast Track, não rola dados
             if (!player.inRatRace) {
                 showFastTrackOpportunity();
                 return;
@@ -1901,7 +1926,6 @@
             dice1.classList.add('rolling');
             dice2.classList.add('rolling');
             
-            // Reseta o terceiro dado
             dice3.style.display = 'none';
             
             setTimeout(() => {
@@ -1910,7 +1934,6 @@
                 
                 let total = dice1Value + dice2Value;
                 
-                // Verifica se tem bônus de caridade
                 if (gameState.dice3Enabled && gameState.charityPlayer === gameState.currentPlayer) {
                     dice3.style.display = 'flex';
                     dice3.classList.add('rolling');
@@ -1920,7 +1943,6 @@
                         dice3.textContent = dice3Value;
                         dice3.classList.remove('rolling');
                         
-                        // Usa os 2 maiores valores
                         const diceValues = [dice1Value, dice2Value, dice3Value];
                         diceValues.sort((a, b) => b - a);
                         total = diceValues[0] + diceValues[1];
@@ -1959,12 +1981,10 @@
             
             let newPosition = (player.position + steps) % 25;
             
-            // Verifica se completou uma volta
             if (newPosition < oldPosition && steps > 0) {
                 player.lapsCompleted++;
                 gameState.totalLaps = Math.max(gameState.totalLaps, player.lapsCompleted);
                 
-                // A cada volta no tabuleiro, recebe o fluxo de caixa
                 payday(playerId);
                 
                 addLog(`🔄 ${player.name} completou uma volta! Total: ${player.lapsCompleted} volta(s)`);
@@ -2001,8 +2021,8 @@
                         downsized(playerId);
                         break;
                     case 'opportunity':
-                        // AGORA É ALEATÓRIO: 50% chance de Small Deal, 50% chance de Big Deal
-                        const isSmallDeal = Math.random() < 0.5;
+                        // 70% Small Deal, 30% Big Deal
+                        const isSmallDeal = Math.random() < 0.7;
                         if (isSmallDeal) {
                             showSmallDeal(playerId);
                         } else {
@@ -2036,7 +2056,40 @@
             typeTag.style.backgroundColor = '#3498db';
             description.textContent = card.description;
             
-            if (card.type === 'ações') {
+            if (card.type === 'proteção') {
+                details.innerHTML = `
+                    <div class="card-detail">
+                        <div class="detail-label">Tipo</div>
+                        <div class="detail-value">Proteção Financeira</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Efeito</div>
+                        <div class="detail-value">Anula o próximo Doodad</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Custo</div>
+                        <div class="detail-value">R$ ${card.cost.toLocaleString()}</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Duração</div>
+                        <div class="detail-value">Uso único</div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="detail-label">Regra</div>
+                        <div class="detail-value">Máximo 1 por jogador</div>
+                    </div>
+                `;
+                
+                actions.innerHTML = `
+                    <button class="button button-protection" onclick="buyAsset()">
+                        <i class="fas fa-shield-alt"></i> COMPRAR PROTEÇÃO
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> RECUSAR
+                    </button>
+                `;
+                
+            } else if (card.type === 'ações') {
                 details.innerHTML = `
                     <div class="card-detail">
                         <div class="detail-label">Tipo</div>
@@ -2067,6 +2120,15 @@
                     </div>
                     ` : ''}
                 `;
+                
+                actions.innerHTML = `
+                    <button class="button button-success" onclick="buyAsset()">
+                        <i class="fas fa-check"></i> COMPRAR
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> RECUSAR
+                    </button>
+                `;
             } else {
                 details.innerHTML = `
                     <div class="card-detail">
@@ -2088,22 +2150,59 @@
                     </div>
                     ` : ''}
                 `;
+                
+                actions.innerHTML = `
+                    <button class="button button-success" onclick="buyAsset()">
+                        <i class="fas fa-check"></i> COMPRAR
+                    </button>
+                    <button class="button" onclick="declineCard()">
+                        <i class="fas fa-times"></i> RECUSAR
+                    </button>
+                `;
             }
-            
-            actions.innerHTML = `
-                <button class="button button-success" onclick="buyAsset()">
-                    <i class="fas fa-check"></i> COMPRAR
-                </button>
-                <button class="button" onclick="declineCard()">
-                    <i class="fas fa-times"></i> RECUSAR
-                </button>
-            `;
             
             display.style.display = 'block';
         }
 
         function showBigDeal(playerId) {
-            const card = bigDealCards[Math.floor(Math.random() * bigDealCards.length)];
+            const player = gameState.players[playerId];
+            let availableCards = [...bigDealCards];
+            
+            availableCards = availableCards.filter(card => {
+                if (!card.requires) return true;
+                
+                if (card.requires === "1 volta completa") {
+                    return player.lapsCompleted >= 1;
+                }
+                
+                if (card.requires.includes("renda passiva mínima")) {
+                    const minIncome = parseInt(card.requires.match(/R\$ (\d+)/)[1]);
+                    return player.passiveIncome >= minIncome;
+                }
+                
+                if (card.requires.includes("OU")) {
+                    const conditions = card.requires.split(" OU ");
+                    return conditions.some(condition => {
+                        if (condition === "1 volta completa") {
+                            return player.lapsCompleted >= 1;
+                        }
+                        if (condition.includes("renda passiva mínima")) {
+                            const minIncome = parseInt(condition.match(/R\$ (\d+)/)[1]);
+                            return player.passiveIncome >= minIncome;
+                        }
+                        return false;
+                    });
+                }
+                
+                return true;
+            });
+            
+            if (availableCards.length === 0) {
+                showSmallDeal(playerId);
+                return;
+            }
+            
+            const card = availableCards[Math.floor(Math.random() * availableCards.length)];
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'big' };
             
             const display = document.getElementById('cardDisplay');
@@ -2147,6 +2246,12 @@
                     <div class="detail-value" style="color: #f39c12;">${card.roi}</div>
                 </div>
                 ` : ''}
+                ${card.requires ? `
+                <div class="card-detail">
+                    <div class="detail-label">Pré-requisito</div>
+                    <div class="detail-value" style="color: #3498db;">${card.requires}</div>
+                </div>
+                ` : ''}
             `;
             
             actions.innerHTML = `
@@ -2174,18 +2279,48 @@
             }
             
             player.cash -= card.downPayment;
-            player.passiveIncome += card.cashflow || 0;
             
-            // Adiciona ao tipo correto de ativo
-            if (card.type === 'ações') {
+            if (card.type === 'proteção') {
+                if (player.assets.protection) {
+                    alert("Você já possui uma proteção ativa! Máximo 1 por jogador.");
+                    player.cash += card.downPayment;
+                    return;
+                }
+                
+                player.assets.protection = {
+                    name: card.name,
+                    description: card.description,
+                    active: true
+                };
+                
+                addLog(`🛡️ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()}`);
+                updateProtectionButton();
+                
+            } else if (card.type === 'ações') {
+                player.passiveIncome += card.cashflow || 0;
+                
+                let specialRules = "";
+                if (card.name.includes("ON2U")) {
+                    specialRules = "Venda somente em mercado de ações | Risco: perde 50% em baixa";
+                } else if (card.name.includes("MYT4U")) {
+                    specialRules = "Venda limitada a 50% por evento de mercado";
+                }
+                
                 player.assets.stocks.push({
                     name: card.name,
                     shares: card.shares,
                     costPerShare: card.costPerShare,
                     cashflow: card.cashflow || 0,
-                    roi: card.roi || ""
+                    roi: card.roi || "",
+                    specialRules: specialRules,
+                    purchasePrice: card.downPayment,
+                    canSell: false
                 });
+                
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} ${card.cashflow ? `(renda: +R$ ${card.cashflow}/mês)` : ''}`);
+                
             } else if (card.type === 'imóvel') {
+                player.passiveIncome += card.cashflow || 0;
                 player.assets.realEstate.push({
                     name: card.name,
                     cost: card.cost,
@@ -2194,7 +2329,11 @@
                     cashflow: card.cashflow || 0,
                     roi: card.roi || ""
                 });
+                
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                
             } else if (card.type === 'negócio') {
+                player.passiveIncome += card.cashflow || 0;
                 player.assets.businesses.push({
                     name: card.name,
                     cost: card.cost,
@@ -2203,26 +2342,38 @@
                     cashflow: card.cashflow || 0,
                     roi: card.roi || ""
                 });
+                
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
+                
             } else if (card.type === 'títulos' || card.type === 'fii') {
+                player.passiveIncome += card.cashflow || 0;
                 player.assets.bonds.push({
                     name: card.name,
                     cost: card.cost || card.downPayment,
                     cashflow: card.cashflow || 0,
                     roi: card.roi || ""
                 });
+                
+                addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} (renda: +R$ ${card.cashflow}/mês)`);
             }
             
-            addLog(`✅ ${player.name} comprou ${card.name} por R$ ${card.downPayment.toLocaleString()} ${card.cashflow ? `(renda: +R$ ${card.cashflow}/mês)` : ''}`);
-            
-            // Verifica se pode sair da Corrida dos Ratos
             checkExitRatRace(card.playerId);
             
             document.getElementById('cardDisplay').style.display = 'none';
             updateCurrentPlayerInfo();
         }
 
-        // =========== DOODADS ATUALIZADOS ===========
+        // =========== DOODADS COM PROTEÇÃO ===========
         function showDoodadCard(playerId) {
+            const player = gameState.players[playerId];
+            
+            if (gameState.nextDoodadProtected && gameState.protectedPlayer === playerId) {
+                addLog(`🛡️ ${player.name} usou proteção! Doodad anulado.`);
+                gameState.nextDoodadProtected = false;
+                gameState.protectedPlayer = null;
+                return;
+            }
+            
             const card = doodadCards[Math.floor(Math.random() * doodadCards.length)];
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'doodad' };
             
@@ -2241,10 +2392,10 @@
             details.innerHTML = `
                 <div class="card-detail">
                     <div class="detail-label">Tipo</div>
-                    <div class="detail-value">Despesa Obrigatória</div>
+                    <div class="detail-label">Despesa Obrigatória</div>
                 </div>
                 <div class="card-detail">
-                    <div class="detail-label">Costo</div>
+                    <div class="detail-label">Custo</div>
                     <div class="detail-value" style="color: #e74c3c;">R$ ${card.cost.toLocaleString()}</div>
                 </div>
             `;
@@ -2276,7 +2427,7 @@
             updateCurrentPlayerInfo();
         }
 
-        // =========== MERCADO ===========
+        // =========== MERCADO COM REGRAS ESPECIAIS ===========
         function showMarketCard(playerId) {
             const card = marketCards[Math.floor(Math.random() * marketCards.length)];
             gameState.currentCard = { ...card, playerId: playerId, cardType: 'market' };
@@ -2342,12 +2493,41 @@
                     `;
                 }
             } else {
-                // Mercado em baixa - apenas informativo
-                actions.innerHTML = `
-                    <button class="button" onclick="declineCard()">
-                        <i class="fas fa-check"></i> ENTENDI
-                    </button>
-                `;
+                if (card.assetType === 'ações') {
+                    const player = gameState.players[playerId];
+                    let lostStocks = false;
+                    
+                    player.assets.stocks.forEach(stock => {
+                        if (stock.name.includes("ON2U")) {
+                            const lostShares = Math.floor(stock.shares * 0.5);
+                            if (lostShares > 0) {
+                                stock.shares -= lostShares;
+                                lostStocks = true;
+                                addLog(`📉 ${player.name} perdeu ${lostShares} ações ON2U em queda do mercado`);
+                            }
+                        }
+                    });
+                    
+                    if (lostStocks) {
+                        actions.innerHTML = `
+                            <button class="button button-danger" onclick="declineCard()">
+                                <i class="fas fa-exclamation-triangle"></i> ACEITAR PERDAS
+                            </button>
+                        `;
+                    } else {
+                        actions.innerHTML = `
+                            <button class="button" onclick="declineCard()">
+                                <i class="fas fa-check"></i> ENTENDI
+                            </button>
+                        `;
+                    }
+                } else {
+                    actions.innerHTML = `
+                        <button class="button" onclick="declineCard()">
+                            <i class="fas fa-check"></i> ENTENDI
+                        </button>
+                    `;
+                }
             }
             
             display.style.display = 'block';
@@ -2399,7 +2579,6 @@
                 return;
             }
             
-            // Ordena do maior para o menor índice para evitar problemas ao remover
             const indicesToRemove = [];
             let totalCash = 0;
             let totalCashflowReduction = 0;
@@ -2412,7 +2591,6 @@
                 indicesToRemove.push({ index, saleValue, cashflow });
             });
             
-            // Ordena decrescente para remover corretamente
             indicesToRemove.sort((a, b) => b.index - a.index);
             
             indicesToRemove.forEach(item => {
@@ -2434,7 +2612,7 @@
             updateCurrentPlayerInfo();
         }
 
-        // =========== MODAL PARA VENDA DE AÇÕES ===========
+        // =========== MODAL PARA VENDA DE AÇÕES (COM REGRAS ESPECIAIS) ===========
         function showSellStocksModal(playerId) {
             const player = gameState.players[playerId];
             const marketCard = gameState.marketEvent;
@@ -2449,7 +2627,17 @@
             
             player.assets.stocks.forEach((asset, index) => {
                 const totalCost = asset.shares * asset.costPerShare;
-                const saleValue = Math.round(totalCost * marketCard.modifier);
+                let saleValue = Math.round(totalCost * marketCard.modifier);
+                
+                if (asset.name.includes("MYT4U")) {
+                    const maxSellableShares = Math.floor(asset.shares * 0.5);
+                    const maxSaleValue = Math.round((maxSellableShares * asset.costPerShare) * marketCard.modifier);
+                    saleValue = maxSaleValue;
+                    html += `<div style="color: #e67e22; font-size: 0.8rem; margin-bottom: 5px;"><i class="fas fa-info-circle"></i> MYT4U: só pode vender 50% das ações por evento</div>`;
+                } else if (asset.name.includes("ON2U")) {
+                    html += `<div style="color: #e67e22; font-size: 0.8rem; margin-bottom: 5px;"><i class="fas fa-info-circle"></i> ON2U: venda somente permitida em mercado de alta</div>`;
+                }
+                
                 const profit = saleValue - totalCost;
                 
                 html += `
@@ -2460,9 +2648,10 @@
                             <small>Investido: R$ ${totalCost.toLocaleString()}</small><br>
                             <small>Valor de venda: R$ ${saleValue.toLocaleString()} (${profit > 0 ? '+' : ''}R$ ${profit.toLocaleString()})</small><br>
                             ${asset.cashflow > 0 ? `<small>Dividendo: R$ ${asset.cashflow}/mês</small>` : ''}
+                            ${asset.specialRules ? `<small style="color: #666;">${asset.specialRules}</small>` : ''}
                         </div>
                         <div class="sell-checkbox">
-                            <input type="checkbox" id="stocks${index}" data-index="${index}" data-value="${saleValue}" data-cashflow="${asset.cashflow}">
+                            <input type="checkbox" id="stocks${index}" data-index="${index}" data-value="${saleValue}" data-cashflow="${asset.cashflow}" data-name="${asset.name}" data-shares="${asset.shares}">
                             <label for="stocks${index}">Vender</label>
                         </div>
                     </div>
@@ -2490,23 +2679,35 @@
                 const index = parseInt(checkbox.dataset.index);
                 const saleValue = parseInt(checkbox.dataset.value);
                 const cashflow = parseInt(checkbox.dataset.cashflow);
+                const stockName = checkbox.dataset.name;
+                const currentShares = parseInt(checkbox.dataset.shares);
                 
-                indicesToRemove.push({ index, saleValue, cashflow });
+                indicesToRemove.push({ index, saleValue, cashflow, stockName, currentShares });
             });
             
-            // Ordena decrescente para remover corretamente
             indicesToRemove.sort((a, b) => b.index - a.index);
             
             indicesToRemove.forEach(item => {
                 const asset = player.assets.stocks[item.index];
+                
+                if (item.stockName.includes("MYT4U")) {
+                    const sharesToRemove = Math.floor(item.currentShares * 0.5);
+                    if (sharesToRemove > 0) {
+                        asset.shares -= sharesToRemove;
+                        if (asset.shares <= 0) {
+                            player.assets.stocks.splice(item.index, 1);
+                        }
+                    }
+                } else {
+                    player.assets.stocks.splice(item.index, 1);
+                }
+                
                 player.cash += item.saleValue;
                 player.passiveIncome -= item.cashflow;
                 totalCash += item.saleValue;
                 totalCashflowReduction += item.cashflow;
                 
-                addLog(`💰 ${player.name} vendeu ${asset.name} por R$ ${item.saleValue.toLocaleString()}`);
-                
-                player.assets.stocks.splice(item.index, 1);
+                addLog(`💰 ${player.name} vendeu ${item.stockName} por R$ ${item.saleValue.toLocaleString()}`);
             });
             
             addLog(`📊 Total recebido: R$ ${totalCash.toLocaleString()} | Redução de renda: R$ ${totalCashflowReduction}/mês`);
@@ -2519,11 +2720,40 @@
         // =========== EVENTOS DO TABULEIRO ===========
         function payday(playerId) {
             const player = gameState.players[playerId];
+            
+            // Verificar se está demitido
+            if (player.isDownsized) {
+                player.downsizedRounds++;
+                
+                // Após 2 rodadas, volta a receber salário
+                if (player.downsizedRounds >= 2) {
+                    player.isDownsized = false;
+                    player.downsizedRounds = 0;
+                    addLog(`🎉 ${player.name} voltou ao trabalho! Agora recebe salário normalmente.`);
+                } else {
+                    // Demitido: não recebe salário, só renda passiva
+                    const childExpenses = player.children * player.perChildCost;
+                    const totalExpenses = player.expenses + childExpenses;
+                    const totalIncome = player.passiveIncome; // Sem salário
+                    
+                    let loanPayments = 0;
+                    player.loans.forEach(loan => {
+                        loanPayments += loan.monthlyPayment;
+                    });
+                    
+                    const netIncome = totalIncome - totalExpenses - loanPayments;
+                    player.cash += netIncome;
+                    
+                    addLog(`⏸️ ${player.name} está demitido! Recebeu apenas: Renda Passiva R$ ${player.passiveIncome} - Despesas R$ ${totalExpenses} - Empréstimos R$ ${loanPayments} = R$ ${netIncome.toLocaleString()}`);
+                    updateCurrentPlayerInfo();
+                    return;
+                }
+            }
+            
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             const totalIncome = player.salary + player.passiveIncome;
             
-            // Deduz pagamentos de empréstimos
             let loanPayments = 0;
             player.loans.forEach(loan => {
                 loanPayments += loan.monthlyPayment;
@@ -2573,14 +2803,49 @@
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             
+            // Verificar se tem negócio Fast Food (reduz fluxo em 50%)
+            player.assets.businesses.forEach(business => {
+                if (business.name.includes("Fast Food")) {
+                    const reducedCashflow = Math.floor(business.cashflow * 0.5);
+                    addLog(`🍔 ${player.name} negócio Fast Food afetado! Fluxo reduzido de R$ ${business.cashflow} para R$ ${reducedCashflow}/mês por 2 rodadas`);
+                    business.cashflow = reducedCashflow;
+                }
+            });
+            
+            // **NOVA REGRA: VERIFICAÇÃO DE SALDO E EMPRÉSTIMO AUTOMÁTICO**
             if (player.cash >= totalExpenses) {
+                // Tem dinheiro suficiente
                 player.cash -= totalExpenses;
                 addLog(`⚠️ ${player.name} foi demitido! Pagou R$ ${totalExpenses.toLocaleString()} em despesas.`);
             } else {
-                // Se não tem dinheiro, precisa vender ativos
-                alert(`DEMISSÃO! Você precisa pagar R$ ${totalExpenses.toLocaleString()} em despesas. Venda ativos para cobrir o custo.`);
-                player.cash = Math.max(0, player.cash - totalExpenses);
+                // **NOVA REGRA: Dinheiro insuficiente vira empréstimo automático**
+                const deficit = totalExpenses - player.cash;
+                
+                // Zerar o saldo
+                player.cash = 0;
+                
+                // Criar empréstimo automático para o valor que faltou
+                const loanAmount = deficit;
+                const monthlyPayment = loanAmount * 0.1;
+                
+                player.loans.push({
+                    amount: loanAmount,
+                    interestRate: 0.1,
+                    monthlyPayment: monthlyPayment,
+                    takenAt: Date.now(),
+                    reason: "Demissão - Déficit automático"
+                });
+                
+                player.expenses += monthlyPayment;
+                
+                addLog(`⚠️ ${player.name} foi demitido! Saldo insuficiente: R$ ${(totalExpenses - deficit).toLocaleString()} disponíveis, precisa de R$ ${totalExpenses.toLocaleString()}`);
+                addLog(`🏦 Empréstimo automático gerado: R$ ${loanAmount.toLocaleString()} (pagamento: R$ ${monthlyPayment.toLocaleString()}/mês)`);
+                addLog(`💰 Saldo zerado. Dívida total: R$ ${player.loans.reduce((sum, loan) => sum + loan.amount, 0).toLocaleString()}`);
             }
+            
+            // Marcar jogador como demitido
+            player.isDownsized = true;
+            player.downsizedRounds = 0;
             
             updateCurrentPlayerInfo();
         }
@@ -2691,6 +2956,10 @@
                             <div class="detail-label">Valor</div>
                             <div class="detail-value" style="color: #e74c3c;">50% do seu dinheiro: R$ ${amount.toLocaleString()}</div>
                         </div>
+                        <div class="card-detail">
+                            <div class="detail-label">Regra</div>
+                            <div class="detail-value">Não pode ser evitada por proteção</div>
+                        </div>
                     `;
                     
                     actions.innerHTML = `
@@ -2736,12 +3005,10 @@
             
             player.cash -= card.custo;
             
-            // Se for um gasto especial, pode ser um "sonho"
             if (card.nome === player.assignedDream || card.custo >= 100000) {
                 player.dreams.push(card.nome);
                 addLog(`🏆 ${player.name} realizou o sonho: ${card.nome} por R$ ${card.custo.toLocaleString()}`);
                 
-                // Verifica se venceu (realizou o sonho atribuído no Fast Track)
                 if (card.nome === player.assignedDream) {
                     declareWinner(playerId);
                 }
@@ -2769,7 +3036,6 @@
                 player.passiveIncome += card.fluxo;
                 addLog(`✅ ${player.name} investiu R$ ${card.entrada.toLocaleString()} em ${card.nome} (renda: +R$ ${card.fluxo}/mês)`);
             } else if (card.ccr) {
-                // CCR = Cash on Cash Return
                 const monthlyReturn = (card.entrada * (card.ccr / 100)) / 12;
                 player.passiveIncome += monthlyReturn;
                 addLog(`✅ ${player.name} investiu R$ ${card.entrada.toLocaleString()} em ${card.nome} (CCR: ${card.ccr}%, renda: +R$ ${monthlyReturn.toLocaleString()}/mês)`);
@@ -2825,12 +3091,10 @@
 
         // =========== TURNO ===========
         function endTurn() {
-            // Remove o terceiro dado se estiver visível
             document.getElementById('dice3').style.display = 'none';
             
             gameState.currentPlayer = gameState.currentPlayer % gameState.totalPlayers + 1;
             
-            // Se voltou ao jogador 1, incrementa rodada
             if (gameState.currentPlayer === 1) {
                 gameState.currentRound++;
                 addLog(`📅 RODADA ${gameState.currentRound} INICIADA`);
@@ -2843,11 +3107,11 @@
             document.getElementById('cardDisplay').style.display = 'none';
             
             updateCurrentPlayerInfo();
+            updateProtectionButton();
             
             const playerName = gameState.players[gameState.currentPlayer].name;
             addLog(`🔄 Vez de: ${playerName}`);
             
-            // Se o jogador atual está no Fast Track, automaticamente mostra oportunidade
             if (!gameState.players[gameState.currentPlayer].inRatRace) {
                 setTimeout(() => {
                     showFastTrackOpportunity();
@@ -2860,11 +3124,9 @@
             const player = gameState.players[gameState.currentPlayer];
             let html = `<h3 style="color: var(--secondary); margin-bottom: 15px;">${player.name} - ${player.profession}</h3>`;
             
-            // Estatísticas
             const childExpenses = player.children * player.perChildCost;
             const totalExpenses = player.expenses + childExpenses;
             
-            // Calcular total de empréstimos
             let totalLoans = 0;
             let totalLoanPayments = 0;
             player.loans.forEach(loan => {
@@ -2913,7 +3175,6 @@
                 </div>
             `;
             
-            // Ações
             if (player.assets.stocks.length > 0) {
                 html += `<h4 style="color: #3498db; margin-top: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">AÇÕES E FUNDOS</h4>`;
                 player.assets.stocks.forEach((stock, index) => {
@@ -2926,13 +3187,13 @@
                                 <span>Investido: R$ ${totalCost.toLocaleString()}</span>
                                 ${stock.cashflow > 0 ? `<span style="color: #2ecc71;">Renda: +R$ ${stock.cashflow}/mês</span>` : ''}
                             </div>
+                            ${stock.specialRules ? `<div style="color: #e67e22; font-size: 0.8rem; margin-top: 3px;"><i class="fas fa-exclamation-triangle"></i> ${stock.specialRules}</div>` : ''}
                             ${stock.roi ? `<div style="color: #666; font-size: 0.8rem; margin-top: 3px;">${stock.roi}</div>` : ''}
                         </div>
                     `;
                 });
             }
             
-            // Imóveis
             if (player.assets.realEstate.length > 0) {
                 html += `<h4 style="color: #e67e22; margin-top: 15px; border-bottom: 2px solid #e67e22; padding-bottom: 5px;">IMÓVEIS</h4>`;
                 player.assets.realEstate.forEach((property, index) => {
@@ -2951,7 +3212,6 @@
                 });
             }
             
-            // Negócios
             if (player.assets.businesses.length > 0) {
                 html += `<h4 style="color: #9b59b6; margin-top: 15px; border-bottom: 2px solid #9b59b6; padding-bottom: 5px;">NEGÓCIOS</h4>`;
                 player.assets.businesses.forEach((business, index) => {
@@ -2969,7 +3229,6 @@
                 });
             }
             
-            // Títulos
             if (player.assets.bonds.length > 0) {
                 html += `<h4 style="color: #2ecc71; margin-top: 15px; border-bottom: 2px solid #2ecc71; padding-bottom: 5px;">TÍTULOS E FUNDOS</h4>`;
                 player.assets.bonds.forEach((bond, index) => {
@@ -2986,16 +3245,25 @@
                 });
             }
             
+            if (player.assets.protection) {
+                html += `<h4 style="color: #27ae60; margin-top: 15px; border-bottom: 2px solid #27ae60; padding-bottom: 5px;">PROTEÇÃO FINANCEIRA</h4>`;
+                html += `
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <div><strong>${player.assets.protection.name}</strong></div>
+                        <div style="color: #666; margin-top: 5px;">${player.assets.protection.description}</div>
+                        <div style="color: #27ae60; margin-top: 5px;"><i class="fas fa-shield-alt"></i> Pronta para uso</div>
+                    </div>
+                `;
+            }
+            
             if (player.assets.stocks.length === 0 && player.assets.realEstate.length === 0 && 
-                player.assets.businesses.length === 0 && player.assets.bonds.length === 0) {
+                player.assets.businesses.length === 0 && player.assets.bonds.length === 0 && !player.assets.protection) {
                 html += '<p>Nenhum ativo adquirido.</p>';
             }
             
-            // Sonho atribuído
             html += `<h4 style="color: #f39c12; margin-top: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 5px;">SONHO</h4>`;
             html += `<p><strong>${player.assignedDream}</strong></p>`;
             
-            // Sonhos realizados (Fast Track)
             if (player.dreams.length > 0) {
                 html += `<h4 style="color: #f39c12; margin-top: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 5px;">SONHOS REALIZADOS</h4>`;
                 player.dreams.forEach(dream => {
